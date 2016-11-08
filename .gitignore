@@ -38,5 +38,6 @@ Thumbs.db
 
 *.db
 *.opendb
-*.vxproj
+*.vcxproj
 *.filters
+*.tlog

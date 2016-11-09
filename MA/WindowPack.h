@@ -13,9 +13,14 @@ public:
 	WindowPack(int, int, int, string);
 	~WindowPack();
 
+	void Render();
+	void HandleEvent();
+	void Close() { Window->close(); };
+
 	void GUIAdd(const tgui::Widget::Ptr & Wiget) { GUI->add(Wiget); };
 	
 	sf::Vector2u GetSize() { return Window->getSize(); };
+
 private:
 	tgui::Gui * GUI;
 	sf::RenderWindow * Window;

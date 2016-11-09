@@ -1,21 +1,14 @@
-
 #include <TGUI/TGUI.hpp>
+#include "StateMachine.h"
+#include "MenuState.h"
 
 int main() {
-	
+	StateMachine SM(800, 600, 60, "Akwizycja Modeli");
+	SM.ChangeState(new MenuState(&SM));
 
-	while (window.isOpen()) {
-		sf::Event event;
-		while (window.pollEvent(event)) {
-			if (event.type == sf::Event::Closed)
-				window.close();
-
-			gui.handleEvent(event);
-		}
-
-		window.clear();
-		gui.draw();
-		window.display();
+	while (true) {
+		SM.Update();
+		SM.Render();
 	}
 
 	return 0;

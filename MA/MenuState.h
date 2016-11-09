@@ -1,9 +1,10 @@
 #pragma once
 #include "State.h"
+#include "StateMachine.h"
 
 class MenuState : public State {
 public:
-	MenuState(WindowPack*);
+	MenuState(StateMachine*);
 
 	void HandleInput();
 	void Update();

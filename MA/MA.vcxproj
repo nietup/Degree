@@ -165,6 +165,16 @@ opencv_videostab310.lib;sfml-system-d.lib;sfml-window-d.lib;sfml-graphics-d.lib;
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="MA.cpp" />
+    <ClCompile Include="MenuState.cpp" />
+    <ClCompile Include="State.cpp" />
+    <ClCompile Include="StateMachine.cpp" />
+    <ClCompile Include="WindowPack.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="MenuState.h" />
+    <ClInclude Include="State.h" />
+    <ClInclude Include="StateMachine.h" />
+    <ClInclude Include="WindowPack.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,5 +1,4 @@
 #include "StateMachine.h"
-#include <iostream>
 
 StateMachine::StateMachine(int WindowWidth, int WindowHeight, int Rate, string Title) {
 	Window = new WindowPack(WindowWidth, WindowHeight, Rate, Title);

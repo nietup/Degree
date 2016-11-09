@@ -4,7 +4,8 @@
 
 int main() {
 	StateMachine SM(800, 600, 60, "Akwizycja Modeli");
-	SM.ChangeState(new MenuState(&SM));
+	MenuState Menu(&SM);
+	SM.ChangeState(&Menu);
 
 	while (true) {
 		SM.Update();

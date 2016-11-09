@@ -10,6 +10,7 @@ public:
 	void Update();
 	void Render();
 	void ChangeState(State*);
+	void Close();
 
 	WindowPack * GetWindow() { return Window; };
 

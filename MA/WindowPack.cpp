@@ -28,3 +28,7 @@ void WindowPack::HandleEvent() {
 		GUI->handleEvent(event);
 	}
 }
+
+void WindowPack::Close() {
+	Window->close();
+}

@@ -10,6 +10,7 @@ public:
 	void Update();
 	void Render();
 	void ChangeState(State*);
+	bool ChangeState(std::string);
 	void Close();
 
 	WindowPack * GetWindow() { return Window; };
@@ -17,4 +18,5 @@ public:
 private:
 	State * CurrentState;
 	WindowPack * Window;
+	std::vector<State *> * States;
 };

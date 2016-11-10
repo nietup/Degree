@@ -1,12 +1,20 @@
 #pragma once
 #include <TGUI/TGUI.hpp>
-#include "WindowPack.h"
+
+class StateMachine;
 
 class State {
 public:
-	virtual void HandleInput() = 0;
-	virtual void Update() = 0;
-	virtual void Render() = 0;
-	virtual void Show() = 0;
-	virtual void Hide() = 0;
+	virtual void HandleInput();
+	virtual void Update();
+	virtual void Render();
+	virtual void Show();
+	virtual void Hide();
+
+	std::string GetName() { return Name; };
+
+protected:
+	StateMachine * Manager;
+	std::vector<tgui::Widget::Ptr> * Widgets;
+	std::string Name;
 };

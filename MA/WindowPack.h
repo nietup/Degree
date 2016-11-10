@@ -15,7 +15,7 @@ public:
 
 	void Render();
 	void HandleEvent();
-	void Close() { Window->close(); };
+	void Close(); //read access violation
 
 	void GUIAdd(const tgui::Widget::Ptr & Wiget) { GUI->add(Wiget); };
 	

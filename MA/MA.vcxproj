@@ -71,6 +71,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
+    <IntDir>$(Configuration)\$(ProjectName)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
@@ -166,12 +167,14 @@ opencv_videostab310.lib;sfml-system-d.lib;sfml-window-d.lib;sfml-graphics-d.lib;
   <ItemGroup>
     <ClCompile Include="MA.cpp" />
     <ClCompile Include="MenuState.cpp" />
+    <ClCompile Include="NewModelState.cpp" />
     <ClCompile Include="State.cpp" />
     <ClCompile Include="StateMachine.cpp" />
     <ClCompile Include="WindowPack.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MenuState.h" />
+    <ClInclude Include="NewModelState.h" />
     <ClInclude Include="State.h" />
     <ClInclude Include="StateMachine.h" />
     <ClInclude Include="WindowPack.h" />

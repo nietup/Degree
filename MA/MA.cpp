@@ -7,7 +7,7 @@ int main() {
 	MenuState Menu(&SM);
 	SM.ChangeState(&Menu);
 
-	while (true) {
+	while (SM.IsRunning()) {
 		SM.Update();
 		SM.Render();
 	}

@@ -42,6 +42,23 @@ NewModelState::NewModelState(StateMachine * SM) {
 	radioButton->setPosition(40, ((5 * WindowHeight) / 10.f))	;
 	radioButton->setText("Prymityw");
 	radioButton->setSize(25, 25);
+	radioButton->connect("checked unchecked", [&] () {
+		tgui::Theme::Ptr theme = std::make_shared<tgui::Theme>("../../widgets/Black.txt");
+		WindowPack * Window = Manager->GetWindow();
+		tgui::CheckBox::Ptr checkbox = theme->load("checkbox");
+		checkbox->setPosition(420, 240);
+		checkbox->setText("Prostopadlosc");
+		checkbox->setSize(25, 25);
+		Window->GUIAdd(checkbox);
+		Widgets->push_back(checkbox);
+
+		checkbox = theme->load("checkbox");
+		checkbox->setPosition(420, 265);
+		checkbox->setText("Rownoleglosc");
+		checkbox->setSize(25, 25);
+		Window->GUIAdd(checkbox);
+		Widgets->push_back(checkbox);
+	});
 	Window->GUIAdd(radioButton);
 	Widgets->push_back(radioButton);
 

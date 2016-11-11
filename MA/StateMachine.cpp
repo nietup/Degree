@@ -3,6 +3,7 @@
 StateMachine::StateMachine(int WindowWidth, int WindowHeight, int Rate, string Title) {
 	Window = new WindowPack(WindowWidth, WindowHeight, Rate, Title);
 	States = new std::vector<State *>();
+	Running = true;
 }
 
 void StateMachine::HandleInput() {
@@ -44,4 +45,5 @@ bool StateMachine::ChangeState(std::string Name) {
 
 void StateMachine::Close() {
 	Window->Close();
+	Running = false;
 }

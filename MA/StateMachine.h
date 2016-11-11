@@ -14,9 +14,11 @@ public:
 	void Close();
 
 	WindowPack * GetWindow() { return Window; };
+	bool IsRunning() { return Running; };
 
 private:
 	State * CurrentState;
 	WindowPack * Window;
 	std::vector<State *> * States;
+	bool Running;
 };

@@ -14,20 +14,26 @@ MenuState::MenuState(StateMachine * SM) {
 
 	tgui::Label::Ptr label = theme->load("label");
 	label->setText("Akwizycja Modeli");
-	label->setHorizontalAlignment(tgui::Label::HorizontalAlignment::Center);
-	label->setPosition(WindowWidth/2.f, WindowHeight/10.f);
 	label->setTextSize(30);
+	label->setPosition(40, WindowHeight/10.f);
 	Window->GUIAdd(label);
 	Widgets->push_back(label);
 
 	tgui::Button::Ptr button = theme->load("button");
-	button->setPosition(WindowWidth/2.f - 50.f, WindowHeight/2.f + 10);
-	button->setText("Nowy model");
 	button->setSize(300, 40);
+	button->setPosition((WindowWidth - button->getSize().x)/2.f, WindowHeight/2.f - 2*button->getSize().y);
+	button->setText("Nowy model");
 	button->connect("pressed", [&] () {
 		if (!Manager->ChangeState("NewModel"))
 			Manager->ChangeState(new NewModelState(Manager)); 
 	});
+	Window->GUIAdd(button);
+	Widgets->push_back(button);
+
+	button = theme->load("button");
+	button->setSize(300, 40);
+	button->setPosition((WindowWidth - button->getSize().x) / 2.f, WindowHeight / 2.f + 2 * button->getSize().y);
+	button->setText("Wybierz model");
 	Window->GUIAdd(button);
 	Widgets->push_back(button);
 

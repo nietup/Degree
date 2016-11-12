@@ -17,9 +17,9 @@ public:
 
 	void Show() override;
 
-	void printuj(int i) {
-		std::cout << i;
-	};
+	void Select(int);
+	void Deselect(int);
+	void DeselectAll();
 
 private:
 	std::string ModelName;

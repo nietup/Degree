@@ -94,6 +94,8 @@ NewModelState::NewModelState(StateMachine * SM) {
 
 void NewModelState::DisplayRelationships(int Level) {
 
+	DeselectAll();
+
 	Model * NewModel = new Model();
 
 	switch (Level) {
@@ -119,8 +121,8 @@ void NewModelState::DisplayRelationships(int Level) {
 		checkbox->setPosition(420, 240 + i*25);
 		checkbox->setText(NewModel->GetRelationshipName(i));
 		checkbox->setSize(25, 25);
-		checkbox->connect("checked", &NewModelState::printuj, this, i);
-//		checkbox->connect("unchecked", [&] () {DeleteRelationships(); });
+		checkbox->connect("checked", &NewModelState::Select, this, i);
+		checkbox->connect("unchecked", &NewModelState::Deselect, this, i);
 		Window->GUIAdd(checkbox);
 		DisplayedRelationships->push_back(checkbox);
 	}
@@ -143,4 +145,24 @@ void NewModelState::Show() {
 
 	for (auto &Widget : *DisplayedRelationships)
 		Widget->show();
+}
+
+void NewModelState::Select(int i) {
+	std::vector<int>::iterator it;
+	it = find(ModelRelationships->begin(), ModelRelationships->end(), i);
+
+	if (it == ModelRelationships->end())
+		ModelRelationships->push_back(i);
+}
+
+void NewModelState::Deselect(int i) {
+	std::vector<int>::iterator it;
+	it = find(ModelRelationships->begin(), ModelRelationships->end(), i);
+
+	if (it != ModelRelationships->end())
+		ModelRelationships->erase(it);
+}
+
+void NewModelState::DeselectAll() {
+	ModelRelationships->clear();
 }

@@ -17,7 +17,8 @@ public:
 	void HandleEvent();
 	void Close(); //read access violation
 
-	void GUIAdd(const tgui::Widget::Ptr & Wiget) { GUI->add(Wiget); };
+	void GUIAdd(const tgui::Widget::Ptr & Widget) { GUI->add(Widget); };
+	void GUIDel(const tgui::Widget::Ptr & Widget) { GUI->remove(Widget); };
 	
 	sf::Vector2u GetSize() { return Window->getSize(); };
 

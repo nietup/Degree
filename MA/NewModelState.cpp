@@ -2,6 +2,11 @@
 
 NewModelState::NewModelState(StateMachine * SM) {
 	Name = "NewModel";
+	ModelName = "UDEF";
+	ModelLevel = -1;
+	ModelRelationships = new std::vector<int>();
+	DisplayedRelationships = new std::vector<tgui::Widget::Ptr>();
+
 	Widgets = new std::vector<tgui::Widget::Ptr>();
 	Manager = SM;
 	WindowPack * Window = Manager->GetWindow();
@@ -42,23 +47,8 @@ NewModelState::NewModelState(StateMachine * SM) {
 	radioButton->setPosition(40, ((5 * WindowHeight) / 10.f))	;
 	radioButton->setText("Prymityw");
 	radioButton->setSize(25, 25);
-	radioButton->connect("checked unchecked", [&] () {
-		tgui::Theme::Ptr theme = std::make_shared<tgui::Theme>("../../widgets/Black.txt");
-		WindowPack * Window = Manager->GetWindow();
-		tgui::CheckBox::Ptr checkbox = theme->load("checkbox");
-		checkbox->setPosition(420, 240);
-		checkbox->setText("Prostopadlosc");
-		checkbox->setSize(25, 25);
-		Window->GUIAdd(checkbox);
-		Widgets->push_back(checkbox);
-
-		checkbox = theme->load("checkbox");
-		checkbox->setPosition(420, 265);
-		checkbox->setText("Rownoleglosc");
-		checkbox->setSize(25, 25);
-		Window->GUIAdd(checkbox);
-		Widgets->push_back(checkbox);
-	});
+	radioButton->connect("checked", [&] () {DisplayRelationships(1); });
+	radioButton->connect("unchecked", [&] () {DeleteRelationships(); });
 	Window->GUIAdd(radioButton);
 	Widgets->push_back(radioButton);
 
@@ -66,6 +56,8 @@ NewModelState::NewModelState(StateMachine * SM) {
 	radioButton->setText("Bryla");
 	radioButton->setSize(25, 25);
 	radioButton->setPosition(40, ((5 * WindowHeight) / 10.f) + radioButton->getSize().y + 5);
+	radioButton->connect("checked", [&] () {DisplayRelationships(2); });
+	radioButton->connect("unchecked", [&] () {DeleteRelationships(); });
 	Window->GUIAdd(radioButton);
 	Widgets->push_back(radioButton);
 
@@ -73,8 +65,12 @@ NewModelState::NewModelState(StateMachine * SM) {
 	radioButton->setText("Abstrakt");
 	radioButton->setSize(25, 25);
 	radioButton->setPosition(40, ((5 * WindowHeight) / 10.f) + 2 * radioButton->getSize().y + 10);
+	radioButton->connect("checked", [&] () {DisplayRelationships(3); });
+	radioButton->connect("unchecked", [&] () {DeleteRelationships(); });
 	Window->GUIAdd(radioButton);
 	Widgets->push_back(radioButton);
+
+	//TODO Button "stworz model"
 
 	tgui::Button::Ptr button = theme->load("button");
 	button->setPosition(15.f, WindowHeight - 50.f);
@@ -94,4 +90,57 @@ NewModelState::NewModelState(StateMachine * SM) {
 	button->connect("pressed", [&] () { Manager->Close(); });
 	Window->GUIAdd(button);
 	Widgets->push_back(button);
+}
+
+void NewModelState::DisplayRelationships(int Level) {
+
+	Model * NewModel = new Model();
+
+	switch (Level) {
+		case 1:
+			NewModel = new Primitive();
+			break;
+		case 2:
+			NewModel = new Solid();
+			break;
+		case 3:
+			NewModel = new Abstract();
+			break;
+		default:
+			break;
+	}
+
+	tgui::Theme::Ptr theme = std::make_shared<tgui::Theme>("../../widgets/Black.txt");
+	WindowPack * Window = Manager->GetWindow();
+	tgui::CheckBox::Ptr checkbox;
+
+	for (int i = 0; i < NewModel->NumberOfRelationships(); i++) {
+		checkbox = theme->load("checkbox");
+		checkbox->setPosition(420, 240 + i*25);
+		checkbox->setText(NewModel->GetRelationshipName(i));
+		checkbox->setSize(25, 25);
+		checkbox->connect("checked", &NewModelState::printuj, this, i);
+//		checkbox->connect("unchecked", [&] () {DeleteRelationships(); });
+		Window->GUIAdd(checkbox);
+		DisplayedRelationships->push_back(checkbox);
+	}
+
+	delete NewModel;
+}
+
+void NewModelState::DeleteRelationships() {
+	WindowPack * Window = Manager->GetWindow();
+
+	for (auto &w : *DisplayedRelationships)
+		Window->GUIDel(w);
+
+	DisplayedRelationships->clear();
+}
+
+void NewModelState::Show() {
+	for (auto &Widget : *Widgets)
+		Widget->show();
+
+	for (auto &Widget : *DisplayedRelationships)
+		Widget->show();
 }

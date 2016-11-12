@@ -5,6 +5,7 @@
 class StateMachine {
 public:
 	StateMachine(int, int, int, string);
+	~StateMachine();
 
 	void HandleInput();
 	void Update();

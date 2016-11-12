@@ -6,6 +6,10 @@ StateMachine::StateMachine(int WindowWidth, int WindowHeight, int Rate, string T
 	Running = true;
 }
 
+StateMachine::~StateMachine() {
+	Running = false;
+}
+
 void StateMachine::HandleInput() {
 	CurrentState->HandleInput();
 }

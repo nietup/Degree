@@ -8,6 +8,7 @@ public:
 	virtual int NumberOfRelationships() { return Considered->size(); };
 
 	virtual void ChooseRelationships(std::vector<int>*);
+	virtual void SetName(std::string s) { Name = s; };
 
 protected:
 	std::vector<Relationship*> * Considered;

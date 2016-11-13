@@ -1,6 +1,11 @@
 #include "Model.h"
 
-
 void Model::ChooseRelationships(std::vector<int> * Chosen) {
-	//TODO: delete all members of Considered w indices not included in Chosen
+	std::vector<Relationship*> tmp;
+
+	for (int &i : *Chosen) 
+		tmp.push_back(Considered->operator[](i));
+	
+	delete Considered;
+	Considered = new std::vector<Relationship*>(tmp);
 }

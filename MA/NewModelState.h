@@ -14,8 +14,10 @@ public:
 
 	void DisplayRelationships(int);
 	void DeleteRelationships();
+	Model * CreateModel();
 
 	void Show() override;
+	void Hide() override;
 
 	void Select(int);
 	void Deselect(int);
@@ -26,5 +28,7 @@ private:
 	int ModelLevel;
 	std::vector<int> * ModelRelationships;
 	std::vector<tgui::Widget::Ptr> * DisplayedRelationships;
+	tgui::EditBox::Ptr ModelNamePtr;
+	Model * NewModel;
 };
 

@@ -36,6 +36,7 @@ NewModelState::NewModelState(StateMachine * SM) {
 	//editBox->setDefaultText("Click to edit text...");
 	Window->GUIAdd(editBox);
 	Widgets->push_back(editBox);
+	ModelNamePtr = editBox;
 
 	label = theme->load("label");
 	label->setText("Wybierz typ modelu");
@@ -47,7 +48,10 @@ NewModelState::NewModelState(StateMachine * SM) {
 	radioButton->setPosition(40, ((5 * WindowHeight) / 10.f))	;
 	radioButton->setText("Prymityw");
 	radioButton->setSize(25, 25);
-	radioButton->connect("checked", [&] () {DisplayRelationships(1); });
+	radioButton->connect("checked", [&] () {
+		ModelLevel = 1;
+		DisplayRelationships(1); 
+	});
 	radioButton->connect("unchecked", [&] () {DeleteRelationships(); });
 	Window->GUIAdd(radioButton);
 	Widgets->push_back(radioButton);
@@ -56,7 +60,10 @@ NewModelState::NewModelState(StateMachine * SM) {
 	radioButton->setText("Bryla");
 	radioButton->setSize(25, 25);
 	radioButton->setPosition(40, ((5 * WindowHeight) / 10.f) + radioButton->getSize().y + 5);
-	radioButton->connect("checked", [&] () {DisplayRelationships(2); });
+	radioButton->connect("checked", [&] () {
+		ModelLevel = 2;
+		DisplayRelationships(2);
+	});
 	radioButton->connect("unchecked", [&] () {DeleteRelationships(); });
 	Window->GUIAdd(radioButton);
 	Widgets->push_back(radioButton);
@@ -65,14 +72,24 @@ NewModelState::NewModelState(StateMachine * SM) {
 	radioButton->setText("Abstrakt");
 	radioButton->setSize(25, 25);
 	radioButton->setPosition(40, ((5 * WindowHeight) / 10.f) + 2 * radioButton->getSize().y + 10);
-	radioButton->connect("checked", [&] () {DisplayRelationships(3); });
+	radioButton->connect("checked", [&] () {
+		ModelLevel = 3;
+		DisplayRelationships(3);
+	});
 	radioButton->connect("unchecked", [&] () {DeleteRelationships(); });
 	Window->GUIAdd(radioButton);
 	Widgets->push_back(radioButton);
 
-	//TODO Button "stworz model"
-
 	tgui::Button::Ptr button = theme->load("button");
+	button = theme->load("button");
+	button->setPosition(WindowWidth - 200, WindowHeight/10.f);
+	button->setText("Stworz");
+	button->setSize(150, 40);
+	button->connect("pressed", &NewModelState::CreateModel, this);
+	Window->GUIAdd(button);
+	Widgets->push_back(button);
+
+	button = theme->load("button");
 	button->setPosition(15.f, WindowHeight - 50.f);
 	button->setText("Menu glowne");
 	button->setSize(300, 40); 
@@ -95,8 +112,6 @@ NewModelState::NewModelState(StateMachine * SM) {
 void NewModelState::DisplayRelationships(int Level) {
 
 	DeselectAll();
-
-	Model * NewModel = new Model();
 
 	switch (Level) {
 		case 1:
@@ -126,8 +141,6 @@ void NewModelState::DisplayRelationships(int Level) {
 		Window->GUIAdd(checkbox);
 		DisplayedRelationships->push_back(checkbox);
 	}
-
-	delete NewModel;
 }
 
 void NewModelState::DeleteRelationships() {
@@ -139,12 +152,64 @@ void NewModelState::DeleteRelationships() {
 	DisplayedRelationships->clear();
 }
 
+Model * NewModelState::CreateModel() {
+	ModelName = "";
+	for (int i = 0; NULL != ModelNamePtr->getText()[i]; i++)
+		ModelName += ModelNamePtr->getText()[i];
+
+	
+
+	if ("" == ModelName || -1 == ModelLevel || 0 == ModelRelationships->size()) {
+		WindowPack * Window = Manager->GetWindow();
+		tgui::Theme::Ptr theme = std::make_shared<tgui::Theme>("../../widgets/Black.txt");
+		tgui::ChildWindow::Ptr child = theme->load("ChildWindow");
+		child->setSize(250, 120);
+		child->setPosition(420, 80);
+		child->setTitle("Child window");
+		Window->GUIAdd(child);
+
+		tgui::Label::Ptr label = theme->load("label");
+		label->setText("Prosze podac wszystkie dane");
+		label->setPosition(30, 30);
+		label->setTextSize(15);
+		child->add(label);
+
+		tgui::Button::Ptr button = theme->load("button");
+		button->setPosition(75, 70);
+		button->setText("OK");
+		button->setSize(100, 30);
+		button->connect("pressed", [=] () { child->hide(); });
+		child->add(button);
+		return nullptr;
+	}
+
+	std::cout << "\nModel Name: " << ModelName << "\nModel Level: " << ModelLevel << "\nModel Relationships: ";
+	for (int &i : *ModelRelationships)
+		std::cout << i << " ";
+
+	NewModel->SetName(ModelName);
+	NewModel->ChooseRelationships(ModelRelationships);
+
+	for (int i = 0; i < NewModel->NumberOfRelationships(); i++)
+		std::cout << "\n" << NewModel->GetRelationshipName(i);
+
+	return NewModel;
+}
+
 void NewModelState::Show() {
 	for (auto &Widget : *Widgets)
 		Widget->show();
 
 	for (auto &Widget : *DisplayedRelationships)
 		Widget->show();
+}
+
+void NewModelState::Hide() {
+	for (auto &Widget : *Widgets)
+		Widget->hide();
+
+	for (auto &Widget : *DisplayedRelationships)
+		Widget->hide();
 }
 
 void NewModelState::Select(int i) {

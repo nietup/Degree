@@ -152,7 +152,7 @@ void NewModelState::DeleteRelationships() {
 	DisplayedRelationships->clear();
 }
 
-Model * NewModelState::CreateModel() {
+void NewModelState::CreateModel() {
 	ModelName = "";
 	for (int i = 0; NULL != ModelNamePtr->getText()[i]; i++)
 		ModelName += ModelNamePtr->getText()[i];
@@ -180,7 +180,7 @@ Model * NewModelState::CreateModel() {
 		button->setSize(100, 30);
 		button->connect("pressed", [=] () { child->hide(); });
 		child->add(button);
-		return nullptr;
+		return;
 	}
 
 	std::cout << "\nModel Name: " << ModelName << "\nModel Level: " << ModelLevel << "\nModel Relationships: ";
@@ -193,7 +193,7 @@ Model * NewModelState::CreateModel() {
 	for (int i = 0; i < NewModel->NumberOfRelationships(); i++)
 		std::cout << "\n" << NewModel->GetRelationshipName(i);
 
-	return NewModel;
+	Manager->ChangeState(new SampleSelectionState(Manager, NewModel));
 }
 
 void NewModelState::Show() {

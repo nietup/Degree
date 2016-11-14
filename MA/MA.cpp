@@ -1,3 +1,4 @@
+/*+M+*/
 #include <TGUI/TGUI.hpp>
 #include "StateMachine.h"
 #include "MenuState.h"

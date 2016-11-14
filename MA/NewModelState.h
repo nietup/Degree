@@ -5,6 +5,7 @@
 #include "Primitive.h"
 #include "Abstract.h"
 #include "Solid.h"
+#include "SampleSelectionState.h"
 
 class MenuState;
 
@@ -14,7 +15,7 @@ public:
 
 	void DisplayRelationships(int);
 	void DeleteRelationships();
-	Model * CreateModel();
+	void CreateModel();
 
 	void Show() override;
 	void Hide() override;

@@ -39,7 +39,7 @@ MenuState::MenuState(StateMachine * SM) {
 
 	button = theme->load("button");
 	button->setPosition(WindowWidth - 115.f, WindowHeight - 50.f);
-	button->setText("Exit");
+	button->setText("Wyjscie");
 	button->setSize(100, 40);
 	button->connect("pressed", [&] () { Manager->Close(); });
 	Window->GUIAdd(button);

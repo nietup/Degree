@@ -1,5 +1,6 @@
 #pragma once
 #include <iostream>
+#include <fstream>
 #include "State.h"
 #include "StateMachine.h"
 #include "Primitive.h"
@@ -29,7 +30,7 @@ private:
 	int ModelLevel;
 	std::vector<int> * ModelRelationships;
 	std::vector<tgui::Widget::Ptr> * DisplayedRelationships;
-	tgui::EditBox::Ptr ModelNamePtr;
+	tgui::EditBox::Ptr ModelNamePtr, SaveFolderPtr;
 	Model * NewModel;
 };
 

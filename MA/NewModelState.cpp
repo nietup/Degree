@@ -39,13 +39,29 @@ NewModelState::NewModelState(StateMachine * SM) {
 	ModelNamePtr = editBox;
 
 	label = theme->load("label");
+	label->setText("Folder zapisu");
+	label->setPosition(40, (2 * WindowHeight) / 10.f + 65);
+	Window->GUIAdd(label);
+	Widgets->push_back(label);
+
+	editBox = theme->load("EditBox");
+	editBox->setSize(200, 25);
+	editBox->setTextSize(18);
+	editBox->setPosition(40, (2 * WindowHeight) / 10.f + 95);
+	editBox->setText(".\\Models");
+	//editBox->setDefaultText("Click to edit text...");
+	Window->GUIAdd(editBox);
+	Widgets->push_back(editBox);
+	SaveFolderPtr = editBox;
+
+	label = theme->load("label");
 	label->setText("Wybierz typ modelu");
-	label->setPosition(40, (4*WindowHeight) / 10.f + 5);
+	label->setPosition(40, (4*WindowHeight) / 10.f + 65);
 	Window->GUIAdd(label);
 	Widgets->push_back(label);
 
 	tgui::RadioButton::Ptr radioButton = theme->load("RadioButton");
-	radioButton->setPosition(40, ((5 * WindowHeight) / 10.f))	;
+	radioButton->setPosition(40, 50 + ((5 * WindowHeight) / 10.f));
 	radioButton->setText("Prymityw");
 	radioButton->setSize(25, 25);
 	radioButton->connect("checked", [&] () {
@@ -59,7 +75,7 @@ NewModelState::NewModelState(StateMachine * SM) {
 	radioButton = theme->load("RadioButton");
 	radioButton->setText("Bryla");
 	radioButton->setSize(25, 25);
-	radioButton->setPosition(40, ((5 * WindowHeight) / 10.f) + radioButton->getSize().y + 5);
+	radioButton->setPosition(40, 50 + ((5 * WindowHeight) / 10.f) + radioButton->getSize().y + 5);
 	radioButton->connect("checked", [&] () {
 		ModelLevel = 2;
 		DisplayRelationships(2);
@@ -71,7 +87,7 @@ NewModelState::NewModelState(StateMachine * SM) {
 	radioButton = theme->load("RadioButton");
 	radioButton->setText("Abstrakt");
 	radioButton->setSize(25, 25);
-	radioButton->setPosition(40, ((5 * WindowHeight) / 10.f) + 2 * radioButton->getSize().y + 10);
+	radioButton->setPosition(40, 50 + ((5 * WindowHeight) / 10.f) + 2 * radioButton->getSize().y + 10);
 	radioButton->connect("checked", [&] () {
 		ModelLevel = 3;
 		DisplayRelationships(3);
@@ -91,8 +107,8 @@ NewModelState::NewModelState(StateMachine * SM) {
 
 	button = theme->load("button");
 	button->setPosition(15.f, WindowHeight - 50.f);
-	button->setText("Menu glowne");
-	button->setSize(300, 40); 
+	button->setText("Powrot");
+	button->setSize(100, 40); 
 	button->connect("pressed", [&] () {
 		if (!Manager->ChangeState("Menu"));;
 			//Manager->ChangeState(new MenuState(Manager));
@@ -102,7 +118,7 @@ NewModelState::NewModelState(StateMachine * SM) {
 
 	button = theme->load("button");
 	button->setPosition(WindowWidth - 115.f, WindowHeight - 50.f);
-	button->setText("Exit");
+	button->setText("Wyjscie");
 	button->setSize(100, 40);
 	button->connect("pressed", [&] () { Manager->Close(); });
 	Window->GUIAdd(button);
@@ -130,6 +146,13 @@ void NewModelState::DisplayRelationships(int Level) {
 	tgui::Theme::Ptr theme = std::make_shared<tgui::Theme>("../../widgets/Black.txt");
 	WindowPack * Window = Manager->GetWindow();
 	tgui::CheckBox::Ptr checkbox;
+
+	tgui::Label::Ptr label = theme->load("label");
+	label->setText("Wybierz relacje poszukiwane w modelu:");
+	label->setPosition(420, 200);
+	Window->GUIAdd(label);
+	DisplayedRelationships->push_back(label);
+
 
 	for (int i = 0; i < NewModel->NumberOfRelationships(); i++) {
 		checkbox = theme->load("checkbox");
@@ -165,7 +188,7 @@ void NewModelState::CreateModel() {
 		tgui::ChildWindow::Ptr child = theme->load("ChildWindow");
 		child->setSize(250, 120);
 		child->setPosition(420, 80);
-		child->setTitle("Child window");
+		child->setTitle("Brak danych");
 		Window->GUIAdd(child);
 
 		tgui::Label::Ptr label = theme->load("label");
@@ -187,13 +210,42 @@ void NewModelState::CreateModel() {
 	for (int &i : *ModelRelationships)
 		std::cout << i << " ";
 
+	//I have to do this for the case when someone walks back from Sample Selection state
+	delete NewModel;
+
+	switch (ModelLevel) {
+		case 1:
+			NewModel = new Primitive();
+			break;
+		case 2:
+			NewModel = new Solid();
+			break;
+		case 3:
+			NewModel = new Abstract();
+			break;
+		default:
+			break;
+	}
+
 	NewModel->SetName(ModelName);
 	NewModel->ChooseRelationships(ModelRelationships);
 
 	for (int i = 0; i < NewModel->NumberOfRelationships(); i++)
 		std::cout << "\n" << NewModel->GetRelationshipName(i);
 
-	Manager->ChangeState(new SampleSelectionState(Manager, NewModel));
+	std::ofstream outfile(".\\Models\\"+ModelName+".txt");
+
+	if (!outfile.is_open()) {
+		std::cout << "\nPrzykra sprawa";
+	}
+
+	outfile << ModelName << "\n" << ModelLevel << std::endl;
+
+	outfile.close();
+
+	if (!Manager->ChangeState("SampleSelection")) {
+		Manager->ChangeState(new SampleSelectionState(Manager, NewModel));
+	}
 }
 
 void NewModelState::Show() {

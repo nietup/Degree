@@ -63,10 +63,10 @@ SampleSelectionState::SampleSelectionState(StateMachine* SM, Model * M) {
 
 	button = theme->load("button");
 	button->setPosition(15.f, WindowHeight - 50.f);
-	button->setText("Menu glowne");
-	button->setSize(300, 40);
+	button->setText("Powrot");
+	button->setSize(100, 40);
 	button->connect("pressed", [&] () {
-		if (!Manager->ChangeState("Menu"));;
+		if (!Manager->ChangeState("NewModel"));
 		//Manager->ChangeState(new MenuState(Manager));
 	});
 	Window->GUIAdd(button);
@@ -74,7 +74,7 @@ SampleSelectionState::SampleSelectionState(StateMachine* SM, Model * M) {
 
 	button = theme->load("button");
 	button->setPosition(WindowWidth - 115.f, WindowHeight - 50.f);
-	button->setText("Exit");
+	button->setText("Wyjscie");
 	button->setSize(100, 40);
 	button->connect("pressed", [&] () { Manager->Close(); });
 	Window->GUIAdd(button);

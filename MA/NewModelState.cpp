@@ -48,7 +48,7 @@ NewModelState::NewModelState(StateMachine * SM) {
 	editBox->setSize(200, 25);
 	editBox->setTextSize(18);
 	editBox->setPosition(40, (2 * WindowHeight) / 10.f + 95);
-	editBox->setText(".\\Models");
+	editBox->setText("..\\Models");
 	//editBox->setDefaultText("Click to edit text...");
 	Window->GUIAdd(editBox);
 	Widgets->push_back(editBox);
@@ -175,11 +175,25 @@ void NewModelState::DeleteRelationships() {
 	DisplayedRelationships->clear();
 }
 
+std::wstring NewModelState::s2ws(const std::string& s) {
+	int len;
+	int slength = (int)s.length() + 1;
+	len = MultiByteToWideChar(CP_ACP, 0, s.c_str(), slength, 0, 0);
+	wchar_t* buf = new wchar_t[len];
+	MultiByteToWideChar(CP_ACP, 0, s.c_str(), slength, buf, len);
+	std::wstring r(buf);
+	delete[] buf;
+	return r;
+}
+
 void NewModelState::CreateModel() {
 	ModelName = "";
 	for (int i = 0; NULL != ModelNamePtr->getText()[i]; i++)
 		ModelName += ModelNamePtr->getText()[i];
 
+	SaveFolder = "";
+	for (int i = 0; NULL != SaveFolderPtr->getText()[i]; i++)
+		SaveFolder += SaveFolderPtr->getText()[i];
 	
 
 	if ("" == ModelName || -1 == ModelLevel || 0 == ModelRelationships->size()) {
@@ -233,13 +247,25 @@ void NewModelState::CreateModel() {
 	for (int i = 0; i < NewModel->NumberOfRelationships(); i++)
 		std::cout << "\n" << NewModel->GetRelationshipName(i);
 
-	std::ofstream outfile(".\\Models\\"+ModelName+".txt");
+
+	//to file
+	std::ofstream outfile(SaveFolder+"\\"+ModelName+".model");
 
 	if (!outfile.is_open()) {
-		std::cout << "\nPrzykra sprawa";
+		std::wstring stemp = s2ws(SaveFolder);
+		LPCWSTR DirPath = stemp.c_str();
+		CreateDirectory(DirPath, NULL);
+		
+		outfile.open(SaveFolder + "\\" + ModelName+".model");
+
+		if (!outfile.is_open()) {
+			std::cout << "\nPrzykra sprawa";
+		}
 	}
 
-	outfile << ModelName << "\n" << ModelLevel << std::endl;
+	outfile << ModelName << "\n" << ModelLevel << "\n" << ModelRelationships->size() << "\n";
+	for (auto &rel : *ModelRelationships)
+		outfile << NewModel->GetRelationshipName(rel) << std::endl;
 
 	outfile.close();
 

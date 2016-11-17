@@ -1,6 +1,7 @@
 #pragma once
 #include <iostream>
 #include <fstream>
+#include <windows.h>
 #include "State.h"
 #include "StateMachine.h"
 #include "Primitive.h"
@@ -26,11 +27,13 @@ public:
 	void DeselectAll();
 
 private:
-	std::string ModelName;
+	std::string ModelName, SaveFolder;
 	int ModelLevel;
 	std::vector<int> * ModelRelationships;
 	std::vector<tgui::Widget::Ptr> * DisplayedRelationships;
 	tgui::EditBox::Ptr ModelNamePtr, SaveFolderPtr;
 	Model * NewModel;
+
+	std::wstring s2ws(const std::string& s);
 };
 

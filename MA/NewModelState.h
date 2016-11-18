@@ -7,6 +7,7 @@
 #include "Primitive.h"
 #include "Abstract.h"
 #include "Solid.h"
+#include "Figure.h"
 #include "SampleSelectionState.h"
 
 class MenuState;
@@ -33,7 +34,5 @@ private:
 	std::vector<tgui::Widget::Ptr> * DisplayedRelationships;
 	tgui::EditBox::Ptr ModelNamePtr, SaveFolderPtr;
 	Model * NewModel;
-
-	std::wstring s2ws(const std::string& s);
 };
 

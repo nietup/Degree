@@ -41,3 +41,9 @@ Thumbs.db
 *.vcxproj
 *.filters
 *.tlog
+
+Models/
+Debug/
+MA/Debug/
+.vs/
+*.jpg

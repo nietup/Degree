@@ -73,7 +73,7 @@ NewModelState::NewModelState(StateMachine * SM) {
 	Widgets->push_back(radioButton);
 
 	radioButton = theme->load("RadioButton");
-	radioButton->setText("Bryla");
+	radioButton->setText("Figura");
 	radioButton->setSize(25, 25);
 	radioButton->setPosition(40, 50 + ((5 * WindowHeight) / 10.f) + radioButton->getSize().y + 5);
 	radioButton->connect("checked", [&] () {
@@ -85,12 +85,24 @@ NewModelState::NewModelState(StateMachine * SM) {
 	Widgets->push_back(radioButton);
 
 	radioButton = theme->load("RadioButton");
-	radioButton->setText("Abstrakt");
+	radioButton->setText("Bryla");
 	radioButton->setSize(25, 25);
 	radioButton->setPosition(40, 50 + ((5 * WindowHeight) / 10.f) + 2 * radioButton->getSize().y + 10);
 	radioButton->connect("checked", [&] () {
 		ModelLevel = 3;
 		DisplayRelationships(3);
+	});
+	radioButton->connect("unchecked", [&] () {DeleteRelationships(); });
+	Window->GUIAdd(radioButton);
+	Widgets->push_back(radioButton);
+
+	radioButton = theme->load("RadioButton");
+	radioButton->setText("Abstrakt");
+	radioButton->setSize(25, 25);
+	radioButton->setPosition(40, 50 + ((5 * WindowHeight) / 10.f) + 3 * radioButton->getSize().y + 15);
+	radioButton->connect("checked", [&] () {
+		ModelLevel = 4;
+		DisplayRelationships(4);
 	});
 	radioButton->connect("unchecked", [&] () {DeleteRelationships(); });
 	Window->GUIAdd(radioButton);
@@ -134,9 +146,12 @@ void NewModelState::DisplayRelationships(int Level) {
 			NewModel = new Primitive();
 			break;
 		case 2:
-			NewModel = new Solid();
+			NewModel = new Figure();
 			break;
 		case 3:
+			NewModel = new Solid();
+			break;
+		case 4:
 			NewModel = new Abstract();
 			break;
 		default:
@@ -173,17 +188,6 @@ void NewModelState::DeleteRelationships() {
 		Window->GUIDel(w);
 
 	DisplayedRelationships->clear();
-}
-
-std::wstring NewModelState::s2ws(const std::string& s) {
-	int len;
-	int slength = (int)s.length() + 1;
-	len = MultiByteToWideChar(CP_ACP, 0, s.c_str(), slength, 0, 0);
-	wchar_t* buf = new wchar_t[len];
-	MultiByteToWideChar(CP_ACP, 0, s.c_str(), slength, buf, len);
-	std::wstring r(buf);
-	delete[] buf;
-	return r;
 }
 
 void NewModelState::CreateModel() {
@@ -232,9 +236,12 @@ void NewModelState::CreateModel() {
 			NewModel = new Primitive();
 			break;
 		case 2:
-			NewModel = new Solid();
+			NewModel = new Figure();
 			break;
 		case 3:
+			NewModel = new Solid();
+			break;
+		case 4:
 			NewModel = new Abstract();
 			break;
 		default:
@@ -247,27 +254,9 @@ void NewModelState::CreateModel() {
 	for (int i = 0; i < NewModel->NumberOfRelationships(); i++)
 		std::cout << "\n" << NewModel->GetRelationshipName(i);
 
+	NewModel->SetFilePath(SaveFolder + "\\" + ModelName + ".model");
 
-	//to file
-	std::ofstream outfile(SaveFolder+"\\"+ModelName+".model");
-
-	if (!outfile.is_open()) {
-		std::wstring stemp = s2ws(SaveFolder);
-		LPCWSTR DirPath = stemp.c_str();
-		CreateDirectory(DirPath, NULL);
-		
-		outfile.open(SaveFolder + "\\" + ModelName+".model");
-
-		if (!outfile.is_open()) {
-			std::cout << "\nPrzykra sprawa";
-		}
-	}
-
-	outfile << ModelName << "\n" << ModelLevel << "\n" << ModelRelationships->size() << "\n";
-	for (auto &rel : *ModelRelationships)
-		outfile << NewModel->GetRelationshipName(rel) << std::endl;
-
-	outfile.close();
+	//NewModel->SaveModel();
 
 	if (!Manager->ChangeState("SampleSelection")) {
 		Manager->ChangeState(new SampleSelectionState(Manager, NewModel));

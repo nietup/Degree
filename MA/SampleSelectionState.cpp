@@ -32,7 +32,7 @@ SampleSelectionState::SampleSelectionState(StateMachine* SM, Model * M) {
 	editBox->setSize(200, 25);
 	editBox->setTextSize(18);
 	editBox->setPosition(40, (2 * WindowHeight) / 10.f + 55);
-	editBox->setDefaultText(".\\samples\\pos\\");
+	editBox->setText("..\\Samples\\pos\\");
 	Window->GUIAdd(editBox);
 	Widgets->push_back(editBox);
 	PositiveFolder = editBox;
@@ -47,7 +47,7 @@ SampleSelectionState::SampleSelectionState(StateMachine* SM, Model * M) {
 	editBox->setSize(200, 25);
 	editBox->setTextSize(18);
 	editBox->setPosition(40, (4 * WindowHeight) / 10.f + 55);
-	editBox->setDefaultText(".\\samples\\neg\\");
+	editBox->setText("..\\Samples\\neg\\");
 	Window->GUIAdd(editBox);
 	Widgets->push_back(editBox);
 	PositiveFolder = editBox;

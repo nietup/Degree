@@ -1,9 +1,9 @@
-#include "Primitive.h"
+#include "Figure.h"
 
 
 
-Primitive::Primitive() {
-	Level = 1;
+Figure::Figure() {
+	Level = 2;
 	Considered = new std::vector<Relationship*>();
 	Considered->push_back(new Relationship("Podobny rozmiar"));
 	Considered->push_back(new Relationship("Prostopadly"));
@@ -12,5 +12,5 @@ Primitive::Primitive() {
 }
 
 
-Primitive::~Primitive() {
+Figure::~Figure() {
 }

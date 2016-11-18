@@ -1,5 +1,8 @@
 #pragma once
 #include <vector>
+#include <fstream>
+#include <iostream>
+#include <windows.h>
 #include "Relationship.h"
 
 class Model {
@@ -9,9 +12,14 @@ public:
 
 	virtual void ChooseRelationships(std::vector<int>*);
 	virtual void SetName(std::string s) { Name = s; };
+	virtual void SetFilePath(std::string s) { FilePath = s; };
+
+	virtual void SaveModel();
 
 protected:
 	std::vector<Relationship*> * Considered;
 	std::string Name;
+	int Level;
+	std::string FilePath;
 };
 

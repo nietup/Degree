@@ -13,7 +13,7 @@ SampleSelectionState::SampleSelectionState(StateMachine* SM, Model * M) {
 	float WindowWidth = Window->GetSize().x;
 	float WindowHeight = Window->GetSize().y;
 
-	tgui::Theme::Ptr theme = std::make_shared<tgui::Theme>("../../widgets/Black.txt");
+	tgui::Theme::Ptr theme = std::make_shared<tgui::Theme>("/usr/share/tgui-0.7/widgets/Black.txt");
 
 	tgui::Label::Ptr label = theme->load("label");
 	label->setText("Wybor Probek");

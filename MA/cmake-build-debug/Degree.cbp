@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6"/>
+	<Project>
+		<Option title="Degree"/>
+		<Option makefile_is_custom="1"/>
+		<Option compiler="gcc"/>
+		<Option virtualFolders="CMake Files\;CMake Files\cmake_modules\;"/>
+		<Build>
+			<Target title="all">
+				<Option working_dir="/home/nietup/Code/eng/Degree/MA/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j2 -f &quot;/home/nietup/Code/eng/Degree/MA/cmake-build-debug/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="/usr/bin/make -j2 -f &quot;/home/nietup/Code/eng/Degree/MA/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j2 -f &quot;/home/nietup/Code/eng/Degree/MA/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j2 -f &quot;/home/nietup/Code/eng/Degree/MA/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="edit_cache">
+				<Option working_dir="/home/nietup/Code/eng/Degree/MA/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j2 -f &quot;/home/nietup/Code/eng/Degree/MA/cmake-build-debug/Makefile&quot;  VERBOSE=1 edit_cache"/>
+					<CompileFile command="/usr/bin/make -j2 -f &quot;/home/nietup/Code/eng/Degree/MA/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j2 -f &quot;/home/nietup/Code/eng/Degree/MA/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j2 -f &quot;/home/nietup/Code/eng/Degree/MA/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="rebuild_cache">
+				<Option working_dir="/home/nietup/Code/eng/Degree/MA/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j2 -f &quot;/home/nietup/Code/eng/Degree/MA/cmake-build-debug/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
+					<CompileFile command="/usr/bin/make -j2 -f &quot;/home/nietup/Code/eng/Degree/MA/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j2 -f &quot;/home/nietup/Code/eng/Degree/MA/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j2 -f &quot;/home/nietup/Code/eng/Degree/MA/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="Degree">
+				<Option output="/home/nietup/Code/eng/Degree/MA/cmake-build-debug/Degree" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/nietup/Code/eng/Degree/MA/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+					<Add directory="/usr/include/c++/5"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/5"/>
+					<Add directory="/usr/include/c++/5/backward"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j2 -f &quot;/home/nietup/Code/eng/Degree/MA/cmake-build-debug/Makefile&quot;  VERBOSE=1 Degree"/>
+					<CompileFile command="/usr/bin/make -j2 -f &quot;/home/nietup/Code/eng/Degree/MA/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j2 -f &quot;/home/nietup/Code/eng/Degree/MA/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j2 -f &quot;/home/nietup/Code/eng/Degree/MA/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="Degree/fast">
+				<Option output="/home/nietup/Code/eng/Degree/MA/cmake-build-debug/Degree" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/nietup/Code/eng/Degree/MA/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+					<Add directory="/usr/include/c++/5"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/5"/>
+					<Add directory="/usr/include/c++/5/backward"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j2 -f &quot;/home/nietup/Code/eng/Degree/MA/cmake-build-debug/Makefile&quot;  VERBOSE=1 Degree/fast"/>
+					<CompileFile command="/usr/bin/make -j2 -f &quot;/home/nietup/Code/eng/Degree/MA/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j2 -f &quot;/home/nietup/Code/eng/Degree/MA/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j2 -f &quot;/home/nietup/Code/eng/Degree/MA/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+		</Build>
+		<Unit filename="/home/nietup/Code/eng/Degree/MA/Abstract.cpp">
+			<Option target="Degree"/>
+		</Unit>
+		<Unit filename="/home/nietup/Code/eng/Degree/MA/Abstract.h">
+			<Option target="Degree"/>
+		</Unit>
+		<Unit filename="/home/nietup/Code/eng/Degree/MA/Figure.cpp">
+			<Option target="Degree"/>
+		</Unit>
+		<Unit filename="/home/nietup/Code/eng/Degree/MA/Figure.h">
+			<Option target="Degree"/>
+		</Unit>
+		<Unit filename="/home/nietup/Code/eng/Degree/MA/MA.cpp">
+			<Option target="Degree"/>
+		</Unit>
+		<Unit filename="/home/nietup/Code/eng/Degree/MA/MenuState.cpp">
+			<Option target="Degree"/>
+		</Unit>
+		<Unit filename="/home/nietup/Code/eng/Degree/MA/MenuState.h">
+			<Option target="Degree"/>
+		</Unit>
+		<Unit filename="/home/nietup/Code/eng/Degree/MA/Model.cpp">
+			<Option target="Degree"/>
+		</Unit>
+		<Unit filename="/home/nietup/Code/eng/Degree/MA/Model.h">
+			<Option target="Degree"/>
+		</Unit>
+		<Unit filename="/home/nietup/Code/eng/Degree/MA/NewModelState.cpp">
+			<Option target="Degree"/>
+		</Unit>
+		<Unit filename="/home/nietup/Code/eng/Degree/MA/NewModelState.h">
+			<Option target="Degree"/>
+		</Unit>
+		<Unit filename="/home/nietup/Code/eng/Degree/MA/Primitive.cpp">
+			<Option target="Degree"/>
+		</Unit>
+		<Unit filename="/home/nietup/Code/eng/Degree/MA/Primitive.h">
+			<Option target="Degree"/>
+		</Unit>
+		<Unit filename="/home/nietup/Code/eng/Degree/MA/Relationship.cpp">
+			<Option target="Degree"/>
+		</Unit>
+		<Unit filename="/home/nietup/Code/eng/Degree/MA/Relationship.h">
+			<Option target="Degree"/>
+		</Unit>
+		<Unit filename="/home/nietup/Code/eng/Degree/MA/SampleSelectionState.cpp">
+			<Option target="Degree"/>
+		</Unit>
+		<Unit filename="/home/nietup/Code/eng/Degree/MA/SampleSelectionState.h">
+			<Option target="Degree"/>
+		</Unit>
+		<Unit filename="/home/nietup/Code/eng/Degree/MA/Solid.cpp">
+			<Option target="Degree"/>
+		</Unit>
+		<Unit filename="/home/nietup/Code/eng/Degree/MA/Solid.h">
+			<Option target="Degree"/>
+		</Unit>
+		<Unit filename="/home/nietup/Code/eng/Degree/MA/State.cpp">
+			<Option target="Degree"/>
+		</Unit>
+		<Unit filename="/home/nietup/Code/eng/Degree/MA/State.h">
+			<Option target="Degree"/>
+		</Unit>
+		<Unit filename="/home/nietup/Code/eng/Degree/MA/StateMachine.cpp">
+			<Option target="Degree"/>
+		</Unit>
+		<Unit filename="/home/nietup/Code/eng/Degree/MA/StateMachine.h">
+			<Option target="Degree"/>
+		</Unit>
+		<Unit filename="/home/nietup/Code/eng/Degree/MA/WindowPack.cpp">
+			<Option target="Degree"/>
+		</Unit>
+		<Unit filename="/home/nietup/Code/eng/Degree/MA/WindowPack.h">
+			<Option target="Degree"/>
+		</Unit>
+		<Unit filename="/home/nietup/Code/eng/Degree/MA/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\"/>
+		</Unit>
+		<Unit filename="/home/nietup/Code/eng/Degree/MA/cmake_modules/FindSFML.cmake">
+			<Option virtualFolder="CMake Files\cmake_modules\"/>
+		</Unit>
+		<Unit filename="/home/nietup/Code/eng/Degree/MA/cmake_modules/FindTGUI.cmake">
+			<Option virtualFolder="CMake Files\cmake_modules\"/>
+		</Unit>
+	</Project>
+</CodeBlocks_project_file>

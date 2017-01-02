@@ -14,7 +14,7 @@ NewModelState::NewModelState(StateMachine * SM) {
 	float WindowWidth = Window->GetSize().x;
 	float WindowHeight = Window->GetSize().y;
 
-	tgui::Theme::Ptr theme = std::make_shared<tgui::Theme>("../../widgets/Black.txt");
+	tgui::Theme::Ptr theme = std::make_shared<tgui::Theme>("/usr/share/tgui-0.7/widgets/Black.txt");
 
 	tgui::Label::Ptr label = theme->load("label");
 	label->setText("Nowy Model");
@@ -158,7 +158,7 @@ void NewModelState::DisplayRelationships(int Level) {
 			break;
 	}
 
-	tgui::Theme::Ptr theme = std::make_shared<tgui::Theme>("../../widgets/Black.txt");
+	tgui::Theme::Ptr theme = std::make_shared<tgui::Theme>("/usr/share/tgui-0.7/widgets/Black.txt");
 	WindowPack * Window = Manager->GetWindow();
 	tgui::CheckBox::Ptr checkbox;
 
@@ -202,7 +202,7 @@ void NewModelState::CreateModel() {
 
 	if ("" == ModelName || -1 == ModelLevel || 0 == ModelRelationships->size()) {
 		WindowPack * Window = Manager->GetWindow();
-		tgui::Theme::Ptr theme = std::make_shared<tgui::Theme>("../../widgets/Black.txt");
+		tgui::Theme::Ptr theme = std::make_shared<tgui::Theme>("/usr/share/tgui-0.7/widgets/Black.txt");
 		tgui::ChildWindow::Ptr child = theme->load("ChildWindow");
 		child->setSize(250, 120);
 		child->setPosition(420, 80);

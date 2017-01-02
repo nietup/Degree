@@ -15,14 +15,13 @@ int main() {
 	return 0;
 }
 
-//
 //int main() {
 //	sf::RenderWindow window(sf::VideoMode(800, 600), "TGUI window");
 //	window.setFramerateLimit(60);
 //
 //	tgui::Gui gui(window);
 //
-//	/*tgui::Theme::Ptr theme = std::make_shared<tgui::Theme>("/usr/share/tgui-0.7/widgets/Black.txt");
+//	tgui::Theme::Ptr theme = std::make_shared<tgui::Theme>("/usr/share/tgui-0.7/widgets/Black.txt");
 //
 //	tgui::Tab::Ptr tab = theme->load("tab");
 //	tab->setTabHeight(30);
@@ -214,7 +213,7 @@ int main() {
 //	button->setText("Exit");
 //	button->setSize(100, 40);
 //	button->connect("pressed", [&] () { window.close(); });
-//	gui.add(button);*/
+//	gui.add(button);
 //
 //	while (window.isOpen()) {
 //		sf::Event event;

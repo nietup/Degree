@@ -48,7 +48,7 @@ NewModelState::NewModelState(StateMachine * SM) {
 	editBox->setSize(200, 25);
 	editBox->setTextSize(18);
 	editBox->setPosition(40, (2 * WindowHeight) / 10.f + 95);
-	editBox->setText("..\\Models");
+	editBox->setText("../Models");
 	//editBox->setDefaultText("Click to edit text...");
 	Window->GUIAdd(editBox);
 	Widgets->push_back(editBox);
@@ -254,9 +254,9 @@ void NewModelState::CreateModel() {
 	for (int i = 0; i < NewModel->NumberOfRelationships(); i++)
 		std::cout << "\n" << NewModel->GetRelationshipName(i);
 
-	NewModel->SetFilePath(SaveFolder + "\\" + ModelName + ".model");
+	NewModel->SetFilePath(SaveFolder + "/" + ModelName + ".model");
 
-	//NewModel->SaveModel();
+	NewModel->SaveModel();
 
 	if (!Manager->ChangeState("SampleSelection")) {
 		Manager->ChangeState(new SampleSelectionState(Manager, NewModel));

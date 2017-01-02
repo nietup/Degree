@@ -4,6 +4,7 @@ StateMachine::StateMachine(int WindowWidth, int WindowHeight, int Rate, string T
 	Window = new WindowPack(WindowWidth, WindowHeight, Rate, Title);
 	States = new std::vector<State *>();
 	Running = true;
+	CurrentState = nullptr;
 }
 
 StateMachine::~StateMachine() {
@@ -25,7 +26,7 @@ void StateMachine::Render() {
 }
 
 void StateMachine::ChangeState(State* NewState) {
-	if (NULL != CurrentState) {
+	if (nullptr != CurrentState) {
 		CurrentState->Hide();
 	}
 	States->push_back(NewState);

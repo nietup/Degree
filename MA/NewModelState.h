@@ -1,7 +1,6 @@
 #pragma once
 #include <iostream>
 #include <fstream>
-#include <windows.h>
 #include "State.h"
 #include "StateMachine.h"
 #include "Primitive.h"

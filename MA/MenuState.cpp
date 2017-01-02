@@ -10,7 +10,7 @@ MenuState::MenuState(StateMachine * SM) {
 	float WindowWidth = Window->GetSize().x;
 	float WindowHeight = Window->GetSize().y;
 
-	tgui::Theme::Ptr theme = std::make_shared<tgui::Theme>("../../widgets/Black.txt");
+	tgui::Theme::Ptr theme = std::make_shared<tgui::Theme>("/usr/share/tgui-0.7/widgets/Black.txt");
 
 	tgui::Label::Ptr label = theme->load("label");
 	label->setText("Akwizycja Modeli");
@@ -25,7 +25,7 @@ MenuState::MenuState(StateMachine * SM) {
 	button->setText("Nowy model");
 	button->connect("pressed", [&] () {
 		if (!Manager->ChangeState("NewModel"))
-			Manager->ChangeState(new NewModelState(Manager)); 
+			Manager->ChangeState(new NewModelState(Manager));
 	});
 	Window->GUIAdd(button);
 	Widgets->push_back(button);

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="MA" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="bin/Debug/MA" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Debug/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-std=c++11" />
+					<Add option="-g" />
+					<Add option="-DSFML_STATIC" />
+				</Compiler>
+				<Linker>
+					<Add option="-ltgui" />
+					<Add library="sfml-graphics" />
+					<Add library="sfml-window" />
+					<Add library="sfml-system" />
+				</Linker>
+			</Target>
+			<Target title="Release">
+				<Option output="bin/Release/MA" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Release/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O2" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wall" />
+		</Compiler>
+		<Unit filename="Abstract.cpp" />
+		<Unit filename="Abstract.h" />
+		<Unit filename="Figure.cpp" />
+		<Unit filename="Figure.h" />
+		<Unit filename="MA.cpp" />
+		<Unit filename="MenuState.cpp" />
+		<Unit filename="MenuState.h" />
+		<Unit filename="Model.cpp" />
+		<Unit filename="Model.h" />
+		<Unit filename="NewModelState.cpp" />
+		<Unit filename="NewModelState.h" />
+		<Unit filename="Primitive.cpp" />
+		<Unit filename="Primitive.h" />
+		<Unit filename="Relationship.cpp" />
+		<Unit filename="Relationship.h" />
+		<Unit filename="SampleSelectionState.cpp" />
+		<Unit filename="SampleSelectionState.h" />
+		<Unit filename="Solid.cpp" />
+		<Unit filename="Solid.h" />
+		<Unit filename="State.cpp" />
+		<Unit filename="State.h" />
+		<Unit filename="StateMachine.cpp" />
+		<Unit filename="StateMachine.h" />
+		<Unit filename="WindowPack.cpp" />
+		<Unit filename="WindowPack.h" />
+		<Extensions>
+			<code_completion />
+			<debugger />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>

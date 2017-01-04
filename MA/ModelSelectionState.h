@@ -14,6 +14,8 @@ public:
     ModelSelectionState(StateMachine*);
 
 private:
+    void LoadModel();
+
     Model * chosenModel;
     std::string modelName, path;
     tgui::EditBox::Ptr modelNamePtr, pathPtr;

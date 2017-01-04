@@ -21,7 +21,7 @@ std::wstring s2ws(const std::string& s) {
 //	return r;
 }
 
-void Model::SaveModel() {std::cout << FilePath;
+void Model::SaveModel() {
 	//to file
 	std::ofstream outfile(FilePath);
 

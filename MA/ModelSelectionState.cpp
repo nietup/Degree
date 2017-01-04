@@ -32,7 +32,6 @@ ModelSelectionState::ModelSelectionState(StateMachine * stateMachine) {
     editBox->setSize(200, 25);
     editBox->setTextSize(18);
     editBox->setPosition(40, (2 * WindowHeight) / 10.f + 35);
-    //editBox->setDefaultText("Click to edit text...");
     Window->GUIAdd(editBox);
     Widgets->push_back(editBox);
     modelNamePtr = editBox;
@@ -48,71 +47,16 @@ ModelSelectionState::ModelSelectionState(StateMachine * stateMachine) {
     editBox->setTextSize(18);
     editBox->setPosition(40, (2 * WindowHeight) / 10.f + 95);
     editBox->setText("../Models");
-    //editBox->setDefaultText("Click to edit text...");
     Window->GUIAdd(editBox);
     Widgets->push_back(editBox);
     pathPtr = editBox;
-
-//    label = theme->load("label");
-//    label->setText("Wybierz typ modelu");
-//    label->setPosition(40, (4*WindowHeight) / 10.f + 65);
-//    Window->GUIAdd(label);
-//    Widgets->push_back(label);
-//
-//    tgui::RadioButton::Ptr radioButton = theme->load("RadioButton");
-//    radioButton->setPosition(40, 50 + ((5 * WindowHeight) / 10.f));
-//    radioButton->setText("Prymityw");
-//    radioButton->setSize(25, 25);
-//    radioButton->connect("checked", [&] () {
-//        ModelLevel = 1;
-//        DisplayRelationships(1);
-//    });
-//    radioButton->connect("unchecked", [&] () {DeleteRelationships(); });
-//    Window->GUIAdd(radioButton);
-//    Widgets->push_back(radioButton);
-//
-//    radioButton = theme->load("RadioButton");
-//    radioButton->setText("Figura");
-//    radioButton->setSize(25, 25);
-//    radioButton->setPosition(40, 50 + ((5 * WindowHeight) / 10.f) + radioButton->getSize().y + 5);
-//    radioButton->connect("checked", [&] () {
-//        ModelLevel = 2;
-//        DisplayRelationships(2);
-//    });
-//    radioButton->connect("unchecked", [&] () {DeleteRelationships(); });
-//    Window->GUIAdd(radioButton);
-//    Widgets->push_back(radioButton);
-//
-//    radioButton = theme->load("RadioButton");
-//    radioButton->setText("Bryla");
-//    radioButton->setSize(25, 25);
-//    radioButton->setPosition(40, 50 + ((5 * WindowHeight) / 10.f) + 2 * radioButton->getSize().y + 10);
-//    radioButton->connect("checked", [&] () {
-//        ModelLevel = 3;
-//        DisplayRelationships(3);
-//    });
-//    radioButton->connect("unchecked", [&] () {DeleteRelationships(); });
-//    Window->GUIAdd(radioButton);
-//    Widgets->push_back(radioButton);
-//
-//    radioButton = theme->load("RadioButton");
-//    radioButton->setText("Abstrakt");
-//    radioButton->setSize(25, 25);
-//    radioButton->setPosition(40, 50 + ((5 * WindowHeight) / 10.f) + 3 * radioButton->getSize().y + 15);
-//    radioButton->connect("checked", [&] () {
-//        ModelLevel = 4;
-//        DisplayRelationships(4);
-//    });
-//    radioButton->connect("unchecked", [&] () {DeleteRelationships(); });
-//    Window->GUIAdd(radioButton);
-//    Widgets->push_back(radioButton);
 
     tgui::Button::Ptr button = theme->load("button");
     button = theme->load("button");
     button->setPosition(WindowWidth - 200, WindowHeight/10.f);
     button->setText("Wybierz");
     button->setSize(150, 40);
-//    button->connect("pressed", &NewModelState::CreateModel, this);
+    button->connect("pressed", &ModelSelectionState::LoadModel, this);
     Window->GUIAdd(button);
     Widgets->push_back(button);
 
@@ -123,4 +67,49 @@ ModelSelectionState::ModelSelectionState(StateMachine * stateMachine) {
     button->connect("pressed", [&] () { Manager->Close(); });
     Window->GUIAdd(button);
     Widgets->push_back(button);
+}
+
+void ModelSelectionState::LoadModel() {
+    modelName = "";
+    for (int i = 0; NULL != modelNamePtr->getText()[i]; i++)
+        modelName += modelNamePtr->getText()[i];
+
+    path = "";
+    for (int i = 0; NULL != pathPtr->getText()[i]; i++)
+        path += pathPtr->getText()[i];
+
+    std::ifstream infile(path+"/"+modelName+".model");
+
+    if (!infile.is_open()) {
+        std::cout << "\nPrzykra sprawa\n";
+    } else {
+        std::getline(infile, modelName);
+        string modelLvlStr;
+        std::getline(infile, modelLvlStr);
+        string nrOfRelsStr;
+        std::getline(infile, nrOfRelsStr);
+        //while getline push back to model relationships
+    }
+
+//    switch (ModelLevel) {
+//        case 1:
+//            NewModel = new Primitive();
+//            break;
+//        case 2:
+//            NewModel = new Figure();
+//            break;
+//        case 3:
+//            NewModel = new Solid();
+//            break;
+//        case 4:
+//            NewModel = new Abstract();
+//            break;
+//        default:
+//            break;
+//    }
+//
+//    NewModel->SetName(ModelName);
+//    NewModel->ChooseRelationships(ModelRelationships);
+
+    infile.close();
 }

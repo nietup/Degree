@@ -111,6 +111,12 @@
 		<Unit filename="/home/nietup/Code/eng/Degree/MA/Model.h">
 			<Option target="Degree"/>
 		</Unit>
+		<Unit filename="/home/nietup/Code/eng/Degree/MA/ModelSelectionState.cpp">
+			<Option target="Degree"/>
+		</Unit>
+		<Unit filename="/home/nietup/Code/eng/Degree/MA/ModelSelectionState.h">
+			<Option target="Degree"/>
+		</Unit>
 		<Unit filename="/home/nietup/Code/eng/Degree/MA/NewModelState.cpp">
 			<Option target="Degree"/>
 		</Unit>

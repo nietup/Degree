@@ -41,6 +41,8 @@ StateMachine.h
 /home/nietup/Code/eng/Degree/MA/StateMachine.h
 NewModelState.h
 /home/nietup/Code/eng/Degree/MA/NewModelState.h
+ModelSelectionState.h
+/home/nietup/Code/eng/Degree/MA/ModelSelectionState.h
 
 /home/nietup/Code/eng/Degree/MA/Model.cpp
 Model.h
@@ -55,6 +57,18 @@ iostream
 -
 Relationship.h
 /home/nietup/Code/eng/Degree/MA/Relationship.h
+
+/home/nietup/Code/eng/Degree/MA/ModelSelectionState.cpp
+ModelSelectionState.h
+/home/nietup/Code/eng/Degree/MA/ModelSelectionState.h
+
+/home/nietup/Code/eng/Degree/MA/ModelSelectionState.h
+StateMachine.h
+/home/nietup/Code/eng/Degree/MA/StateMachine.h
+Model.h
+/home/nietup/Code/eng/Degree/MA/Model.h
+WindowPack.h
+/home/nietup/Code/eng/Degree/MA/WindowPack.h
 
 /home/nietup/Code/eng/Degree/MA/NewModelState.cpp
 NewModelState.h

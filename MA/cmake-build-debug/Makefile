@@ -258,6 +258,33 @@ Model.cpp.s:
 	$(MAKE) -f CMakeFiles/Degree.dir/build.make CMakeFiles/Degree.dir/Model.cpp.s
 .PHONY : Model.cpp.s
 
+ModelSelectionState.o: ModelSelectionState.cpp.o
+
+.PHONY : ModelSelectionState.o
+
+# target to build an object file
+ModelSelectionState.cpp.o:
+	$(MAKE) -f CMakeFiles/Degree.dir/build.make CMakeFiles/Degree.dir/ModelSelectionState.cpp.o
+.PHONY : ModelSelectionState.cpp.o
+
+ModelSelectionState.i: ModelSelectionState.cpp.i
+
+.PHONY : ModelSelectionState.i
+
+# target to preprocess a source file
+ModelSelectionState.cpp.i:
+	$(MAKE) -f CMakeFiles/Degree.dir/build.make CMakeFiles/Degree.dir/ModelSelectionState.cpp.i
+.PHONY : ModelSelectionState.cpp.i
+
+ModelSelectionState.s: ModelSelectionState.cpp.s
+
+.PHONY : ModelSelectionState.s
+
+# target to generate assembly for a file
+ModelSelectionState.cpp.s:
+	$(MAKE) -f CMakeFiles/Degree.dir/build.make CMakeFiles/Degree.dir/ModelSelectionState.cpp.s
+.PHONY : ModelSelectionState.cpp.s
+
 NewModelState.o: NewModelState.cpp.o
 
 .PHONY : NewModelState.o
@@ -498,6 +525,9 @@ help:
 	@echo "... Model.o"
 	@echo "... Model.i"
 	@echo "... Model.s"
+	@echo "... ModelSelectionState.o"
+	@echo "... ModelSelectionState.i"
+	@echo "... ModelSelectionState.s"
 	@echo "... NewModelState.o"
 	@echo "... NewModelState.i"
 	@echo "... NewModelState.s"

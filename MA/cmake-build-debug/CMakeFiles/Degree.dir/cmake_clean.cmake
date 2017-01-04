@@ -12,6 +12,7 @@ file(REMOVE_RECURSE
   "CMakeFiles/Degree.dir/State.cpp.o"
   "CMakeFiles/Degree.dir/StateMachine.cpp.o"
   "CMakeFiles/Degree.dir/WindowPack.cpp.o"
+  "CMakeFiles/Degree.dir/ModelSelectionState.cpp.o"
   "Degree.pdb"
   "Degree"
 )

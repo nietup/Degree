@@ -34,6 +34,10 @@ MenuState::MenuState(StateMachine * SM) {
 	button->setSize(300, 40);
 	button->setPosition((WindowWidth - button->getSize().x) / 2.f, WindowHeight / 2.f + 2 * button->getSize().y);
 	button->setText("Wybierz model");
+	button->connect("pressed", [&] () {
+		if (!Manager->ChangeState("ModelSelection"))
+			Manager->ChangeState(new ModelSelectionState(Manager));
+	});
 	Window->GUIAdd(button);
 	Widgets->push_back(button);
 

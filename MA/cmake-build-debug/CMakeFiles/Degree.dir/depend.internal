@@ -17,6 +17,7 @@ CMakeFiles/Degree.dir/MA.cpp.o
  /home/nietup/Code/eng/Degree/MA/MA.cpp
  /home/nietup/Code/eng/Degree/MA/MenuState.h
  /home/nietup/Code/eng/Degree/MA/Model.h
+ /home/nietup/Code/eng/Degree/MA/ModelSelectionState.h
  /home/nietup/Code/eng/Degree/MA/NewModelState.h
  /home/nietup/Code/eng/Degree/MA/Primitive.h
  /home/nietup/Code/eng/Degree/MA/Relationship.h
@@ -31,6 +32,7 @@ CMakeFiles/Degree.dir/MenuState.cpp.o
  /home/nietup/Code/eng/Degree/MA/MenuState.cpp
  /home/nietup/Code/eng/Degree/MA/MenuState.h
  /home/nietup/Code/eng/Degree/MA/Model.h
+ /home/nietup/Code/eng/Degree/MA/ModelSelectionState.h
  /home/nietup/Code/eng/Degree/MA/NewModelState.h
  /home/nietup/Code/eng/Degree/MA/Primitive.h
  /home/nietup/Code/eng/Degree/MA/Relationship.h
@@ -43,6 +45,14 @@ CMakeFiles/Degree.dir/Model.cpp.o
  /home/nietup/Code/eng/Degree/MA/Model.cpp
  /home/nietup/Code/eng/Degree/MA/Model.h
  /home/nietup/Code/eng/Degree/MA/Relationship.h
+CMakeFiles/Degree.dir/ModelSelectionState.cpp.o
+ /home/nietup/Code/eng/Degree/MA/Model.h
+ /home/nietup/Code/eng/Degree/MA/ModelSelectionState.cpp
+ /home/nietup/Code/eng/Degree/MA/ModelSelectionState.h
+ /home/nietup/Code/eng/Degree/MA/Relationship.h
+ /home/nietup/Code/eng/Degree/MA/State.h
+ /home/nietup/Code/eng/Degree/MA/StateMachine.h
+ /home/nietup/Code/eng/Degree/MA/WindowPack.h
 CMakeFiles/Degree.dir/NewModelState.cpp.o
  /home/nietup/Code/eng/Degree/MA/Abstract.h
  /home/nietup/Code/eng/Degree/MA/Figure.h

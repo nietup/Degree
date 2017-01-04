@@ -2,6 +2,7 @@
 #include "State.h"
 #include "StateMachine.h"
 #include "NewModelState.h"
+#include "ModelSelectionState.h"
 
 class MenuState : public State {
 public:

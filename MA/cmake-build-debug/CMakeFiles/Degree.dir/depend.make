@@ -16,6 +16,7 @@ CMakeFiles/Degree.dir/MA.cpp.o: ../Figure.h
 CMakeFiles/Degree.dir/MA.cpp.o: ../MA.cpp
 CMakeFiles/Degree.dir/MA.cpp.o: ../MenuState.h
 CMakeFiles/Degree.dir/MA.cpp.o: ../Model.h
+CMakeFiles/Degree.dir/MA.cpp.o: ../ModelSelectionState.h
 CMakeFiles/Degree.dir/MA.cpp.o: ../NewModelState.h
 CMakeFiles/Degree.dir/MA.cpp.o: ../Primitive.h
 CMakeFiles/Degree.dir/MA.cpp.o: ../Relationship.h
@@ -30,6 +31,7 @@ CMakeFiles/Degree.dir/MenuState.cpp.o: ../Figure.h
 CMakeFiles/Degree.dir/MenuState.cpp.o: ../MenuState.cpp
 CMakeFiles/Degree.dir/MenuState.cpp.o: ../MenuState.h
 CMakeFiles/Degree.dir/MenuState.cpp.o: ../Model.h
+CMakeFiles/Degree.dir/MenuState.cpp.o: ../ModelSelectionState.h
 CMakeFiles/Degree.dir/MenuState.cpp.o: ../NewModelState.h
 CMakeFiles/Degree.dir/MenuState.cpp.o: ../Primitive.h
 CMakeFiles/Degree.dir/MenuState.cpp.o: ../Relationship.h
@@ -42,6 +44,14 @@ CMakeFiles/Degree.dir/MenuState.cpp.o: ../WindowPack.h
 CMakeFiles/Degree.dir/Model.cpp.o: ../Model.cpp
 CMakeFiles/Degree.dir/Model.cpp.o: ../Model.h
 CMakeFiles/Degree.dir/Model.cpp.o: ../Relationship.h
+
+CMakeFiles/Degree.dir/ModelSelectionState.cpp.o: ../Model.h
+CMakeFiles/Degree.dir/ModelSelectionState.cpp.o: ../ModelSelectionState.cpp
+CMakeFiles/Degree.dir/ModelSelectionState.cpp.o: ../ModelSelectionState.h
+CMakeFiles/Degree.dir/ModelSelectionState.cpp.o: ../Relationship.h
+CMakeFiles/Degree.dir/ModelSelectionState.cpp.o: ../State.h
+CMakeFiles/Degree.dir/ModelSelectionState.cpp.o: ../StateMachine.h
+CMakeFiles/Degree.dir/ModelSelectionState.cpp.o: ../WindowPack.h
 
 CMakeFiles/Degree.dir/NewModelState.cpp.o: ../Abstract.h
 CMakeFiles/Degree.dir/NewModelState.cpp.o: ../Figure.h

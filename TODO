@@ -1,4 +1,7 @@
 immediate todo:
+write simple code on a separate project:
+	hardcoded picture
+	handled output of elsdpp	
 
 later todo:
 new pointers
@@ -8,10 +11,14 @@ consistent naming convention:
 	classes: first letter big
 	methods: first letter big
 
+--------------------------------------------------------------------------------
 
 what do i want to have
  |
  V
 pic -> elsdpp -> lines, arcs -> MAGIC -> model
 
-
+MAGIC:
+take pairs of lines/arcs
+	estimate satisfaction of given relation
+	(same size, angle, touching)

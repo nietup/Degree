@@ -47,3 +47,9 @@ Debug/
 MA/Debug/
 .vs/
 *.jpg
+
+MA/.idea/
+MA/Models
+MA/cmake-build-debug
+*.xml
+

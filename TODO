@@ -1,7 +1,7 @@
 immediate todo:
-write simple code on a separate project:
-	hardcoded picture
-	handled output of elsdpp	
+put elsd to your project
+	open image and segment it to lines and arcs
+	read thoroughly robrex
 
 later todo:
 new pointers

@@ -48,8 +48,18 @@ MA/Debug/
 .vs/
 *.jpg
 
-MA/.idea/
+MA/.idea/*
 MA/Models
-MA/cmake-build-debug
+MA/cmake-build-debug/
 *.xml
+MA/.idea/workspace.xml
+
+TODO
+
+.TODO.swp
+.Diary.txt.swp
+.gitignore.swp
+Diary.txt
+MA/Samples/
+
 

@@ -1,6 +1,6 @@
 #include "SampleSelectionState.h"
-
-
+#include <dirent.h>
+#include <iostream>
 
 SampleSelectionState::SampleSelectionState(StateMachine* SM, Model * M) {
 
@@ -57,7 +57,7 @@ SampleSelectionState::SampleSelectionState(StateMachine* SM, Model * M) {
 	button->setPosition(WindowWidth - 200, WindowHeight / 10.f);
 	button->setText("Ucz");
 	button->setSize(150, 40);
-	//button->connect("pressed", &NewModelState::CreateModel, this);
+	button->connect("pressed", &SampleSelectionState::PrepareLearningData, this);
 	Window->GUIAdd(button);
 	Widgets->push_back(button);
 
@@ -83,4 +83,29 @@ SampleSelectionState::SampleSelectionState(StateMachine* SM, Model * M) {
 
 
 SampleSelectionState::~SampleSelectionState() {
+}
+
+void SampleSelectionState::SetPathStrings() {
+    //TODO
+    PositivePath = "/home/nietup/Code/eng/Degree/MA/Samples/pos";
+    NegativePath = "/home/nietup/Code/eng/Degree/MA/Samples/neg";
+}
+
+void SampleSelectionState::PrepareLearningData() {
+    SetPathStrings();
+
+	DIR *dir;
+    struct dirent *ent;
+    if ((dir = opendir (PositivePath.c_str())) != NULL) {
+        /* print all the files and directories within directory */
+        while ((ent = readdir (dir)) != NULL) {
+            std::cout << "\n" << ent->d_name;git 
+        }
+        closedir (dir);
+    }
+    else {
+        /* could not open directory */
+        perror ("");
+        std::cout << "\nPROGRAM FAILURE: Unable to access path " << PositivePath << "\n";
+    }
 }

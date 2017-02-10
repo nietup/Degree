@@ -1,6 +1,0 @@
-/home/nietup/Programs/clion-2016.3.2/bin/cmake/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" /home/nietup/Code/eng/Degree/MA
--- Found SFML 2.3.2 in /usr/include
--- Found TGUI 0.7.2 in /usr/include
--- Configuring done
--- Generating done
--- Build files have been written to: /home/nietup/Code/eng/Degree/MA/cmake-build-debug

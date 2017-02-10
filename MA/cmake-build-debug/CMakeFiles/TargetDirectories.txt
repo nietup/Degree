@@ -1,3 +1,0 @@
-/home/nietup/Code/eng/Degree/MA/cmake-build-debug/CMakeFiles/edit_cache.dir
-/home/nietup/Code/eng/Degree/MA/cmake-build-debug/CMakeFiles/rebuild_cache.dir
-/home/nietup/Code/eng/Degree/MA/cmake-build-debug/CMakeFiles/Degree.dir

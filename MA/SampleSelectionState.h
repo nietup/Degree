@@ -19,5 +19,6 @@ private:
 	Model * LearnedModel;
 	tgui::EditBox::Ptr PositiveFolder, NegativeFolder;
     string PositivePath, NegativePath;
+    std::vector<std::string> PositiveFiles;
 };
 

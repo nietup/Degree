@@ -99,7 +99,8 @@ void SampleSelectionState::PrepareLearningData() {
     if ((dir = opendir (PositivePath.c_str())) != NULL) {
         /* print all the files and directories within directory */
         while ((ent = readdir (dir)) != NULL) {
-            std::cout << "\n" << ent->d_name;git 
+            std::cout << "\n" << ent->d_name << " - |" << (int)ent->d_type << "|"; //8 is file 4 is folder
+
         }
         closedir (dir);
     }

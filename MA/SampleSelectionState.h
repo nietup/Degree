@@ -2,6 +2,7 @@
 #include "State.h"
 #include "Model.h"
 #include "StateMachine.h"
+#include "ImageHandler.h"
 
 class SampleSelectionState : public State {
 public:
@@ -19,6 +20,7 @@ private:
 	Model * LearnedModel;
 	tgui::EditBox::Ptr PositiveFolder, NegativeFolder;
     string PositivePath, NegativePath;
-    std::vector<std::string> PositiveFiles;
+    std::vector<std::string> * PositiveFiles = new std::vector<std::string>();
+    ImageHandler * Handler;
 };
 

@@ -6,10 +6,11 @@
 #define DEGREE_IMAGEHANDLER_H
 
 #include <string>
+#include <vector>
 
 class ImageHandler {
 public:
-    ImageHandler(std::string PathToFolder);
+    ImageHandler(std::vector<std::string> * PathToFolder);
 
     /*purpose of this function:
      * open file
@@ -17,10 +18,10 @@ public:
      * prepare proper learning sample
      * return it to the learning algorithm
      */
-    void HandleFile(std::string PathToFile);
+    void ImageToLearningSample();
 
 private:
-    std::string Path;
+    std::vector<std::string> * Path;
 };
 
 

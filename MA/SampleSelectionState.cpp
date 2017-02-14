@@ -99,8 +99,9 @@ void SampleSelectionState::PrepareLearningData() {
     if ((dir = opendir (PositivePath.c_str())) != NULL) {
         /* print all the files and directories within directory */
         while ((ent = readdir (dir)) != NULL) {
-            std::cout << "\n" << ent->d_name << " - |" << (int)ent->d_type << "|"; //8 is file 4 is folder
-
+            //std::cout << "\n" << ent->d_name << " - |" << (int)ent->d_type << "|"; //8 is file 4 is folder
+            if (8 == ent->d_type)
+                PositiveFiles->push_back(string(ent->d_name));
         }
         closedir (dir);
     }
@@ -109,4 +110,9 @@ void SampleSelectionState::PrepareLearningData() {
         perror ("");
         std::cout << "\nPROGRAM FAILURE: Unable to access path " << PositivePath << "\n";
     }
+
+    for (auto &i : *PositiveFiles)
+        std::cout << "\n" << i;
+    Handler = new ImageHandler(PositiveFiles);
+    Handler->ImageToLearningSample();
 }

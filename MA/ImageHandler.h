@@ -10,7 +10,7 @@
 
 class ImageHandler {
 public:
-    ImageHandler(std::vector<std::string> * PathToFolder);
+    ImageHandler(std::vector<std::string> * FileNames, std::string Directory);
 
     /*purpose of this function:
      * open file
@@ -22,6 +22,7 @@ public:
 
 private:
     std::vector<std::string> * Path;
+    std::string Directory;
 };
 
 

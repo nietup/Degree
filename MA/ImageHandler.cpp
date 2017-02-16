@@ -10,13 +10,14 @@
 #include <elsdetector.hpp>
 #include <elsdsvgwriter.hpp>
 
-ImageHandler::ImageHandler(std::vector<std::string> * aPath) : Path(aPath) {
+ImageHandler::ImageHandler(std::vector<std::string> * aPath, std::string Dir) : Path(aPath), Directory(Dir) {
 }
 
 void ImageHandler::ImageToLearningSample() {
-    std::string inFile = (*Path)[0];
+    //this is proof of concept only now
+    //TODO
+    std::string inFile = Directory + (*Path)[0];
     Path->erase(Path->begin(), Path->begin()++);
-    inFile = "/home/nietup/Code/eng/Degree/MA/Samples/pos/" + inFile;
     std::cout << "\nHANDLED FILE: " << inFile << "\n";
 
     using namespace std;

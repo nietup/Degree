@@ -87,7 +87,7 @@ SampleSelectionState::~SampleSelectionState() {
 
 void SampleSelectionState::SetPathStrings() {
     //TODO
-    PositivePath = "/home/nietup/Code/eng/Degree/MA/Samples/pos";
+    PositivePath = "/home/nietup/Code/eng/Degree/MA/Samples/pos/";
     NegativePath = "/home/nietup/Code/eng/Degree/MA/Samples/neg";
 }
 
@@ -111,8 +111,9 @@ void SampleSelectionState::PrepareLearningData() {
         std::cout << "\nPROGRAM FAILURE: Unable to access path " << PositivePath << "\n";
     }
 
-    for (auto &i : *PositiveFiles)
+    /*for (auto &i : *PositiveFiles)
         std::cout << "\n" << i;
-    Handler = new ImageHandler(PositiveFiles);
+    std::cout << PositivePath << "\n";*/
+    Handler = new ImageHandler(PositiveFiles, PositivePath);
     Handler->ImageToLearningSample();
 }

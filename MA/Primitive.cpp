@@ -9,6 +9,7 @@ Primitive::Primitive() {
 	Considered->push_back(new Relationship("Prostopadly"));
 	Considered->push_back(new Relationship("Rownolegly"));
 	Considered->push_back(new Relationship("Przystaje"));
+	Considered->push_back(new Relationship("Kat"));
 }
 
 

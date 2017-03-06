@@ -64,4 +64,5 @@ MA/Samples/
 
 MA/cmake_modules/
 opncvconfig.txt
+*.txt
 

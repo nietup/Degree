@@ -15,8 +15,17 @@ public:
 
 	virtual void SaveModel();
 
+    virtual void AssignParts(std::vector<std::vector<Relationship*>*> *);
+
 protected:
 	std::vector<Relationship*> * Considered;
+    /*this looks somewhat complicated
+      by 'Part' I mean pair of detected segments that satisfies one or more of considered constraints
+      that is why this is a vector of vectors - maybe there is only one constraint, maybe more
+      (e.g. maybe consecutive edges have to perpendicular - like in square)
+      this vector will be filled during the learning process
+     */
+    std::vector<std::vector<Relationship*>*> * Parts;
 	std::string Name;
 	int Level;
 	std::string FilePath;

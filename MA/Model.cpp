@@ -45,3 +45,7 @@ void Model::SaveModel() {
 
 	outfile.close();
 }
+
+void Model::AssignParts(std::vector<std::vector<Relationship *> *> * aParts) {
+    Parts = aParts;
+}

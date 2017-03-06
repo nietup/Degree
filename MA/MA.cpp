@@ -2,17 +2,41 @@
 #include "StateMachine.h"
 #include "MenuState.h"
 
+//ORIGINAL MAIN
+//int main() {
+//	StateMachine SM(800, 600, 60, "Akwizycja Modeli");
+//	MenuState Menu(&SM);
+//	SM.ChangeState(&Menu);
+//
+//	while (SM.IsRunning()) {
+//		SM.Update();
+//		SM.Render();
+//	}
+//
+//	return 0;
+//}
+
 int main() {
-	StateMachine SM(800, 600, 60, "Akwizycja Modeli");
-	MenuState Menu(&SM);
-	SM.ChangeState(&Menu);
+    std::cout << "In this testing case we hardcode triangle model and test classification";
 
-	while (SM.IsRunning()) {
-		SM.Update();
-		SM.Render();
-	}
+    Relationship angle("kat");
+    Relationship cons("przystawanie");
+    Relationship size("podobny rozmiar");
 
-	return 0;
+    std::vector<Relationship*> vertex;
+    vertex.push_back(&angle);
+    vertex.push_back(&cons);
+    vertex.push_back(&size);
+
+    std::vector<std::vector<Relationship*>*> * parts = new std::vector<std::vector<Relationship*>*>();
+    parts->push_back(&vertex);
+    parts->push_back(&vertex);
+    parts->push_back(&vertex);
+
+    Primitive triangle;
+    triangle.AssignParts(parts);
+
+    return 0;
 }
 
 //int main() {

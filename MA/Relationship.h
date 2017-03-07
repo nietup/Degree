@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include <functional>
 
 class Relationship {
 public:
@@ -7,11 +8,12 @@ public:
 	~Relationship();
 
 	std::string GetName() { return Name; };
-
-    //SATISFACTION TEST WILL BE LAMBDA
-    //or maybe we do derivation for every possible relationship
+    void SetScoringFunction(std::function<char ()>);
+    char Score() { return ScoringFunction(); };
 
 private:
 	std::string Name;
+    //scoring function will return score in scale 0-100 where 0 is best match
+    std::function<char ()> ScoringFunction;
 };
 

@@ -17,6 +17,8 @@ public:
 
     virtual void AssignParts(std::vector<std::vector<Relationship*>*> *);
 
+    std::vector<std::vector<Relationship*>*> GetParts() { return *Parts; }
+
 protected:
 	std::vector<Relationship*> * Considered;
     /*this looks somewhat complicated

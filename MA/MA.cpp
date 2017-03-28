@@ -39,12 +39,12 @@ void DetectionTest() {
     auto score = [] (LineSegment * a, LineSegment * b) { return rand()%100; };
 
     Relationship angle("kat");
-    angle.SetScoringFunction(score);
+    //angle.SetScoringFunction(score);
 
     Relationship cons("przystawanie");
-    cons.SetScoringFunction(score);
+    //cons.SetScoringFunction(score);
     Relationship size("podobny rozmiar");
-    size.SetScoringFunction(score);
+    //size.SetScoringFunction(score);
 
     vector<Relationship*> vertex;
     vertex.push_back(&angle);
@@ -63,24 +63,9 @@ void DetectionTest() {
     ImageInterface::Ptr image(new ElsdPgmFileReader(inFile));
     ShapesDetectorInterface::Ptr detector(new ElsDetector);
     detector->run(image);
-}
 
-void Fit(vector<vector<Relationship*>*> parts, vector<LineSegment> lineSegments, vector<SvgArc> ellipticalArcs, vector<SvgArc> circularArcs) {
-    cout << "This is fitting function\n";
-    int threshold = 80;
-
-
-    int segmentsNo = lineSegments.size() + circularArcs.size() + ellipticalArcs.size();
-    //so the number of possible pairs is equal to 0.5 * segmentsNo * (segmentsNo-1)
-    int pairsNo = segmentsNo * (segmentsNo-1) / 2;
-    int partsNo = parts.size();
-
-    Matcher mat(pairsNo, partsNo);
-    //int * match = mat.Match();
-
-    cout << "Found match: ";
-    for (int i = 0; i < partsNo; i++)
-        cout << match[i] << " ";
+    vector<LineSegment> ls = detector->getLineSegments();
+    Matcher mat(10, 10);
 }
 
 int Pair(int x, int y) {

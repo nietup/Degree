@@ -18,19 +18,23 @@ using namespace elsd;
 
 class Matcher {
 public:
+	Matcher(int x, int y){cout << "dopa";};
 	Matcher(int, int, vector<vector<Relationship*>*> *, vector<LineSegment> *);
 	~Matcher();
 
-	vector<int> Match();
-	void InitMatch();
-	bool CorrectMatches();
+	int * Match();
 
 private:
+    void InitMatch();
+    bool CorrectMatches();
+    bool Discover(int x, int y);    //checks if seg x matches model part y
+
 	int n, //number of pairs of segments
         m, //number of parts of the model
-        matchedNo;
+        matchedNo,
+        pairsNo;
     vector<int> * matchLeft;
-    vector<int> * matchRight;
+    int * matchRight;
     vector<int> * edges;
 
     //i dont have edges available so i need to discover them

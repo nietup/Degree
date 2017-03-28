@@ -5,32 +5,42 @@
 #include "Matcher.h"
 using namespace std;
 
-Matcher::Matcher(int pairsNo, int partsNo, vector<vector<Relationship*>*> * _parts, vector<LineSegment> * _segments)
-        : n(pairsNo), m(partsNo), matchedNo(0) {
-	edges = new vector<int>[n];
+Matcher::Matcher(int pairsNo, int partsNo, vector<vector<Relationship*>*> * _parts, vector<LineSegment> * _segments) {
+    /*n = pairsNo;
+    m = partsNo;
+    matchedNo = 0;
     parts = _parts;
     segments = _segments;
+    matchLeft = new vector<int>;
+    matchRight = new int[m];*/
 }
 
 Matcher::~Matcher() {
 	delete edges;
 }
 
-vector<int> Matcher::Match() {
+int * Matcher::Match() {
 	InitMatch();
 	while (CorrectMatches());
-    return *matchRight;
+    return matchRight;
+}
+
+bool Matcher::Discover(int x, int y) {
+    return true;
 }
 
 void Matcher::InitMatch() {
-	matchLeft = new vector<int>;
-	matchRight = new vector<int>;
-	bool * matched = new bool[n];
-	for (int i = 0; i < n; i++) {
-		matchLeft[i] = matchRight[i] = -1;
+    /*
+     * Initial matching is finished in one of two conditions:
+     * - matchedNo == m
+     * - last pair was checked for matching
+     */
+
+	bool * matched = new bool[m];
+	for (int i = 0; i < m; i++)
 		matched[i] = false;
-	}
-	for (int i = 0; i < n; i++) {
+
+	/*for (int i = 0; i < n; i++) {
 		int clean = -1;
 		int j = 0;
 		for (auto e : edges[i]) {
@@ -47,10 +57,32 @@ void Matcher::InitMatch() {
 		if (-1 != clean)
 			edges[i].erase(edges[i].begin() + j);
 	}
-	delete matched;
+	delete matched;*/
+
+    for (int i = 0; (i < n) && (matchedNo < m); i++){
+        bool wasMatched = false;
+        for (int j = 0; j < m; j++) {
+            if (!matched[j] && Discover(i, j)) {
+                matched[j] = true;
+                matchRight[j] = i;
+                matchLeft->push_back(j);
+                matchedNo++;
+                wasMatched = true;
+                break;
+            }
+        }
+        if (!wasMatched)
+            matchLeft->push_back(-1);
+    }
+
+    cout << "\ninit match:\n" << " matchedNo: " << matchedNo << "\n"
+         << " size of matchLeft: " << matchLeft->size() << "\n"
+         << " matchRight: ";
+    for (int i = 0; i < m; i++)
+        cout << matchRight[i] << " ";
 }
 
-bool Matcher::CorrectMatches() {
+bool Matcher::CorrectMatches() {/*
 	if (n == matchedNo)
 		return false;
 
@@ -103,5 +135,7 @@ bool Matcher::CorrectMatches() {
 
 			return true;
 		}
-	}
+	}*/
+
+    return false;
 }

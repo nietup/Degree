@@ -5,18 +5,19 @@
 #include "Matcher.h"
 using namespace std;
 
+
 Matcher::Matcher(int pairsNo, int partsNo, vector<vector<Relationship*>*> * _parts, vector<LineSegment> * _segments) {
-    /*n = pairsNo;
+    n = pairsNo;
     m = partsNo;
     matchedNo = 0;
     parts = _parts;
     segments = _segments;
     matchLeft = new vector<int>;
-    matchRight = new int[m];*/
+    matchRight = new int[m];
+
 }
 
 Matcher::~Matcher() {
-	delete edges;
 }
 
 int * Matcher::Match() {
@@ -40,7 +41,7 @@ void Matcher::InitMatch() {
 	for (int i = 0; i < m; i++)
 		matched[i] = false;
 
-	/*for (int i = 0; i < n; i++) {
+/*for (int i = 0; i < n; i++) {
 		int clean = -1;
 		int j = 0;
 		for (auto e : edges[i]) {
@@ -58,6 +59,7 @@ void Matcher::InitMatch() {
 			edges[i].erase(edges[i].begin() + j);
 	}
 	delete matched;*/
+
 
     for (int i = 0; (i < n) && (matchedNo < m); i++){
         bool wasMatched = false;
@@ -82,7 +84,8 @@ void Matcher::InitMatch() {
         cout << matchRight[i] << " ";
 }
 
-bool Matcher::CorrectMatches() {/*
+bool Matcher::CorrectMatches() {
+/*
 	if (n == matchedNo)
 		return false;
 
@@ -136,6 +139,7 @@ bool Matcher::CorrectMatches() {/*
 			return true;
 		}
 	}*/
+
 
     return false;
 }

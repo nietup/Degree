@@ -65,7 +65,8 @@ void DetectionTest() {
     detector->run(image);
 
     vector<LineSegment> ls = detector->getLineSegments();
-    Matcher mat(10, 10);
+    Matcher mat(5, 4, parts, &ls);
+    mat.Match();
 }
 
 int Pair(int x, int y) {

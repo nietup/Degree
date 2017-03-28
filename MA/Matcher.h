@@ -18,8 +18,7 @@ using namespace elsd;
 
 class Matcher {
 public:
-	Matcher(int x, int y){cout << "dopa";};
-	Matcher(int, int, vector<vector<Relationship*>*> *, vector<LineSegment> *);
+	Matcher(int n, int m, vector<vector<Relationship*>*> * model, vector<LineSegment> * segments);
 	~Matcher();
 
 	int * Match();
@@ -31,8 +30,7 @@ private:
 
 	int n, //number of pairs of segments
         m, //number of parts of the model
-        matchedNo,
-        pairsNo;
+        matchedNo;
     vector<int> * matchLeft;
     int * matchRight;
     vector<int> * edges;

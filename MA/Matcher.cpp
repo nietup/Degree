@@ -6,9 +6,10 @@
 using namespace std;
 
 
-Matcher::Matcher(int pairsNo, int partsNo, vector<vector<Relationship*>*> * _parts, vector<LineSegment> * _segments) {
-    n = pairsNo;
-    m = partsNo;
+Matcher::Matcher(vector<vector<Relationship*>*> * _parts, vector<LineSegment> * _segments) {
+    int s = _segments->size();
+    n = 0.5*s*(s-1);
+    m = _parts->size();
     matchedNo = 0;
     parts = _parts;
     segments = _segments;
@@ -27,6 +28,13 @@ int * Matcher::Match() {
 }
 
 bool Matcher::Discover(int x, int y) {
+    pair<int, int> seg = Unpair(x);
+    vector<Relationship*> * part = (*parts)[y];
+    for (Relationship * rel : *part) {
+        cout << "\nScore of pair " << x << " to part " << y << ": "
+             << rel->Score(&(*segments)[seg.first], &(*segments)[seg.second]) << endl;
+    }
+
     return true;
 }
 
@@ -77,7 +85,9 @@ void Matcher::InitMatch() {
             matchLeft->push_back(-1);
     }
 
-    cout << "\ninit match:\n" << " matchedNo: " << matchedNo << "\n"
+    cout << "\ninit match:\n"
+         << " n: " << n << " m: " << m << endl
+         << " matchedNo: " << matchedNo << "\n"
          << " size of matchLeft: " << matchLeft->size() << "\n"
          << " matchRight: ";
     for (int i = 0; i < m; i++)
@@ -142,4 +152,15 @@ bool Matcher::CorrectMatches() {
 
 
     return false;
+}
+
+int Matcher::Pair(int x, int y) {
+    return (int) (0.5 * (y * y - 2 * x + y) - 1);
+}
+
+pair<int, int> Matcher::Unpair(int z) {
+    int y = (int) floor(0.5 * (sqrt(8.0 * z + 1.0) + 1.0));
+    int x = (int) (0.5 * (y * y + y - 2 * z) - 1);
+    pair<int, int> result(x,y);
+    return result;
 }

@@ -18,7 +18,7 @@ using namespace elsd;
 
 class Matcher {
 public:
-	Matcher(int n, int m, vector<vector<Relationship*>*> * model, vector<LineSegment> * segments);
+	Matcher(vector<vector<Relationship*>*> * model, vector<LineSegment> * segments);
 	~Matcher();
 
 	int * Match();
@@ -27,6 +27,8 @@ private:
     void InitMatch();
     bool CorrectMatches();
     bool Discover(int x, int y);    //checks if seg x matches model part y
+    int Pair(int x, int y);
+    pair<int, int> Unpair(int z);
 
 	int n, //number of pairs of segments
         m, //number of parts of the model

@@ -1,6 +1,11 @@
 #pragma once
 #include <string>
 #include <functional>
+#include <elsdpgmfilereader.hpp>
+#include <elsdetector.hpp>
+#include <elsdsvgwriter.hpp>
+
+using namespace elsd;
 
 class Relationship {
 public:
@@ -8,12 +13,11 @@ public:
 	~Relationship();
 
 	std::string GetName() { return Name; };
-    void SetScoringFunction(std::function<char ()>);
-    char Score() { return ScoringFunction(); };
+    void SetScoringFunction(std::function<char (LineSegment *, LineSegment *)>);
+    char Score(LineSegment * a, LineSegment * b) { return ScoringFunction(a, b); };
 
 private:
 	std::string Name;
     //scoring function will return score in scale 0-100 where 0 is best match
-    std::function<char ()> ScoringFunction;
+    std::function<char (LineSegment *, LineSegment *)> ScoringFunction;
 };
-

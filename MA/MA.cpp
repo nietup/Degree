@@ -39,12 +39,12 @@ void DetectionTest() {
     auto score = [] (LineSegment * a, LineSegment * b) { return rand()%100; };
 
     Relationship angle("kat");
-    //angle.SetScoringFunction(score);
+    angle.SetScoringFunction(score);
 
     Relationship cons("przystawanie");
-    //cons.SetScoringFunction(score);
+    cons.SetScoringFunction(score);
     Relationship size("podobny rozmiar");
-    //size.SetScoringFunction(score);
+    size.SetScoringFunction(score);
 
     vector<Relationship*> vertex;
     vertex.push_back(&angle);
@@ -65,17 +65,6 @@ void DetectionTest() {
     detector->run(image);
 
     vector<LineSegment> ls = detector->getLineSegments();
-    Matcher mat(5, 4, parts, &ls);
+    Matcher mat(parts, &ls);
     mat.Match();
-}
-
-int Pair(int x, int y) {
-    return (int) (0.5 * (y * y - 2 * x + y) - 1);
-}
-
-pair<int, int> Unpair(int z) {
-    int y = (int) floor(0.5 * (sqrt(8.0 * z + 1.0) + 1.0));
-    int x = (int) (0.5 * (y * y + y - 2 * z) - 1);
-    pair<int, int> result(x,y);
-    return result;
 }

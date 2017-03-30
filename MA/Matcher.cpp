@@ -6,16 +6,16 @@
 using namespace std;
 
 
-Matcher::Matcher(vector<vector<Relationship*>*> * _parts, vector<LineSegment> * _segments) {
+Matcher::Matcher(int t, vector<vector<Relationship*>*> * _parts, vector<LineSegment> * _segments) {
     int s = _segments->size();
     n = 0.5*s*(s-1);
     m = _parts->size();
+    threshold = t;
     matchedNo = 0;
     parts = _parts;
     segments = _segments;
     matchLeft = new vector<int>;
     matchRight = new int[m];
-
 }
 
 Matcher::~Matcher() {
@@ -28,14 +28,26 @@ int * Matcher::Match() {
 }
 
 bool Matcher::Discover(int x, int y) {
-    pair<int, int> seg = Unpair(x);
+    /*pair<int, int> seg = Unpair(x);
     vector<Relationship*> * part = (*parts)[y];
     for (Relationship * rel : *part) {
-        cout << "\nScore of pair " << x << " to part " << y << ": "
-             << rel->Score(&(*segments)[seg.first], &(*segments)[seg.second]) << endl;
+        char score = rel->Score(&(*segments)[seg.first], &(*segments)[seg.second]);
+        cout << "\nScore of pair " << x << " to part " << y << " for constraint " << rel->GetName() << ": "
+             << (int)score << endl;
+        if (score < threshold) {
+            cout << "rejected\n";
+            return false;
+        }
     }
 
-    return true;
+    return true;*/
+    bool res[6][3];
+    res[0][0]=1;res[0][1]=1;res[0][2]=1;
+    res[1][0]=1;res[1][1]=0;res[1][2]=0;
+    res[2][0]=1;res[3][1]=1;res[2][2]=0;
+    res[3][0]=0;res[4][1]=0;res[3][2]=0;
+    res[4][0]=0;res[5][1]=0;res[4][2]=0;
+    res[5][0]=0;res[6][1]=0;res[5][2]=0;
 }
 
 void Matcher::InitMatch() {
@@ -46,8 +58,10 @@ void Matcher::InitMatch() {
      */
 
 	bool * matched = new bool[m];
-	for (int i = 0; i < m; i++)
-		matched[i] = false;
+	for (int i = 0; i < m; i++) {
+        matchRight[i] = -1;
+        matched[i] = false;
+    }
 
 /*for (int i = 0; i < n; i++) {
 		int clean = -1;
@@ -92,6 +106,9 @@ void Matcher::InitMatch() {
          << " matchRight: ";
     for (int i = 0; i < m; i++)
         cout << matchRight[i] << " ";
+    cout << "\n matchLeft: ";
+    for (int i = 0; i < n; i++)
+        cout << (*matchLeft)[i] << " ";
 }
 
 bool Matcher::CorrectMatches() {
@@ -151,7 +168,66 @@ bool Matcher::CorrectMatches() {
 	}*/
 
 
-    return false;
+
+
+
+
+
+
+
+    if (m == matchedNo)
+        return false;
+
+    int currentLeft = -1;
+    int currentRight;
+    for (int i = 0; i < n; i++) //szukamy pierwszego wolnego lewego
+        if (-1 == (*matchLeft)[i]) {
+            currentLeft = i;
+            break;
+        }
+    if (-1 == currentLeft)
+        return false;
+
+    vector<int> alternatingPath;
+    alternatingPath.push_back(currentLeft);
+
+    while (true) {
+        if (edges[currentLeft].size()) {
+            //loop in ap check
+            for (int i = 0; i < alternatingPath.size(); i++)
+                if (alternatingPath[i] == edges[currentLeft][0] &&
+                    1 == i % 2) {
+                    //-1 = matching NOT YET found
+                    //-2 = matching impossible
+                    (*matchLeft)[alternatingPath[0]] = -2;
+
+                    return true;
+                }
+
+            currentRight = edges[currentLeft][0];
+            alternatingPath.push_back(currentRight);
+        }
+        else {
+            (*matchLeft)[alternatingPath[0]] = -2;
+
+            return true;
+        }
+
+        if (-1 != matchRight[currentRight]) {
+            currentLeft = matchRight[currentRight];
+            alternatingPath.push_back(currentLeft);
+        }
+        else {
+            int size = alternatingPath.size();
+            for (int i = 0; i < size; i += 2) {
+                (*matchLeft)[alternatingPath[i]] = alternatingPath[i + 1];
+                matchRight[alternatingPath[i + 1]] = alternatingPath[i];
+            }
+            matchedNo++;
+
+            return true;
+        }
+    }
 }
 
 int Matcher::Pair(int x, int y) {

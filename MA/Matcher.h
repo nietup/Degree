@@ -18,7 +18,7 @@ using namespace elsd;
 
 class Matcher {
 public:
-	Matcher(vector<vector<Relationship*>*> * model, vector<LineSegment> * segments);
+	Matcher(int threshold, vector<vector<Relationship*>*> * model, vector<LineSegment> * segments);
 	~Matcher();
 
 	int * Match();
@@ -32,7 +32,8 @@ private:
 
 	int n, //number of pairs of segments
         m, //number of parts of the model
-        matchedNo;
+        matchedNo,
+        threshold; //above which we accept
     vector<int> * matchLeft;
     int * matchRight;
     vector<int> * edges;

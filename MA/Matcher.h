@@ -36,7 +36,7 @@ private:
         threshold; //above which we accept
     vector<int> * matchLeft;
     int * matchRight;
-    vector<int> * edges;
+    //vector<int> * edges;
 
     //i dont have edges available so i need to discover them
     //so i need a readonly pointer to pairs and parts and scoring function

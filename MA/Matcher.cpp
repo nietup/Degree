@@ -48,6 +48,8 @@ bool Matcher::Discover(int x, int y) {
     res[3][0]=0;res[4][1]=0;res[3][2]=0;
     res[4][0]=0;res[5][1]=0;res[4][2]=0;
     res[5][0]=0;res[6][1]=0;res[5][2]=0;
+
+    return res[x][y];
 }
 
 void Matcher::InitMatch() {
@@ -63,27 +65,7 @@ void Matcher::InitMatch() {
         matched[i] = false;
     }
 
-/*for (int i = 0; i < n; i++) {
-		int clean = -1;
-		int j = 0;
-		for (auto e : edges[i]) {
-			if (!matched[e]) {
-				matchLeft[i] = e;
-				matchRight[e] = i;
-				matched[e] = true;
-				matchedNo++;
-				clean = j;
-				break;
-			}
-			j++;
-		}
-		if (-1 != clean)
-			edges[i].erase(edges[i].begin() + j);
-	}
-	delete matched;*/
-
-
-    for (int i = 0; (i < n) && (matchedNo < m); i++){
+    for (int i = 0; (i < n) && (matchedNo < m); i++) {
         bool wasMatched = false;
         for (int j = 0; j < m; j++) {
             if (!matched[j] && Discover(i, j)) {
@@ -99,7 +81,8 @@ void Matcher::InitMatch() {
             matchLeft->push_back(-1);
     }
 
-    cout << "\ninit match:\n"
+    //for debug purpose
+    /*cout << "\ninit match:\n"
          << " n: " << n << " m: " << m << endl
          << " matchedNo: " << matchedNo << "\n"
          << " size of matchLeft: " << matchLeft->size() << "\n"
@@ -108,73 +91,14 @@ void Matcher::InitMatch() {
         cout << matchRight[i] << " ";
     cout << "\n matchLeft: ";
     for (int i = 0; i < n; i++)
-        cout << (*matchLeft)[i] << " ";
+        cout << (*matchLeft)[i] << " ";*/
 }
 
+/*issue
+ * the algorithm doesnt work in the situation when
+ * second edge should be chosen from the vector
+ */
 bool Matcher::CorrectMatches() {
-/*
-	if (n == matchedNo)
-		return false;
-
-	int currentLeft = -1;
-	int currentRight;
-	for (int i = 0; i < n; i++)
-		if (-1 == matchLeft[i]) {
-			currentLeft = i;
-			break;
-		}
-	if (-1 == currentLeft)
-		return false;
-
-	vector<int> alternatingPath;
-	alternatingPath.push_back(currentLeft);
-
-	while (true) {
-		if (edges[currentLeft].size()) {
-			//loop in ap check
-			for (int i = 0; i < alternatingPath.size(); i++)
-				if (alternatingPath[i] == edges[currentLeft][0] &&
-					1 == i % 2) {
-					//-1 = matching NOT YET found
-					//-2 = matching impossible
-					matchLeft[alternatingPath[0]] = -2;
-
-					return true;
-				}
-
-			currentRight = edges[currentLeft][0];
-			alternatingPath.push_back(currentRight);
-		}
-		else {
-			matchLeft[alternatingPath[0]] = -2;
-
-			return true;
-		}
-
-		if (-1 != matchRight[currentRight]) {
-			currentLeft = matchRight[currentRight];
-			alternatingPath.push_back(currentLeft);
-		}
-		else {
-			int size = alternatingPath.size();
-			for (int i = 0; i < size; i += 2) {
-				matchLeft[alternatingPath[i]] = alternatingPath[i + 1];
-				matchRight[alternatingPath[i + 1]] = alternatingPath[i];
-			}
-			matchedNo++;
-
-			return true;
-		}
-	}*/
-
-
-
-
-
-
-
-
-
     if (m == matchedNo)
         return false;
 
@@ -192,7 +116,7 @@ bool Matcher::CorrectMatches() {
     alternatingPath.push_back(currentLeft);
 
     while (true) {
-        if (edges[currentLeft].size()) {
+        if (edges[currentLeft].size()) {cout<<"\nenter case 1";
             //loop in ap check
             for (int i = 0; i < alternatingPath.size(); i++)
                 if (alternatingPath[i] == edges[currentLeft][0] &&
@@ -207,17 +131,17 @@ bool Matcher::CorrectMatches() {
             currentRight = edges[currentLeft][0];
             alternatingPath.push_back(currentRight);
         }
-        else {
+        else {cout<<"\nenter case 2";
             (*matchLeft)[alternatingPath[0]] = -2;
 
             return true;
         }
 
-        if (-1 != matchRight[currentRight]) {
+        if (-1 != matchRight[currentRight]) {cout<<"\nenter case 3";
             currentLeft = matchRight[currentRight];
             alternatingPath.push_back(currentLeft);
         }
-        else {
+        else {cout<<"\nenter case 4";
             int size = alternatingPath.size();
             for (int i = 0; i < size; i += 2) {
                 (*matchLeft)[alternatingPath[i]] = alternatingPath[i + 1];

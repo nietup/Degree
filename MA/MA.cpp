@@ -66,5 +66,7 @@ void DetectionTest() {
 
     vector<LineSegment> ls = detector->getLineSegments();
     Matcher mat(20, parts, &ls);
-    mat.Match();
+    int * match = mat.Match();
+    for (int i = 0; i < 3; i++)
+        cout << "\n" << match[i];
 }

@@ -52,12 +52,13 @@ bool Matcher::Discover(int x, int y) {
 
     return true;*/
     bool res[6][3];
-    res[0][0]=1;res[0][1]=0;res[0][2]=1;
+
+    res[0][0]=1;res[0][1]=1;res[0][2]=0;
     res[1][0]=1;res[1][1]=0;res[1][2]=0;
-    res[2][0]=1;res[3][1]=1;res[2][2]=0;
-    res[3][0]=0;res[4][1]=0;res[3][2]=0;
-    res[4][0]=0;res[5][1]=0;res[4][2]=0;
-    res[5][0]=0;res[6][1]=0;res[5][2]=0;
+    res[2][0]=0;res[2][1]=1;res[2][2]=1;
+    res[3][0]=0;res[3][1]=0;res[3][2]=0;
+    res[4][0]=0;res[4][1]=0;res[4][2]=0;
+    res[5][0]=0;res[5][1]=0;res[5][2]=0;
 
     return res[x][y];
 }

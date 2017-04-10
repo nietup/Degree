@@ -14,6 +14,7 @@ void DetectionTest();
 void Fit();
 int Pair();
 pair<int, int> Unpair();
+int TestScore(LineSegment & a, LineSegment & b);
 
 int main() {
 /*	StateMachine SM(800, 600, 60, "Akwizycja Modeli");
@@ -36,7 +37,7 @@ void DetectionTest() {
     srand((uint)time(NULL));
 
     //SvgArc i think derives form LineSegment
-    auto score = [] (LineSegment * a, LineSegment * b) { return rand()%100; };
+    auto score = [] (LineSegment * a, LineSegment * b) { return 1; };
 
     Relationship angle("kat");
     angle.SetScoringFunction(score);
@@ -65,8 +66,25 @@ void DetectionTest() {
     detector->run(image);
 
     vector<LineSegment> ls = detector->getLineSegments();
-    Matcher mat(20, parts, &ls);
+
+    //matcher seems to work for now, lets focus on
+    /*Matcher mat(20, parts, &ls);
     int * match = mat.Match();
     for (int i = 0; i < 3; i++)
-        cout << "\n" << match[i];
+        cout << "\n" << match[i];*/
+    TestScore(ls[0],ls[1]);
+}
+
+int TestScore(LineSegment & a, LineSegment & b) {
+    double x1 = a.startPoint[0],
+           y1 = a.startPoint[1],
+           x2 = a.endPoint[0],
+           y2 = a.endPoint[1];
+    cout << "\nfirst we will count line length using point coords"
+         << "\nx1: " << x1 << " y1: " << y1
+         << "\nx2: " << x2 << " y2: " << y2
+         << "\nsqrt((x2-x1)^2+(y2-y1)^2): " << sqrt((x2-x1)*(x2-x1)+(y2-y1)*(y2-y1));
+    cout << "\n\nnow lets calculate angle between two line segments";
+
+    return 0;
 }

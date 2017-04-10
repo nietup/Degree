@@ -53,9 +53,9 @@ bool Matcher::Discover(int x, int y) {
     return true;*/
     bool res[6][3];
 
-    res[0][0]=1;res[0][1]=1;res[0][2]=0;
+    res[0][0]=1;res[0][1]=1;res[0][2]=1;
     res[1][0]=1;res[1][1]=0;res[1][2]=0;
-    res[2][0]=0;res[2][1]=1;res[2][2]=1;
+    res[2][0]=1;res[2][1]=1;res[2][2]=0;
     res[3][0]=0;res[3][1]=0;res[3][2]=0;
     res[4][0]=0;res[4][1]=0;res[4][2]=0;
     res[5][0]=0;res[5][1]=0;res[5][2]=0;
@@ -210,20 +210,33 @@ bool Matcher::CorrectMatches() {
     alternatingPath.push_back(currentLeft);
 
     while (true) {
-        if (edges[currentLeft].size()) {
+        int esize = edges[currentLeft].size();
+        if (esize) {
             //loop in ap check
-            for (int i = 0; i < alternatingPath.size(); i++)
-                if (alternatingPath[i] == edges[currentLeft][0] &&
-                    1 == i % 2) {
-                    //-1 = matching NOT YET found
-                    //-2 = matching impossible
-                    matchLeft[alternatingPath[0]] = -2;
+            //check if there is a vertex on the right size that is:
+            // connected with current left vertex (== is in edges[currentLeft])
+            // not yed added to alternating path  (== is not in alternatingPath)
+            int notAPVertex = -1;
+            for (auto &p : edges[currentLeft]) {
+                for (auto &q : alternatingPath)
+                    if (q == p) break;
+                notAPVertex = p;
+                break;
+            }
 
-                    return true;
-                }
+            //failure
+            if (-1 == notAPVertex) {
+                //-1 = matching NOT YET found
+                //-2 = matching impossible
+                matchLeft[alternatingPath[0]] = -2;
+                return true;
+            }
 
-            currentRight = edges[currentLeft][0];
-            alternatingPath.push_back(currentRight);
+            //success
+            if (0 <= notAPVertex) {
+                currentRight = edges[currentLeft][notAPVertex];
+                alternatingPath.push_back(currentRight);
+            }
         }
         else {
             matchLeft[alternatingPath[0]] = -2;

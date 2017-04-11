@@ -76,7 +76,7 @@ void DetectionTest() {
 
     vector<LineSegment> ls = detector->getLineSegments();
 
-    //matcher seems to work for now, lets focus on
+    //matcher seems to work for now, lets focus on scoring
     /*Matcher mat(20, parts, &ls);
     int * match = mat.Match();
     for (int i = 0; i < 3; i++)
@@ -92,7 +92,7 @@ void DetectionTest() {
  len(v)   = sqrt(v.x^2 + v.y^2)
 */
 int TestScore(LineSegment & a, LineSegment & b) {
-    /*double x1 = a.startPoint[0],
+    double x1 = a.startPoint[0],
            y1 = a.startPoint[1],
            x2 = a.endPoint[0],
            y2 = a.endPoint[1],
@@ -103,9 +103,9 @@ int TestScore(LineSegment & a, LineSegment & b) {
            lenA = sqrt((x2-x1)*(x2-x1)+(y2-y1)*(y2-y1)),
            lenB = sqrt((bx2-bx1)*(bx2-bx1)+(by2-by1)*(by2-by1)),
            dot = (x2-x1)*(bx2-bx1) + (y2-y1)*(by2-by1),
-           cos = dot/(lenA*lenB);*/
+           cos = dot/(lenA*lenB);
 
-    /*cout << "\nfirst we will count line length using point coords"
+    cout << "\nfirst we will count line length using point coords"
          << "\nx1: " << x1 << " y1: " << y1
          << "\nx2: " << x2 << " y2: " << y2
          << "\nsqrt((x2-x1)^2+(y2-y1)^2): " << lenA
@@ -114,16 +114,17 @@ int TestScore(LineSegment & a, LineSegment & b) {
          << "\nbx2: " << bx2 << " by2: " << by2
          << "\nlenB: " << lenB
          << "\ndot(a, b): " << dot
-         << "\ncos: " << cos;*/
+         << "\ncos: " << cos;
 
 
 
-    double by1 = b.startPoint[1];
+    /*double by1 = b.startPoint[1];
     double by2 = b.endPoint[1];
 
     double hard1 = 361.538;
     double hard2 = 361.53;
 
+    cout.precision(17);
     cout << "\nb.startPoint[1]:\t\t\t\t\t"                << b.startPoint[1]
          << "\nb.endPoint[1]:\t\t\t\t\t\t"                << b.endPoint[1]
          << "\nb.startPoint[1] - b.endPoint[1]:\t"        << b.startPoint[1] - b.endPoint[1]
@@ -132,8 +133,7 @@ int TestScore(LineSegment & a, LineSegment & b) {
          << "\nby1-by2:\t\t\t\t\t\t\t"                    << by1-by2
          << "\ndouble hard1 = 361.538:\t\t\t\t"           << hard1
          << "\ndouble hard2 = 361.53:\t\t\t\t"            << hard2
-         << "\nhard1 - hard2:\t\t\t\t\t\t"                << hard1 - hard2;
-
+         << "\nhard1 - hard2:\t\t\t\t\t\t"                << hard1 - hard2;*/
 
     return 0;
 }

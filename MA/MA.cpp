@@ -37,8 +37,10 @@ void DetectionTest() {
 
     srand((uint)time(NULL));
 
-    //SvgArc i think derives form LineSegment
-    auto score = [] (LineSegment * a, LineSegment * b) { return 1; };
+    auto score = [] (LineWrap * a, LineWrap * b) {
+        cout << "\n-------------\n" << a->Length() << "\n-------------\n";
+        return a->Length();
+    };
 
     Relationship angle("kat");
     angle.SetScoringFunction(score);
@@ -74,24 +76,16 @@ void DetectionTest() {
     ofs << *svg;
     ofs.close();
 
-    vector<LineSegment> ls = detector->getLineSegments();
+    vector<LineWrap> ls;
+    for (auto a : detector->getLineSegments()) {
+        LineWrap l(a);
+        ls.push_back(l);
+    }
 
     //matcher seems to work for now, lets focus on scoring
-    /*Matcher mat(20, parts, &ls);
+    Matcher mat(20, parts, &ls);
     int * match = mat.Match();
     for (int i = 0; i < 3; i++)
-        cout << "\n" << match[i];*/
-    TestScore(ls[1],ls[3]);
+        cout << "\n" << match[i];
 }
 
-int TestScore(LineSegment & a, LineSegment & b) {
-    LineWrap la(a);
-    LineWrap lb(b);
-    cout << "\nlenA: " << la.Length()
-         << "\nlenB: " << lb.Length()
-         << "\ndot(a, b): " << la.Dot(lb)
-         << "\ncos: " << la.GetCos(lb)
-         << "\ndist: " << la.Distance(lb);
-
-    return 0;
-}

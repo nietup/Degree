@@ -12,13 +12,14 @@
 #include <elsdpgmfilereader.hpp>
 #include <elsdetector.hpp>
 #include <elsdsvgwriter.hpp>
+#include "LineWrap.h"
 
 using namespace std;
 using namespace elsd;
 
 class Matcher {
 public:
-	Matcher(int threshold, vector<vector<Relationship*>*> * model, vector<LineSegment> * segments);
+	Matcher(int threshold, vector<vector<Relationship*>*> * model, vector<LineWrap> * segments);
 	~Matcher();
 
 	int * Match();
@@ -41,7 +42,7 @@ private:
     //i dont have edges available so i need to discover them
     //so i need a readonly pointer to pairs and parts and scoring function
     vector<vector<Relationship*>*> * parts;
-    vector<LineSegment> * segments;
+    vector<LineWrap> * segments;
 };
 
 #endif //DEGREE_MATCHER_H

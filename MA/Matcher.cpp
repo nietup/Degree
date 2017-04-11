@@ -6,7 +6,7 @@
 using namespace std;
 
 
-Matcher::Matcher(int t, vector<vector<Relationship*>*> * _parts, vector<LineSegment> * _segments) {
+Matcher::Matcher(int t, vector<vector<Relationship*>*> * _parts, vector<LineWrap> * _segments) {
     int s = _segments->size();
     n = 0.5*s*(s-1);
     m = _parts->size();
@@ -41,9 +41,9 @@ bool Matcher::Discover(int x, int y) {
     pair<int, int> seg = Unpair(x);
     vector<Relationship*> * part = (*parts)[y];
     for (Relationship * rel : *part) {
-        char score = rel->Score(&(*segments)[seg.first], &(*segments)[seg.second]);
+        int score = rel->Score(&(*segments)[seg.first], &(*segments)[seg.second]);
         cout << "\nScore of pair " << x << " to part " << y << " for constraint " << rel->GetName() << ": "
-             << (int)score << endl;
+             << score << endl;
         if (score < threshold) {
             cout << "rejected\n";
             return false;

@@ -4,6 +4,7 @@
 #include <elsdpgmfilereader.hpp>
 #include <elsdetector.hpp>
 #include <elsdsvgwriter.hpp>
+#include "LineWrap.h"
 
 using namespace elsd;
 
@@ -13,11 +14,11 @@ public:
 	~Relationship();
 
 	std::string GetName() { return Name; };
-    void SetScoringFunction(std::function<char (LineSegment *, LineSegment *)>);
-    char Score(LineSegment * a, LineSegment * b) { return ScoringFunction(a, b); };
+    void SetScoringFunction(std::function<int (LineWrap *, LineWrap *)>);
+    int Score(LineWrap * a, LineWrap * b) { return ScoringFunction(a, b); };
 
 private:
 	std::string Name;
     //scoring function will return score in scale 0-100 where 0 is best match
-    std::function<char (LineSegment *, LineSegment *)> ScoringFunction;
+    std::function<int (LineWrap *, LineWrap *)> ScoringFunction;
 };

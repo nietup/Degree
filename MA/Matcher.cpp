@@ -40,7 +40,7 @@ void SaveDetection(vector<LineWrap> save) {
         << "<svg width=\"500\" height=\"500\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\">" << endl;
     for (LineWrap l : save)
         ofs << "<line x1=\""<< l.GetStart()[0] <<"\" y1=\""<< l.GetStart()[1] <<"\" x2=\""<< l.GetEnd()[0] <<"\" y2=\""<< l.GetEnd()[1] <<"\" fill=\"none\" stroke =\"green\" stroke-width=\"1\" />" << endl;
-
+    ofs << "</svg>";
     ofs.close();
 }
 

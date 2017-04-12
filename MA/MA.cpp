@@ -125,10 +125,18 @@ void DetectionTest() {
      * that will try to match detected segments to defined model
      */
     vector<LineWrap> ls;
-    for (auto a : detector->getLineSegments()) {
+    /*for (auto a : detector->getLineSegments()) {
         LineWrap l(a);
         ls.push_back(l);
+    }*/
+    vector<LineSegment> lines = detector->getLineSegments();
+    int numberOfExecutions = lines.size();
+    for (int i = 1; i < numberOfExecutions; i++) {
+        LineWrap l(lines[i]);
+        ls.push_back(l);
     }
+    LineWrap l(lines[0]);
+    ls.push_back(l);
 
     Matcher mat(0.5, parts, &ls);
     mat.Match();

@@ -130,10 +130,7 @@ void DetectionTest() {
         ls.push_back(l);
     }
 
-    Matcher mat(1.0, parts, &ls);
-    /*int * match = mat.Match();
-    cout << "\n\nFinal match right:";
-    for (int i = 0; i < 3; i++)
-        cout << "\n" << match[i];*/
+    Matcher mat(0.5, parts, &ls);
+    mat.Match();
 }
 

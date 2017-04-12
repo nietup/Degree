@@ -41,7 +41,7 @@ bool Matcher::Discover(int x, int y) {
     pair<int, int> seg = Unpair(x);
     vector<Relationship*> * part = (*parts)[y];
     for (Relationship * rel : *part) {
-        int score = rel->Score(&(*segments)[seg.first], &(*segments)[seg.second]);
+        double score = rel->Score(&(*segments)[seg.first], &(*segments)[seg.second]);
         cout << "\nScore of pair " << x << " to part " << y << " for constraint " << rel->GetName() << ": "
              << score << endl;
         if (score < threshold) {

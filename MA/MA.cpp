@@ -42,12 +42,44 @@ void DetectionTest() {
         return a->Length();
     };
 
+    /* function scoring size match
+     * returns double in range [0, 1], where 0 is the best match
+     */
+    auto sizeMatch = [] (LineWrap * a, LineWrap * b) {
+        double lenA = a->Length(),
+               lenB = b->Length();
+        return lenA < lenB ? 1 - (lenA / lenB) : 1 - (lenB / lenA);
+    };
+
+    /* function scoring perpendicularity between lines
+     * returns double in range [0, 1], where 0 is the best match
+     */
+    auto perpendicular = [] (LineWrap * a, LineWrap * b) {
+        return abs(a->GetCos(*b));
+    };
+
+    /* function scoring parallelity between lines
+     * returns double in range [0, 1], where 0 is the best match
+     */
+    auto parallel = [] (LineWrap * a, LineWrap * b) {
+        return 1.0 - abs(a->GetCos(*b));
+    };
+
+    /* function scoring adjacency between lines
+    *  returns double in range [0, 1], where 0 is the best match
+    */
+    auto adjacent = [] (LineWrap * a, LineWrap * b) {
+        double d = a->Distance(*b);
+        cout << "\n-------------\n" << d << "\n-------------\n";
+        return d / (d + 1000);
+    };
+
     Relationship angle("kat");
-    angle.SetScoringFunction(score);
+    angle.SetScoringFunction(adjacent);
     Relationship cons("przystawanie");
-    cons.SetScoringFunction(score);
+    cons.SetScoringFunction(adjacent);
     Relationship size("podobny rozmiar");
-    size.SetScoringFunction(score);
+    size.SetScoringFunction(adjacent);
 
     vector<Relationship*> vertex;
     vertex.push_back(&angle);
@@ -62,7 +94,7 @@ void DetectionTest() {
     Primitive triangle;
     triangle.AssignParts(parts);
 
-    string inFile = "./test.pgm";
+    string inFile = "./7.pgm";
     ImageInterface::Ptr image(new ElsdPgmFileReader(inFile));
     ShapesDetectorInterface::Ptr detector(new ElsDetector);
     detector->run(image);

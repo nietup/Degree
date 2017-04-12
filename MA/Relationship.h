@@ -14,11 +14,11 @@ public:
 	~Relationship();
 
 	std::string GetName() { return Name; };
-    void SetScoringFunction(std::function<int (LineWrap *, LineWrap *)>);
-    int Score(LineWrap * a, LineWrap * b) { return ScoringFunction(a, b); };
+    void SetScoringFunction(std::function<double (LineWrap *, LineWrap *)>);
+    double Score(LineWrap * a, LineWrap * b) { return ScoringFunction(a, b); };
 
 private:
 	std::string Name;
     //scoring function will return score in scale 0-100 where 0 is best match
-    std::function<int (LineWrap *, LineWrap *)> ScoringFunction;
+    std::function<double (LineWrap *, LineWrap *)> ScoringFunction;
 };

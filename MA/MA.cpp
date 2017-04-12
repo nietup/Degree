@@ -12,10 +12,6 @@ using namespace std;
 using namespace elsd;
 
 void DetectionTest();
-void Fit();
-int Pair();
-pair<int, int> Unpair();
-int TestScore(LineSegment & a, LineSegment & b);
 
 int main() {
 /*	StateMachine SM(800, 600, 60, "Akwizycja Modeli");
@@ -33,14 +29,9 @@ int main() {
 }
 
 void DetectionTest() {
-    //cout << "In this testing case we hardcode triangle model and test classification";
-
-    srand((uint)time(NULL));
-
-    auto score = [] (LineWrap * a, LineWrap * b) {
-        cout << "\n-------------\n" << a->Length() << "\n-------------\n";
-        return a->Length();
-    };
+    /* First part of this test is scoring functions definitions
+     * each function takes two line segments as argument
+     */
 
     /* function scoring size match
      * returns double in range [0, 1], where 0 is the best match
@@ -65,28 +56,47 @@ void DetectionTest() {
         return 1.0 - abs(a->GetCos(*b));
     };
 
+    /* function scoring closeness to 60 degrees between lines
+     * returns double in range [0, 1], where 0 is the best match
+     */
+    auto angle60 = [] (LineWrap * a, LineWrap * b) {
+        return 2*abs(0.5 - abs(a->GetCos(*b)));
+    };
+
     /* function scoring adjacency between lines
     *  returns double in range [0, 1], where 0 is the best match
     */
     auto adjacent = [] (LineWrap * a, LineWrap * b) {
         double d = a->Distance(*b);
-        cout << "\n-------------\n" << d << "\n-------------\n";
         return d / (d + 1000);
     };
 
+    /* Here we define 3 aspects that will be interesting for us
+     * in each vertex of a square
+     * so each vertex must contain two line segments that are:
+     * - perpendicular
+     * - similar in size
+     * - touching each other
+     */
     Relationship angle("kat");
-    angle.SetScoringFunction(adjacent);
+    angle.SetScoringFunction(perpendicular);
     Relationship cons("przystawanie");
     cons.SetScoringFunction(adjacent);
     Relationship size("podobny rozmiar");
-    size.SetScoringFunction(adjacent);
+    size.SetScoringFunction(sizeMatch);
 
     vector<Relationship*> vertex;
     vertex.push_back(&angle);
     vertex.push_back(&cons);
     vertex.push_back(&size);
 
-    vector<vector<Relationship*>*> * parts = new vector<vector<Relationship*>*>();
+    /* Now that we know what constraints a vertex must fulfill
+     * we have to assemble a whole model
+     * in that case, a square consists of 4 vertices
+     */
+    vector<vector<Relationship*>*> * parts =
+        new vector<vector<Relationship*>*>();
+    parts->push_back(&vertex);
     parts->push_back(&vertex);
     parts->push_back(&vertex);
     parts->push_back(&vertex);
@@ -94,30 +104,37 @@ void DetectionTest() {
     Primitive triangle;
     triangle.AssignParts(parts);
 
+    /* ELSD image processing
+     * detect segments and save them in separate image for testing purposes
+     */
     string inFile = "./7.pgm";
     ImageInterface::Ptr image(new ElsdPgmFileReader(inFile));
     ShapesDetectorInterface::Ptr detector(new ElsDetector);
     detector->run(image);
 
-    //save image
     string outFile = inFile + ".svg";
     SvgWriterInterface::Ptr svg(new ElsdSvgWriter);
     svg->setImageSize(image->xsize(), image->ysize());
-    svg->addLineSegments(detector->getLineSegments().begin(), detector->getLineSegments().end());
+    vector<LineSegment> lineSeg = detector->getLineSegments();
+    svg->addLineSegments(lineSeg.begin(), lineSeg.end());
     ofstream ofs(outFile, ofstream::out);
     ofs << *svg;
     ofs.close();
 
+    /* Create vector of wrapped segments
+     * and apply it to the matcher
+     * that will try to match detected segments to defined model
+     */
     vector<LineWrap> ls;
     for (auto a : detector->getLineSegments()) {
         LineWrap l(a);
         ls.push_back(l);
     }
 
-    //matcher seems to work for now, lets focus on scoring
-    Matcher mat(20, parts, &ls);
-    int * match = mat.Match();
+    Matcher mat(1.0, parts, &ls);
+    /*int * match = mat.Match();
+    cout << "\n\nFinal match right:";
     for (int i = 0; i < 3; i++)
-        cout << "\n" << match[i];
+        cout << "\n" << match[i];*/
 }
 

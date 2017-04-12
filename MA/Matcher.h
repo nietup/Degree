@@ -19,7 +19,7 @@ using namespace elsd;
 
 class Matcher {
 public:
-	Matcher(int threshold, vector<vector<Relationship*>*> * model, vector<LineWrap> * segments);
+	Matcher(double threshold, vector<vector<Relationship*>*> * model, vector<LineWrap> * segments);
 	~Matcher();
 
 	int * Match();
@@ -33,8 +33,8 @@ private:
 
 	int n, //number of pairs of segments
         m, //number of parts of the model
-        matchedNo,
-        threshold; //above which we accept
+        matchedNo;
+    double threshold; //above which we accept
     //vector<int> * matchLeft;
     int *matchRight, *matchLeft;
     vector<int> * edges;

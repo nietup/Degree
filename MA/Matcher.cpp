@@ -6,7 +6,7 @@
 using namespace std;
 
 
-Matcher::Matcher(int t, vector<vector<Relationship*>*> * _parts, vector<LineWrap> * _segments) {
+Matcher::Matcher(double t, vector<vector<Relationship*>*> * _parts, vector<LineWrap> * _segments) {
     int s = _segments->size();
     n = 0.5*s*(s-1);
     m = _parts->size();
@@ -14,18 +14,14 @@ Matcher::Matcher(int t, vector<vector<Relationship*>*> * _parts, vector<LineWrap
     matchedNo = 0;
     parts = _parts;
     segments = _segments;
-    //matchLeft = new vector<int>;
     matchLeft = new int[n];
     matchRight = new int[m];
 
     edges = new vector<int>[n];
-    for (int i = 0; i < n; i++) {
-        for (int j = 0; j < m; j++) {
-            if (Discover(i, j)) {
+    for (int i = 0; i < n; i++)
+        for (int j = 0; j < m; j++)
+            if (Discover(i, j))
                 edges[i].push_back(j);
-            }
-        }
-    }
 }
 
 Matcher::~Matcher() {
@@ -39,29 +35,21 @@ int * Matcher::Match() {
 
 bool Matcher::Discover(int x, int y) {
     pair<int, int> seg = Unpair(x);
+    cout << "Unpair(x=" << x << "): [" << seg.first << ", " << seg.second << "]\n";
     vector<Relationship*> * part = (*parts)[y];
+    cout << "Number of relationships in part y=" << y << ": " << part->size();
     for (Relationship * rel : *part) {
         double score = rel->Score(&(*segments)[seg.first], &(*segments)[seg.second]);
-        cout << "\nScore of pair " << x << " to part " << y << " for constraint " << rel->GetName() << ": "
+        cout << "\nConstraint: " << rel->GetName() << "\nScore: "
              << score << endl;
-        if (score < threshold) {
+        if (score > threshold) {
             cout << "rejected\n";
+            cout << "--------------------------------------\n";
             return false;
         }
     }
-
+    cout << "--------------------------------------\n";
     return true;
-    //some testing cases
-    /*bool res[6][3];
-
-    res[0][0]=1;res[0][1]=1;res[0][2]=1;
-    res[1][0]=1;res[1][1]=0;res[1][2]=0;
-    res[2][0]=1;res[2][1]=1;res[2][2]=0;
-    res[3][0]=0;res[3][1]=0;res[3][2]=0;
-    res[4][0]=0;res[4][1]=0;res[4][2]=0;
-    res[5][0]=0;res[5][1]=0;res[5][2]=0;
-
-    return res[x][y];*/
 }
 
 void Matcher::InitMatch() {
@@ -72,18 +60,22 @@ void Matcher::InitMatch() {
      */
 
     matchLeft = new int[n];
-    matchRight = new int[n];
+    matchRight = new int[m];
     bool * matched = new bool[n];
     for (int i = 0; i < n; i++) {
-        matchLeft[i] = matchRight[i] = -1;
+        matchLeft[i] = -1;
         matched[i] = false;
     }
+    for (int i = 0; i < m; i++)
+        matchRight[i] = -1;
     for (int i = 0; i < n; i++) {
         int clean = -1;
         int j = 0;
         /*
          * foreach e in edges of i-th left vertex do
-         *  if right vertex of e is not matched then match end
+         *  if right vertex of e is not matched then
+         *   match e
+         *  end
          * end
          */
         for (auto e : edges[i]) {
@@ -97,13 +89,14 @@ void Matcher::InitMatch() {
             }
             j++;
         }
+        //remove matched edge so we don't check it later when searching for ap
         if (-1 != clean)
             edges[i].erase(edges[i].begin() + j);
     }
     delete matched;
 
     //for debug purpose
-    /*cout << "\ninit match:\n"
+    cout << "\ninit match:\n"
          << " n: " << n << " m: " << m << endl
          << " matchedNo: " << matchedNo << "\n"
          << " matchRight: ";
@@ -111,7 +104,7 @@ void Matcher::InitMatch() {
         cout << matchRight[i] << " ";
     cout << "\n matchLeft: ";
     for (int i = 0; i < n; i++)
-        cout << matchLeft[i] << " ";*/
+        cout << matchLeft[i] << " ";
 }
 
 bool Matcher::CorrectMatches() {
@@ -181,9 +174,6 @@ bool Matcher::CorrectMatches() {
             return true;
         }
     }
-
-
-
 }
 
 int Matcher::Pair(int x, int y) {

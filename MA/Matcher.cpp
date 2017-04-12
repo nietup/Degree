@@ -17,6 +17,7 @@ Matcher::Matcher(double t, vector<vector<Relationship*>*> * _parts, vector<LineW
     matchLeft = new int[n];
     matchRight = new int[m];
 
+    cout << "s: " << s << " n: " << n << " m: " << m << "\n--------------------------------------\n";
     edges = new vector<int>[n];
     for (int i = 0; i < n; i++)
         for (int j = 0; j < m; j++)
@@ -96,7 +97,7 @@ void Matcher::InitMatch() {
     delete matched;
 
     //for debug purpose
-    cout << "\ninit match:\n"
+    /*cout << "\ninit match:\n"
          << " n: " << n << " m: " << m << endl
          << " matchedNo: " << matchedNo << "\n"
          << " matchRight: ";
@@ -104,7 +105,7 @@ void Matcher::InitMatch() {
         cout << matchRight[i] << " ";
     cout << "\n matchLeft: ";
     for (int i = 0; i < n; i++)
-        cout << matchLeft[i] << " ";
+        cout << matchLeft[i] << " ";*/
 }
 
 bool Matcher::CorrectMatches() {

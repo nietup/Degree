@@ -72,14 +72,14 @@ void DetectionTest() {
     };
 
     /* Here we define 3 aspects that will be interesting for us
-     * in each vertex of a square
+     * in each vertex of a triangle
      * so each vertex must contain two line segments that are:
-     * - perpendicular
+     * - of 60 deg angle
      * - similar in size
      * - touching each other
      */
     Relationship angle("kat");
-    angle.SetScoringFunction(perpendicular);
+    angle.SetScoringFunction(angle60);
     Relationship cons("przystawanie");
     cons.SetScoringFunction(adjacent);
     Relationship size("podobny rozmiar");
@@ -92,11 +92,10 @@ void DetectionTest() {
 
     /* Now that we know what constraints a vertex must fulfill
      * we have to assemble a whole model
-     * in that case, a square consists of 4 vertices
+     * in that case, a triangle consists of 3 vertices
      */
     vector<vector<Relationship*>*> * parts =
         new vector<vector<Relationship*>*>();
-    parts->push_back(&vertex);
     parts->push_back(&vertex);
     parts->push_back(&vertex);
     parts->push_back(&vertex);

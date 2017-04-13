@@ -27,7 +27,11 @@ int main() {
 
 	return 0;
 }
-
+//to be tested:
+//filled triangle
+//empty trialnge
+//cute right etc triangles
+//squares
 void DetectionTest() {
     /* First part of this test is scoring functions definitions
      * each function takes two line segments as argument

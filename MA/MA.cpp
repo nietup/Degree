@@ -142,7 +142,35 @@ void DetectionTest() {
     LineWrap l(lines[0]);
     ls.push_back(l);
 
-    Matcher mat(0.5, parts, &ls);
+    Matcher mat(0.02, parts, &ls);
     mat.Match();
+
+    /* Our new approach is to make lambdas taking vectors of line segments
+     * then the score will be evaluated according to requirement fulfillment
+     * between each line with every other
+     * the problem here is - how do we now how many lines should we apply to the
+     * vector?
+     */
+    /*
+     * here the score is the score of the worst pair
+     */
+    auto sizeMatchV = [] (vector<LineWrap *> l) {
+        double score = .0;
+        int size = l.size();
+        for (int i = 0; i < size; i++) {
+            for (int j = i+1; j < size; j++) {
+                double lenA = l[i]->Length(),
+                       lenB = l[j]->Length(),
+                       mtch = lenA < lenB ?
+                              1 - (lenA / lenB):
+                              1 - (lenB / lenA),
+                       score = score > mtch ?
+                               score:
+                               mtch;
+            }
+        }
+        return score;
+    };
+
 }
 

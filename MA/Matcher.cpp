@@ -6,7 +6,8 @@
 using namespace std;
 
 
-Matcher::Matcher(double t, vector<vector<Relationship*>*> * _parts, vector<LineWrap> * _segments) {
+Matcher::Matcher(double t, vector<vector<Relationship*>*> * _parts,
+    vector<LineWrap> * _segments) {
     int s = _segments->size();
     n = 0.5*s*(s-1);
     m = _parts->size();
@@ -31,15 +32,25 @@ Matcher::Matcher(double t, vector<vector<Relationship*>*> * _parts, vector<LineW
 Matcher::~Matcher() {
 }
 
+double linegryba = 1;
 void SaveDetection(vector<LineWrap> save) {
     string inFile = "./7.pgm";
     string outFile = inFile + ".detection.svg";
     ofstream ofs(outFile, ofstream::out);
     ofs << "<?xml version=\"1.0\" standalone=\"no\"?>" << endl
-        << "<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\" \"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">" << endl
-        << "<svg width=\"500\" height=\"500\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\">" << endl;
-    for (LineWrap l : save)
-        ofs << "<line x1=\""<< l.GetStart()[0] <<"\" y1=\""<< l.GetStart()[1] <<"\" x2=\""<< l.GetEnd()[0] <<"\" y2=\""<< l.GetEnd()[1] <<"\" fill=\"none\" stroke =\"green\" stroke-width=\"1\" />" << endl;
+        << "<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\""
+        << " \"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">" << endl
+        << "<svg width=\"500\" height=\"500\" version=\"1.1\""
+        << " xmlns=\"http://www.w3.org/2000/svg\""
+        << " xmlns:xlink=\"http://www.w3.org/1999/xlink\">" << endl;
+    for (LineWrap l : save) {
+        ofs << "<line x1=\"" << l.GetStart()[0] << "\" y1=\"" << l.GetStart()[1]
+            << "\" x2=\"" << l.GetEnd()[0] << "\" y2=\"" << l.GetEnd()[1]
+            << "\" fill=\"none\" stroke =\"green\" stroke-width=\""
+            << floor(linegryba)
+            << "\" />" << endl;
+        linegryba+=0.5;
+    }
     ofs << "</svg>";
     ofs.close();
 }
@@ -53,7 +64,7 @@ int * Matcher::Match() {
     cout << "\n\nLine information:";
     vector<LineWrap> save;
     for (int i = 0; i < m; i++) {
-        pair<int, int> p = Unpair(i);
+        pair<int, int> p = Unpair(matchRight[i]);
         int p1 = p.first;
         int p2 = p.second;
         LineWrap l1 = (*segments)[p1];
@@ -64,10 +75,10 @@ int * Matcher::Match() {
         PointWrap pw1e = l1.GetEnd();
         PointWrap pw2s = l2.GetStart();
         PointWrap pw2e = l2.GetEnd();
-        cout << "\ni=" << i << "->[" <<p1 << ", " << p2 << "]\n"
-             << "point " << p1 << ":\nx1: " << pw1s[0] << " y1: " << pw1s[1] << endl
+        cout << "\npair " << matchRight[i] << "->[" <<p1 << ", " << p2 << "]\n"
+             << "line " << p1 << ":\nx1: " << pw1s[0] << " y1: " << pw1s[1] << endl
              << "x2: " << pw1e[0] << " y2: " << pw1e[1] << endl
-             << "point " << p2 << ":\nx1: " << pw2s[0] << " y1: " << pw2s[1] << endl
+             << "line " << p2 << ":\nx1: " << pw2s[0] << " y1: " << pw2s[1] << endl
              << "x2: " << pw2e[0] << " y2: " << pw2e[1] << endl;
     }
     SaveDetection(save);
@@ -76,20 +87,20 @@ int * Matcher::Match() {
 
 bool Matcher::Discover(int x, int y) {
     pair<int, int> seg = Unpair(x);
-//    cout << "Unpair(x=" << x << "): [" << seg.first << ", " << seg.second << "]\n";
+    cout << "Unpair(x=" << x << "): [" << seg.first << ", " << seg.second << "]\n";
     vector<Relationship*> * part = (*parts)[y];
-//    cout << "Number of relationships in part y=" << y << ": " << part->size();
+    cout << "Number of relationships in part y=" << y << ": " << part->size();
     for (Relationship * rel : *part) {
         double score = rel->Score(&(*segments)[seg.first], &(*segments)[seg.second]);
-//        cout << "\nConstraint: " << rel->GetName() << "\nScore: "
-//             << score << endl;
+        cout << "\nConstraint: " << rel->GetName() << "\nScore: "
+             << score << endl;
         if (score > threshold) {
-//            cout << "rejected\n";
-//            cout << "--------------------------------------\n";
+            cout << "rejected\n";
+            cout << "--------------------------------------\n";
             return false;
         }
     }
-//    cout << "--------------------------------------\n";
+    cout << "--------------------------------------\n";
     return true;
 }
 

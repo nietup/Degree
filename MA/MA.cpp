@@ -242,140 +242,32 @@ int main() {
     auto a1 = make_shared<Atom>(Atom{ "1" });
     auto a2 = make_shared<Atom>(Atom{ "2" });
     auto a3 = make_shared<Atom>(Atom{ "3" });
-    auto a4 = make_shared<Atom>(Atom{ "4" });
 
-    auto f1 = make_shared<Constraint>([](const LineWrap & a,
-                                         const LineWrap & b) {
-        auto w1 = 4.0;
-        auto w2 = 3.0;
-        if ((w1 == a.start.first || w1 == b.start.first) &&
-            (w2 == a.start.first || w2 == b.start.first))
-            return 100.0;
-        else
-            return 0.0;
-    });
-    auto f2 = make_shared<Constraint>([](const LineWrap & a,
-                                         const LineWrap & b) {
-        auto w1 = 4.0;
-        auto w2 = 6.0;
-        if ((w1 == a.start.first || w1 == b.start.first) &&
-            (w2 == a.start.first || w2 == b.start.first))
-            return 100.0;
-        else
-            return 0.0;
-    });
-    auto f3 = make_shared<Constraint>([](const LineWrap & a,
-                                         const LineWrap & b) {
-        auto w1 = 4.0;
-        auto w2 = 1.0;
-        if ((w1 == a.start.first || w1 == b.start.first) &&
-            (w2 == a.start.first || w2 == b.start.first))
-            return 100.0;
-        else
-            return 0.0;
-    });
-    auto f4 = make_shared<Constraint>([](const LineWrap & a,
-                                         const LineWrap & b) {
-        return 0.0;
-        auto w1 = 3.0;
-        auto w2 = 6.0;
-        if ((w1 == a.start.first || w1 == b.start.first) &&
-            (w2 == a.start.first || w2 == b.start.first))
-            return 100.0;
-        else
-            return 0.0;
-    });
-    auto f5 = make_shared<Constraint>([](const LineWrap & a,
-                                         const LineWrap & b) {
-        auto w1 = 3.0;
-        auto w2 = 1.0;
-        if ((w1 == a.start.first || w1 == b.start.first) &&
-            (w2 == a.start.first || w2 == b.start.first))
-            return 100.0;
-        else
-            return 0.0;
-    });
-
-
-    auto v1 = vector<weak_ptr<Constraint>>{ weak_ptr<Constraint>(f1) };
-    auto v2 = vector<weak_ptr<Constraint>>{ weak_ptr<Constraint>(f2) };
-    auto v3 = vector<weak_ptr<Constraint>>{ weak_ptr<Constraint>(f3) };
-    auto v4 = vector<weak_ptr<Constraint>>{ weak_ptr<Constraint>(f4) };
-    auto v5 = vector<weak_ptr<Constraint>>{ weak_ptr<Constraint>(f5) };
-
-
-    auto p1 = make_shared<Part>(Part{ {a1, a2}, v1 });
-    auto p2 = make_shared<Part>(Part{ {a1, a3}, v2 });
-    auto p3 = make_shared<Part>(Part{ {a1, a4}, v3 });
-    auto p4 = make_shared<Part>(Part{ {a2, a3}, v4 });
-    auto p5 = make_shared<Part>(Part{ {a2, a4}, v5 });
-
-    a1.get()->involved.push_back(weak_ptr<Part>(p1));
-    a1.get()->involved.push_back(weak_ptr<Part>(p2));
-    a1.get()->involved.push_back(weak_ptr<Part>(p3));
-    a2.get()->involved.push_back(weak_ptr<Part>(p1));
-    a2.get()->involved.push_back(weak_ptr<Part>(p4));
-    a2.get()->involved.push_back(weak_ptr<Part>(p5));
-    a3.get()->involved.push_back(weak_ptr<Part>(p2));
-    a3.get()->involved.push_back(weak_ptr<Part>(p4));
-    a4.get()->involved.push_back(weak_ptr<Part>(p3));
-    a4.get()->involved.push_back(weak_ptr<Part>(p5));
-
-    model.atoms.push_back(a1);
-    model.atoms.push_back(a2);
-    model.atoms.push_back(a3);
-    model.atoms.push_back(a4);
-
-    model.parts.push_back(p1);
-    model.parts.push_back(p2);
-    model.parts.push_back(p3);
-    model.parts.push_back(p4);
-    model.parts.push_back(p5);
-
-    auto l1 = make_shared<LineWrap>(LineWrap{ {1, 1}, {1, 1} });
-    auto l2 = make_shared<LineWrap>(LineWrap{ {2, 1}, {1, 1} });
-    auto l3 = make_shared<LineWrap>(LineWrap{ {3, 1}, {1, 1} });
-    auto l4 = make_shared<LineWrap>(LineWrap{ {4, 1}, {1, 1} });
-    auto l5 = make_shared<LineWrap>(LineWrap{ {5, 1}, {1, 1} });
-    auto l6 = make_shared<LineWrap>(LineWrap{ {6, 1}, {1, 1} });
-
-    auto segments = vector<weak_ptr<LineWrap>>{ weak_ptr<LineWrap>(l1),
-                                                weak_ptr<LineWrap>(l2),
-                                                weak_ptr<LineWrap>(l3),
-                                                weak_ptr<LineWrap>(l4),
-                                                weak_ptr<LineWrap>(l5),
-                                                weak_ptr<LineWrap>(l6) };
-
-    /*auto f = make_shared<Constraint>([](const LineWrap & a,
+    auto f = make_shared<Constraint>([](const LineWrap & a,
                                         const LineWrap & b) {
-            return 10.0;
+            return 100.0;
     });
 
     auto v = vector<weak_ptr<Constraint>>{ weak_ptr<Constraint>(f) };
 
     auto p1 = make_shared<Part>(Part{ {a1, a2}, v });
     auto p2 = make_shared<Part>(Part{ {a1, a3}, v });
-    auto p3 = make_shared<Part>(Part{ {a1, a4}, v });
-    auto p4 = make_shared<Part>(Part{ {a2, a3}, v });
+    auto p3 = make_shared<Part>(Part{ {a2, a3}, v });
 
     a1.get()->involved.push_back(weak_ptr<Part>(p1));
     a1.get()->involved.push_back(weak_ptr<Part>(p2));
-    a1.get()->involved.push_back(weak_ptr<Part>(p3));
     a2.get()->involved.push_back(weak_ptr<Part>(p1));
-    a2.get()->involved.push_back(weak_ptr<Part>(p4));
+    a2.get()->involved.push_back(weak_ptr<Part>(p3));
     a3.get()->involved.push_back(weak_ptr<Part>(p2));
-    a3.get()->involved.push_back(weak_ptr<Part>(p4));
-    a4.get()->involved.push_back(weak_ptr<Part>(p3));
+    a3.get()->involved.push_back(weak_ptr<Part>(p3));
 
     model.atoms.push_back(a1);
     model.atoms.push_back(a2);
     model.atoms.push_back(a3);
-    model.atoms.push_back(a4);
 
     model.parts.push_back(p1);
     model.parts.push_back(p2);
     model.parts.push_back(p3);
-    model.parts.push_back(p4);
 
     auto l1 = make_shared<LineWrap>(LineWrap{ {1.0, 1}, {1, 1} });
     auto l2 = make_shared<LineWrap>(LineWrap{ {2.0, 1}, {1, 1} });
@@ -385,7 +277,7 @@ int main() {
     auto segments = vector<weak_ptr<LineWrap>>{ weak_ptr<LineWrap>(l1),
                                                 weak_ptr<LineWrap>(l2),
                                                 weak_ptr<LineWrap>(l3),
-                                                weak_ptr<LineWrap>(l4)};*/
+                                                weak_ptr<LineWrap>(l4)};
 
     if (Match(model, segments))
         for (auto & a : model.atoms)

@@ -174,12 +174,14 @@ bool Match(SModel & model, const vector<weak_ptr<LineWrap>> & segments) {
             match[0].atom.lock()->asignment.lock()->matched = false;
             match[0].discardedAtoms.clear();
             auto nextSegment = weak_ptr<LineWrap>();
+            int j = 1;
             for (auto & seg : segments) {
                 if (seg.lock() == match[0].atom.lock()->asignment.lock()) {
-
-                    nextSegment = *(&seg + 1);
+                    if (j < segments.size())
+                        nextSegment = *(&seg + 1);
                     break;
                 }
+                j++;
             }
 
             if (nextSegment.expired()) {
@@ -274,6 +276,7 @@ int main() {
     });
     auto f4 = make_shared<Constraint>([](const LineWrap & a,
                                          const LineWrap & b) {
+        return 0.0;
         auto w1 = 3.0;
         auto w2 = 6.0;
         if ((w1 == a.start.first || w1 == b.start.first) &&
@@ -345,7 +348,7 @@ int main() {
 
     /*auto f = make_shared<Constraint>([](const LineWrap & a,
                                         const LineWrap & b) {
-            return 100.0;
+            return 10.0;
     });
 
     auto v = vector<weak_ptr<Constraint>>{ weak_ptr<Constraint>(f) };
@@ -385,10 +388,9 @@ int main() {
                                                 weak_ptr<LineWrap>(l4)};*/
 
     if (Match(model, segments))
-        for (auto & a : model.atoms) {
+        for (auto & a : model.atoms)
             cout << a->name << " "
                  << a.get()->asignment.lock().get()->start.first << endl;
-        }
     else
         cout << "Non match";
 

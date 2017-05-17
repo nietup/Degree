@@ -19,6 +19,8 @@ public:
     double Distance(elsd::Point & p) const;
     double operator[](uint) const;
 
+    double first;
+    double second;
 private:
     elsd::Point point;
 };

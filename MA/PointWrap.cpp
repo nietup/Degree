@@ -4,11 +4,16 @@
 
 #include "PointWrap.h"
 
-PointWrap::PointWrap(elsd::Point p) : point(p) {}
+PointWrap::PointWrap(elsd::Point p) : point(p) {
+    first = p[0];
+    second = p[1];
+}
 
 PointWrap::PointWrap(double a, double b) {
     point[0] = a;
     point[1] = b;
+    first = a;
+    second = b;
 }
 
 double PointWrap::Distance(const PointWrap & p) const {

@@ -14,6 +14,8 @@
 #include <elsdsvgwriter.hpp>
 #include "LineWrap.h"
 
+//Old Hopcroft-Karp bipartite graph matcher
+
 using namespace std;
 using namespace elsd;
 

@@ -5,6 +5,8 @@
 #include "LineWrap.h"
 
 LineWrap::LineWrap(elsd::LineSegment a) : start(a.startPoint), end(a.endPoint) {}
+LineWrap::LineWrap(std::pair<double, double> a, std::pair<double, double> b) :
+    start(a.first, a.second), end(b.first, b.second) {}
 
 double LineWrap::Distance(const PointWrap & p) {
     double x1 = start[0],

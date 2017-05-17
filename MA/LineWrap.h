@@ -20,6 +20,7 @@
 class LineWrap {
 public:
     LineWrap(elsd::LineSegment a);
+    LineWrap(std::pair<double, double>, std::pair<double, double>);
 
     double Distance(const PointWrap & p);
     double Distance(LineWrap & l);
@@ -28,8 +29,9 @@ public:
     double GetCos(LineWrap & a);
     PointWrap GetStart() { return start; };
     PointWrap GetEnd() {return end; };
+    bool matched;
 
-private:
+
     const PointWrap start, end;
 };
 

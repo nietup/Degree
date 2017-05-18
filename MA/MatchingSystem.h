@@ -14,7 +14,7 @@
 using namespace std;
 using namespace elsd;
 
-const auto threshold = 0.58;
+const auto threshold = 0.5;
 
 using Constraint = function<double(const LineWrap &, const LineWrap &)>;
 
@@ -103,7 +103,7 @@ bool Consistent(const LineWrap & segment, const Atom & atom) {
             otherSegment = atoms.first.lock().get()->asignment;
 
         for (auto constraint : part.lock().get()->constraints) {
-            if (threshold >
+            if (threshold <
                 constraint.lock()->operator()(segment, *otherSegment.lock())) {
                 return false;
             }

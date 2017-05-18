@@ -18,9 +18,9 @@ void TestDetection() {
                                                  const LineWrap & b) {
         double lenA = a.Length(),
                lenB = b.Length();
-        cout << "size match: "
+        /*cout << "size match: "
              << (lenA < lenB ? 1 - (lenA / lenB) : 1 - (lenB / lenA))
-             << endl;
+             << endl;*/
         return lenA < lenB ? 1 - (lenA / lenB) : 1 - (lenB / lenA);
     });
 
@@ -42,7 +42,7 @@ void TestDetection() {
     //* returns double in range [0, 1], where 0 is the best match
     auto angle60 = make_shared<Constraint>([] (const LineWrap & a,
                                                const LineWrap & b) {
-        cout << "angle: " << (2*abs(0.5 - abs(a.GetCos(b))))
+        /*cout << "angle: " << (2*abs(0.5 - abs(a.GetCos(b))))
              << endl
             << " ax1: " << a.start.first
 
@@ -58,9 +58,12 @@ void TestDetection() {
             << endl
             << " bx2: " << b.end.first
 
-            << " | by2: " << b.end.second 
-            << endl
-            ;
+            << " | by2: " << b.end.second
+            << endl << endl
+
+            << "cos ab: " << a.GetCos(b)
+            << endl;*/
+
         return 2*abs(0.5 - abs(a.GetCos(b)));
     });
 
@@ -69,8 +72,18 @@ void TestDetection() {
     auto adjacent = make_shared<Constraint>([] (const LineWrap & a,
                                                 const LineWrap & b) {
         double d = a.Distance(b);
-        cout << "angle: " << (d / (d + 1000))
-             << endl;
+        /*cout << " ("
+             << a.start.first << ", "
+             << a.start.second << ")("
+             << a.end.first << ", "
+             << a.end.second << ")"
+             << " ("
+             << b.start.first << ", "
+             << b.start.second << ")("
+             << b.end.first << ", "
+             << b.end.second << ") "
+             << "adjacent: " << (d / (d + 1000))
+             << endl;*/
         return d / (d + 1000);
     });
 
@@ -111,18 +124,31 @@ void TestDetection() {
     model.parts.push_back(p2);
     model.parts.push_back(p3);
 
-    auto l1 = make_shared<LineWrap>(LineWrap{ {1.0, 0.0}, {0.5, 0.866025404} });
-    auto l2 = make_shared<LineWrap>(LineWrap{ {0.0, 0.0}, {1.0, 0.0} });
-    auto l3 = make_shared<LineWrap>(LineWrap{ {0.0, 0.0}, {0.5, 0.866025404} });
 
-    auto segments = vector<weak_ptr<LineWrap>>{ weak_ptr<LineWrap>(l1),
+    auto l1 = make_shared<LineWrap>(LineWrap{ {0.0, 0.0}, {1.0, 0.0} });
+    auto l2 = make_shared<LineWrap>(LineWrap{ {0.0, 0.0}, {0.5, 0.866025404} });
+    auto l3 = make_shared<LineWrap>(LineWrap{ {0.10, 0.10}, {1.1, 0.1} });
+    auto l4 = make_shared<LineWrap>(LineWrap{ {0.10, 0.10}, {0.6, 0.966025404} });
+    auto l5 = make_shared<LineWrap>(LineWrap{ {0.20, 0.20}, {1.2, 0.2} });
+    auto l6 = make_shared<LineWrap>(LineWrap{ {0.20, 0.20}, {0.7, 1.066025404} });
+    auto l7 = make_shared<LineWrap>(LineWrap{ {0.7, 1.066025404}, {1.2, 0.2} });
+
+    auto segments = vector<weak_ptr<LineWrap>>{ weak_ptr<LineWrap>(l6),
+                                                weak_ptr<LineWrap>(l1),
+                                                weak_ptr<LineWrap>(l4),
+                                                weak_ptr<LineWrap>(l5),
                                                 weak_ptr<LineWrap>(l2),
-                                                weak_ptr<LineWrap>(l3)};
+                                                weak_ptr<LineWrap>(l3),
+                                                weak_ptr<LineWrap>(l7)};
 
     if (Match(model, segments))
         for (auto & a : model.atoms)
-            cout << a->name << " "
-                 << a.get()->asignment.lock().get()->start.first << endl;
+            cout << a->name << " <-> ("
+                 << a.get()->asignment.lock().get()->start.first << ", "
+                 << a.get()->asignment.lock().get()->start.second << ") ("
+                 << a.get()->asignment.lock().get()->end.first << ", "
+                 << a.get()->asignment.lock().get()->end.second << ")"
+                 << endl;
     else
         cout << "Non match";
 }

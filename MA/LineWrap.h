@@ -29,6 +29,9 @@ public:
     double GetCos(const LineWrap & a) const;
     PointWrap GetStart() const { return start; };
     PointWrap GetEnd() const {return end; };
+    elsd::LineSegment GetLineSegment() const {
+        return {{start.first, start.second}, {end.first, end.second}};
+    };
 
     bool matched;
     const PointWrap start, end;

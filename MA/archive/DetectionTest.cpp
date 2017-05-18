@@ -6,8 +6,8 @@
 //cute right etc triangles
 //squares
 void DetectionTest() {
-     First part of this test is scoring functions definitions
-     * each function takes two line segments as argument
+     /*First part of this test is scoring functions definitions
+     * each function takes two line segments as argument*/
      
 
      //function scoring size match
@@ -47,13 +47,13 @@ void DetectionTest() {
         double d = a->Distance(*b);
         return d / (d + 1000);
     };
-
+/*
      Here we define 3 aspects that will be interesting for us
      * in each vertex of a triangle
      * so each vertex must contain two line segments that are:
      * - of 60 deg angle
      * - similar in size
-     * - touching each other
+     * - touching each other*/
      
     Relationship angle("kat");
     angle.SetScoringFunction(angle60);
@@ -66,11 +66,11 @@ void DetectionTest() {
     vertex.push_back(&angle);
     vertex.push_back(&cons);
     vertex.push_back(&size);
-
+/*
      Now that we know what constraints a vertex must fulfill
      * we have to assemble a whole model
      * in that case, a triangle consists of 3 vertices
-     
+     */
     vector<vector<Relationship*>*> * parts =
         new vector<vector<Relationship*>*>();
     parts->push_back(&vertex);
@@ -80,9 +80,11 @@ void DetectionTest() {
     Primitive triangle;
     triangle.AssignParts(parts);
 
+/*
      ELSD image processing
      * detect segments and save them in separate image for testing purposes
-     
+*/
+
     string inFile = "./7.pgm";
     ImageInterface::Ptr image(new ElsdPgmFileReader(inFile));
     ShapesDetectorInterface::Ptr detector(new ElsDetector);
@@ -97,9 +99,9 @@ void DetectionTest() {
     ofs << *svg;
     ofs.close();
 
-     Create vector of wrapped segments
+    /* Create vector of wrapped segments
      * and apply it to the matcher
-     * that will try to match detected segments to defined model
+     * that will try to match detected segments to defined model*/
      
     vector<LineWrap> ls;
     for (auto a : detector->getLineSegments()) {
@@ -118,14 +120,14 @@ void DetectionTest() {
     Matcher mat(0.02, parts, &ls);
     mat.Match();
 
-     Our new approach is to make lambdas taking vectors of line segments
+   /*  Our new approach is to make lambdas taking vectors of line segments
      * then the score will be evaluated according to requirement fulfillment
      * between each line with every other
      * the problem here is - how do we now how many lines should we apply to the
      * vector?
      
     
-     * here the score is the score of the worst pair
+     * here the score is the score of the worst pair*/
      
     auto sizeMatchV = [] (vector<LineWrap *> l) {
         double score = .0;

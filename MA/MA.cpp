@@ -5,6 +5,7 @@
 #include <cmath>
 #include <cstdlib>
 #include <ctime>
+#include <fstream>
 #include "LineWrap.h"
 #include "MatchingSystem.h"
 
@@ -125,7 +126,49 @@ void TestDetection() {
     model.parts.push_back(p3);
 
 
-    auto l1 = make_shared<LineWrap>(LineWrap{ {0.0, 0.0}, {1.0, 0.0} });
+
+
+
+
+    /*
+     * ELSD image processing
+     * detect segments and save them in separate image for testing purposes
+     */
+
+    string inFile = "./7.pgm";
+    ImageInterface::Ptr image(new ElsdPgmFileReader(inFile));
+    ShapesDetectorInterface::Ptr detector(new ElsDetector);
+    detector->run(image);
+
+    string outFile = inFile + ".svg";
+    SvgWriterInterface::Ptr svg(new ElsdSvgWriter);
+    svg->setImageSize(image->xsize(), image->ysize());
+    const vector<LineSegment> & lines = detector->getLineSegments();
+    svg->addLineSegments(lines.begin(), lines.end());
+    ofstream ofs(outFile, ofstream::out);
+    ofs << *svg;
+    ofs.close();
+
+    /*
+     * Create vector of wrapped segments
+     * and apply it to the matcher
+     */
+
+    //TODO fix so there is no copy
+    auto segsShared = vector<shared_ptr<LineWrap>>();
+    for (const auto & line : lines)
+        segsShared.push_back(make_shared<LineWrap>(line));
+
+    auto segments = vector<weak_ptr<LineWrap>>();
+    for (const auto & line : segsShared)
+        segments.push_back(weak_ptr<LineWrap>(line));
+
+
+
+
+
+
+    /*auto l1 = make_shared<LineWrap>(LineWrap{ {0.0, 0.0}, {1.0, 0.0} });
     auto l2 = make_shared<LineWrap>(LineWrap{ {0.0, 0.0}, {0.5, 0.866025404} });
     auto l3 = make_shared<LineWrap>(LineWrap{ {0.10, 0.10}, {1.1, 0.1} });
     auto l4 = make_shared<LineWrap>(LineWrap{ {0.10, 0.10}, {0.6, 0.966025404} });
@@ -139,7 +182,7 @@ void TestDetection() {
                                                 weak_ptr<LineWrap>(l5),
                                                 weak_ptr<LineWrap>(l2),
                                                 weak_ptr<LineWrap>(l3),
-                                                weak_ptr<LineWrap>(l7)};
+                                                weak_ptr<LineWrap>(l7)};*/
 
     if (Match(model, segments))
         for (auto & a : model.atoms)
@@ -151,6 +194,19 @@ void TestDetection() {
                  << endl;
     else
         cout << "Non match";
+
+
+    auto detection = vector<LineSegment>();
+    for (auto & a : model.atoms)
+        detection.push_back(a->asignment.lock()->GetLineSegment());
+
+    string detectionFile = inFile + ".detection.svg";
+    SvgWriterInterface::Ptr svg2(new ElsdSvgWriter);
+    svg2->setImageSize(image->xsize(), image->ysize());
+    svg2->addLineSegments(detection.begin(), detection.end());
+    ofs.open(detectionFile);
+    ofs << *svg2;
+    ofs.close();
 }
 
 int main() {

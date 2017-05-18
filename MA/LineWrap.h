@@ -22,16 +22,15 @@ public:
     LineWrap(elsd::LineSegment a);
     LineWrap(std::pair<double, double>, std::pair<double, double>);
 
-    double Distance(const PointWrap & p);
-    double Distance(LineWrap & l);
-    double Length();
-    double Dot(LineWrap & a);
-    double GetCos(LineWrap & a);
-    PointWrap GetStart() { return start; };
-    PointWrap GetEnd() {return end; };
+    double Distance(const PointWrap & p) const;
+    double Distance(const LineWrap & l) const ;
+    double Length() const;
+    double Dot(const LineWrap & a) const;
+    double GetCos(const LineWrap & a) const;
+    PointWrap GetStart() const { return start; };
+    PointWrap GetEnd() const {return end; };
+
     bool matched;
-
-
     const PointWrap start, end;
 };
 

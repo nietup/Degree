@@ -17,7 +17,7 @@ set(SOURCE_FILES MA.cpp
         State.cpp
         StateMachine.cpp
         WindowPack.cpp
-        ModelSelectionState.cpp ModelSelectionState.h ImageHandler.cpp ImageHandler.h LineWrap.cpp LineWrap.h PointWrap.cpp PointWrap.h)
+        ModelSelectionState.cpp ModelSelectionState.h ImageHandler.cpp ImageHandler.h LineWrap.cpp LineWrap.h PointWrap.cpp PointWrap.h MatchingSystem.h)
 set(EXECUTABLE_NAME Degree)
 add_executable(${EXECUTABLE_NAME} ${SOURCE_FILES})
 

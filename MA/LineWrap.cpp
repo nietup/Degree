@@ -4,11 +4,11 @@
 
 #include "LineWrap.h"
 
-LineWrap::LineWrap(elsd::LineSegment a) : start(a.startPoint), end(a.endPoint) {}
+LineWrap::LineWrap(elsd::LineSegment a) : start(a.startPoint), end(a.endPoint){}
 LineWrap::LineWrap(std::pair<double, double> a, std::pair<double, double> b) :
     start(a.first, a.second), end(b.first, b.second) {}
 
-double LineWrap::Distance(const PointWrap & p) {
+double LineWrap::Distance(const PointWrap & p) const {
     double x1 = start[0],
            y1 = start[1],
            x2 = end[0],
@@ -31,7 +31,7 @@ double LineWrap::Distance(const PointWrap & p) {
     }
 }
 
-double LineWrap::Distance(LineWrap & l) {
+double LineWrap::Distance(const LineWrap & l) const {
     double res  = l.Distance(start),
            nval = l.Distance(end);
     res  = res < nval ? res : nval;
@@ -41,7 +41,7 @@ double LineWrap::Distance(LineWrap & l) {
     return res < nval ? res : nval;
 }
 
-double LineWrap::Length() {
+double LineWrap::Length() const {
     double x1 = start[0],
            y1 = start[1],
            x2 = end[0],
@@ -49,7 +49,7 @@ double LineWrap::Length() {
     return sqrt((x2-x1)*(x2-x1)+(y2-y1)*(y2-y1));
 }
 
-double LineWrap::Dot(LineWrap & a) {
+double LineWrap::Dot(const LineWrap & a) const {
     double ax1 = a.GetStart()[0],
            ay1 = a.GetStart()[1],
            ax2 = a.GetEnd()[0],
@@ -61,6 +61,6 @@ double LineWrap::Dot(LineWrap & a) {
     return (ax2 - ax1) * (x2 - x1) + (ay2 - ay1) * (y2 - y1);
 }
 
-double LineWrap::GetCos(LineWrap & a) {
+double LineWrap::GetCos(const LineWrap & a) const {
     return Dot(a) / (Length() * a.Length());
 }

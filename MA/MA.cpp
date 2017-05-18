@@ -6,249 +6,91 @@
 #include <cstdlib>
 #include <ctime>
 #include "LineWrap.h"
+#include "MatchingSystem.h"
 
 using namespace std;
 using namespace elsd;
 
-void DetectionTest();
+void TestDetection() {
+    //function scoring size match
+    //* returns double in range [0, 1], where 0 is the best match
+    auto sizeMatch = make_shared<Constraint>([] (const LineWrap & a,
+                                                 const LineWrap & b) {
+        double lenA = a.Length(),
+               lenB = b.Length();
+        cout << "size match: "
+             << (lenA < lenB ? 1 - (lenA / lenB) : 1 - (lenB / lenA))
+             << endl;
+        return lenA < lenB ? 1 - (lenA / lenB) : 1 - (lenB / lenA);
+    });
 
-using Constraint = function<double(const LineWrap &, const LineWrap &)>;
+    //function scoring perpendicularity between lines
+    //* returns double in range [0, 1], where 0 is the best match
+    auto perpendicular = make_shared<Constraint>([] (const LineWrap & a,
+                                                     const LineWrap & b) {
+        return abs(a.GetCos(b));
+    });
 
-struct Part;
+    //function scoring parallelity between lines
+    //* returns double in range [0, 1], where 0 is the best match
+    auto parallel = make_shared<Constraint>([] (const LineWrap & a,
+                        const LineWrap & b) {
+        return 1.0 - abs(a.GetCos(b));
+    });
 
-struct Atom {
-    string name;
-    weak_ptr<LineWrap> asignment;
+    //function scoring closeness to 60 degrees between lines
+    //* returns double in range [0, 1], where 0 is the best match
+    auto angle60 = make_shared<Constraint>([] (const LineWrap & a,
+                                               const LineWrap & b) {
+        cout << "angle: " << (2*abs(0.5 - abs(a.GetCos(b))))
+             << endl
+            << " ax1: " << a.start.first
 
-    //should be sorted by most constrained first
-    vector<weak_ptr<Part>> involved;
-};
+            << " | ay1: " << a.start.second
+            << endl
+            << " ax2: " << a.end.first
 
-struct Part {
-    pair<weak_ptr<Atom>, weak_ptr<Atom>> atoms;
-    vector<weak_ptr<Constraint>> constraints;
-};
+            << " | ay2: " << a.end.second
+            << endl << endl
+            << " bx1: " << b.start.first
 
-struct SModel {
-    vector<shared_ptr<Part>> parts;
+            << " | by1: " << b.start.second
+            << endl
+            << " bx2: " << b.end.first
 
-    //should be sorted by most constrained first
-    vector<shared_ptr<Atom>> atoms;
-};
+            << " | by2: " << b.end.second 
+            << endl
+            ;
+        return 2*abs(0.5 - abs(a.GetCos(b)));
+    });
 
-struct TreeNode {
-    weak_ptr<Atom> atom;
-    vector<weak_ptr<Atom>> discardedAtoms;
-    vector<weak_ptr<LineWrap>> discardedSegments;
-};
+    //function scoring adjacency between lines
+    //* returns double in range [0, 1], where 0 is the best match
+    auto adjacent = make_shared<Constraint>([] (const LineWrap & a,
+                                                const LineWrap & b) {
+        double d = a.Distance(b);
+        cout << "angle: " << (d / (d + 1000))
+             << endl;
+        return d / (d + 1000);
+    });
 
-using SearchTree = vector<TreeNode>;
-
-template <class T>
-bool myContains(weak_ptr<T> object, const vector<weak_ptr<T>> & v) {
-    for (auto & a : v) {
-        if (object.lock().get() == a.lock().get()) {
-            return true;
-        }
-    }
-
-    return false;
-}
-
-weak_ptr<Atom> FindAtom(const SearchTree & tree) {
-    int node = tree.size() - 1;
-    auto & discarded = tree[node].discardedAtoms;
-
-    for (; node >= 0; node--) {
-        auto & atom = *tree[node].atom.lock();
-
-        for (auto & part : atom.involved) {
-            auto atoms = part.lock().get()->atoms;
-            if (atoms.first.lock().get() == &atom) {
-                if (atoms.second.lock().get()->asignment.expired()) {
-                    if (!myContains<Atom>(atoms.second, discarded)) {
-                        return atoms.second;
-                    }
-                }
-            }
-            else {
-                if (atoms.first.lock().get()->asignment.expired()) {
-                    if (!myContains<Atom>(atoms.first, discarded)) {
-                        return atoms.first;
-                    }
-                }
-            }
-        }
-    }
-    return weak_ptr<Atom>();
-}
-
-const auto threshold = 88.0;
-
-bool Consistent(const LineWrap & segment, const Atom & atom) {
-    for (auto & part : atom.involved) {
-        auto atoms = part.lock().get()->atoms;
-
-        //if both vars in part are unassigned then it cannot be contradictory
-        if (atoms.first.lock()->asignment.expired() &&
-            atoms.second.lock()->asignment.expired())
-            continue;
-
-        weak_ptr<LineWrap> otherSegment;
-        if (atoms.first.lock()->asignment.expired())
-            otherSegment = atoms.second.lock().get()->asignment;
-        else
-            otherSegment = atoms.first.lock().get()->asignment;
-
-        for (auto constraint : part.lock().get()->constraints) {
-            if (threshold >
-                constraint.lock()->operator()(segment, *otherSegment.lock())) {
-                return false;
-            }
-        }
-    }
-
-    return true;
-}
-
-weak_ptr<LineWrap> FindSegment(const vector<weak_ptr<LineWrap>> & segments,
-                               vector<weak_ptr<LineWrap>> & discarded,
-                               const Atom & atom) {
-    for (auto & segment : segments) {
-        if (!segment.lock().get()->matched) {
-            if (!myContains<LineWrap>(segment, discarded)) {
-                if (Consistent(*segment.lock().get(), atom)) {
-                    return segment;
-                }
-                else {
-                    discarded.push_back(segment);
-                }
-            }
-        }
-    }
-
-    return weak_ptr<LineWrap>();
-}
-
-//assumption: no independent graphs in model
-//return value: true if match, false if non match
-bool Match(SModel & model, const vector<weak_ptr<LineWrap>> & segments) {
-    /*
-    i = 0
-    while i < Atoms.size() do
-        Tree[i].atom = find(Atoms, first connected with Tree[i-1].atom and
-            wout assigned segment and not in discardedA array in Tree[i-1])
-        if Tree[i].atom empty then
-            Tree[i-1].discardedS.push_back(Tree[i-1].atom.segment)
-            Tree.pop(i)
-            i--
-            break
-        end
-        Tree[i].atom.segment = find(Segments, first free and
-            not in discardedS array in Tree[i-1] and
-            consistend with Tree[0..i-1])
-        if Tree[i].atom.segment empty then
-            Tree[i-1].discardedA.push_back(Tree[i].atom)
-            Tree.pop(i)
-            break
-        end
-        i++
-    end
-    */
-
-    //intro stuff
-    auto AtomsSize = model.atoms.size();
-    auto PartsSize = model.parts.size();
-    if (!AtomsSize || !PartsSize)
-        return false;
-    model.atoms[0]->asignment = segments[0];
-    segments[0].lock()->matched = true;
-    auto match = SearchTree{ TreeNode {model.atoms[0]} };
-
-    //main loop
-    auto i = 1u;
-    while (i < AtomsSize) {
-        //if root didn't work out -- move to separate function later
-        if (i == 0) {
-            //find next segment for root
-            match[0].atom.lock()->asignment.lock()->matched = false;
-            match[0].discardedAtoms.clear();
-            auto nextSegment = weak_ptr<LineWrap>();
-            int j = 1;
-            for (auto & seg : segments) {
-                if (seg.lock() == match[0].atom.lock()->asignment.lock()) {
-                    if (j < segments.size())
-                        nextSegment = *(&seg + 1);
-                    break;
-                }
-                j++;
-            }
-
-            if (nextSegment.expired()) {
-                //if we have tried all segments as roots then it is non match
-                return false;
-            }
-            else { //we found next segment for tree
-                match[0].atom.lock()->asignment = nextSegment;
-                nextSegment.lock()->matched = true;
-                i++;
-            }
-        }
-
-        auto nextAtom = FindAtom(match);
-        if (nextAtom.expired()) {
-            if (i > 1) {
-                match[i - 2].discardedSegments.
-                    push_back(match[i - 1].atom.lock()->asignment);
-                match[i - 1].atom.lock()->asignment.lock()->matched = false;
-                match[i - 1].atom.lock()->asignment.reset();
-                match.pop_back();
-            }
-
-            i--;
-            continue;
-        }
-
-        auto nextSegment = FindSegment(segments, match[i - 1].discardedSegments,
-                                       *nextAtom.lock());
-        if (nextSegment.expired()) {
-            match[i - 1].discardedAtoms.push_back(nextAtom);
-            match[i - 1].discardedSegments.clear();
-            continue;
-        }
-
-        nextSegment.lock().get()->matched = true;
-        nextAtom.lock().get()->asignment = nextSegment;
-        match.push_back(TreeNode{ nextAtom });
-
-        i++;
-    }
-
-    return true;
-}
-
-int main() {
-/*	StateMachine SM(800, 600, 60, "Akwizycja Modeli");
-	MenuState Menu(&SM);
-	SM.ChangeState(&Menu);
-
-	while (SM.IsRunning()) {
-		SM.Update();
-		SM.Render();
-	}*/
 
     auto model = SModel{};
 
     auto a1 = make_shared<Atom>(Atom{ "1" });
-    auto a2 = make_shared<Atom>(Atom{ "ij2" });
+    auto a2 = make_shared<Atom>(Atom{ "2" });
     auto a3 = make_shared<Atom>(Atom{ "3" });
 
     auto f = make_shared<Constraint>([](const LineWrap & a,
                                         const LineWrap & b) {
-            return 100.0;
+        return 100.0;
     });
 
-    auto v = vector<weak_ptr<Constraint>>{ weak_ptr<Constraint>(f) };
+    auto v = vector<weak_ptr<Constraint>>{
+        weak_ptr<Constraint>(angle60),
+        weak_ptr<Constraint>(adjacent),
+        weak_ptr<Constraint>(sizeMatch)
+    };
 
     auto p1 = make_shared<Part>(Part{ {a1, a2}, v });
     auto p2 = make_shared<Part>(Part{ {a1, a3}, v });
@@ -269,15 +111,13 @@ int main() {
     model.parts.push_back(p2);
     model.parts.push_back(p3);
 
-    auto l1 = make_shared<LineWrap>(LineWrap{ {1.0, 1}, {1, 1} });
-    auto l2 = make_shared<LineWrap>(LineWrap{ {2.0, 1}, {1, 1} });
-    auto l3 = make_shared<LineWrap>(LineWrap{ {3.0, 1}, {1, 1} });
-    auto l4 = make_shared<LineWrap>(LineWrap{ {4.0, 1}, {1, 1} });
+    auto l1 = make_shared<LineWrap>(LineWrap{ {1.0, 0.0}, {0.5, 0.866025404} });
+    auto l2 = make_shared<LineWrap>(LineWrap{ {0.0, 0.0}, {1.0, 0.0} });
+    auto l3 = make_shared<LineWrap>(LineWrap{ {0.0, 0.0}, {0.5, 0.866025404} });
 
     auto segments = vector<weak_ptr<LineWrap>>{ weak_ptr<LineWrap>(l1),
                                                 weak_ptr<LineWrap>(l2),
-                                                weak_ptr<LineWrap>(l3),
-                                                weak_ptr<LineWrap>(l4)};
+                                                weak_ptr<LineWrap>(l3)};
 
     if (Match(model, segments))
         for (auto & a : model.atoms)
@@ -285,6 +125,19 @@ int main() {
                  << a.get()->asignment.lock().get()->start.first << endl;
     else
         cout << "Non match";
+}
+
+int main() {
+/*	StateMachine SM(800, 600, 60, "Akwizycja Modeli");
+	MenuState Menu(&SM);
+	SM.ChangeState(&Menu);
+
+	while (SM.IsRunning()) {
+		SM.Update();
+		SM.Render();
+	}*/
+
+    TestDetection();
 
 	return 0;
 }

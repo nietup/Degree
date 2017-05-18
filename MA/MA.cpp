@@ -15,10 +15,10 @@ using namespace elsd;
 void TestDetection() {
     //function scoring size match
     //* returns double in range [0, 1], where 0 is the best match
-    auto sizeMatch = make_shared<Constraint>([] (const LineWrap & a,
-                                                 const LineWrap & b) {
+    auto sizeMatch = make_shared<Constraint>([](const LineWrap &a,
+                                                const LineWrap &b) {
         double lenA = a.Length(),
-               lenB = b.Length();
+            lenB = b.Length();
         /*cout << "size match: "
              << (lenA < lenB ? 1 - (lenA / lenB) : 1 - (lenB / lenA))
              << endl;*/
@@ -27,22 +27,22 @@ void TestDetection() {
 
     //function scoring perpendicularity between lines
     //* returns double in range [0, 1], where 0 is the best match
-    auto perpendicular = make_shared<Constraint>([] (const LineWrap & a,
-                                                     const LineWrap & b) {
+    auto perpendicular = make_shared<Constraint>([](const LineWrap &a,
+                                                    const LineWrap &b) {
         return abs(a.GetCos(b));
     });
 
     //function scoring parallelity between lines
     //* returns double in range [0, 1], where 0 is the best match
-    auto parallel = make_shared<Constraint>([] (const LineWrap & a,
-                        const LineWrap & b) {
+    auto parallel = make_shared<Constraint>([](const LineWrap &a,
+                                               const LineWrap &b) {
         return 1.0 - abs(a.GetCos(b));
     });
 
     //function scoring closeness to 60 degrees between lines
     //* returns double in range [0, 1], where 0 is the best match
-    auto angle60 = make_shared<Constraint>([] (const LineWrap & a,
-                                               const LineWrap & b) {
+    auto angle60 = make_shared<Constraint>([](const LineWrap &a,
+                                              const LineWrap &b) {
         /*cout << "angle: " << (2*abs(0.5 - abs(a.GetCos(b))))
              << endl
             << " ax1: " << a.start.first
@@ -65,13 +65,13 @@ void TestDetection() {
             << "cos ab: " << a.GetCos(b)
             << endl;*/
 
-        return 2*abs(0.5 - abs(a.GetCos(b)));
+        return 2 * abs(0.5 - abs(a.GetCos(b)));
     });
 
     //function scoring adjacency between lines
     //* returns double in range [0, 1], where 0 is the best match
-    auto adjacent = make_shared<Constraint>([] (const LineWrap & a,
-                                                const LineWrap & b) {
+    auto adjacent = make_shared<Constraint>([](const LineWrap &a,
+                                               const LineWrap &b) {
         double d = a.Distance(b);
         /*cout << " ("
              << a.start.first << ", "
@@ -91,12 +91,12 @@ void TestDetection() {
 
     auto model = SModel{};
 
-    auto a1 = make_shared<Atom>(Atom{ "1" });
-    auto a2 = make_shared<Atom>(Atom{ "2" });
-    auto a3 = make_shared<Atom>(Atom{ "3" });
+    auto a1 = make_shared<Atom>(Atom{"1"});
+    auto a2 = make_shared<Atom>(Atom{"2"});
+    auto a3 = make_shared<Atom>(Atom{"3"});
 
-    auto f = make_shared<Constraint>([](const LineWrap & a,
-                                        const LineWrap & b) {
+    auto f = make_shared<Constraint>([](const LineWrap &a,
+                                        const LineWrap &b) {
         return 100.0;
     });
 
@@ -106,9 +106,9 @@ void TestDetection() {
         weak_ptr<Constraint>(sizeMatch)
     };
 
-    auto p1 = make_shared<Part>(Part{ {a1, a2}, v });
-    auto p2 = make_shared<Part>(Part{ {a1, a3}, v });
-    auto p3 = make_shared<Part>(Part{ {a2, a3}, v });
+    auto p1 = make_shared<Part>(Part{{a1, a2}, v});
+    auto p2 = make_shared<Part>(Part{{a1, a3}, v});
+    auto p3 = make_shared<Part>(Part{{a2, a3}, v});
 
     a1.get()->involved.push_back(weak_ptr<Part>(p1));
     a1.get()->involved.push_back(weak_ptr<Part>(p2));
@@ -135,7 +135,7 @@ void TestDetection() {
      * detect segments and save them in separate image for testing purposes
      */
 
-    string inFile = "./7.pgm";
+    string inFile = "./5.pgm";
     ImageInterface::Ptr image(new ElsdPgmFileReader(inFile));
     ShapesDetectorInterface::Ptr detector(new ElsDetector);
     detector->run(image);
@@ -143,7 +143,7 @@ void TestDetection() {
     string outFile = inFile + ".svg";
     SvgWriterInterface::Ptr svg(new ElsdSvgWriter);
     svg->setImageSize(image->xsize(), image->ysize());
-    const vector<LineSegment> & lines = detector->getLineSegments();
+    const vector<LineSegment> &lines = detector->getLineSegments();
     svg->addLineSegments(lines.begin(), lines.end());
     ofstream ofs(outFile, ofstream::out);
     ofs << *svg;
@@ -156,11 +156,11 @@ void TestDetection() {
 
     //TODO fix so there is no copy
     auto segsShared = vector<shared_ptr<LineWrap>>();
-    for (const auto & line : lines)
+    for (const auto &line : lines)
         segsShared.push_back(make_shared<LineWrap>(line));
 
     auto segments = vector<weak_ptr<LineWrap>>();
-    for (const auto & line : segsShared)
+    for (const auto &line : segsShared)
         segments.push_back(weak_ptr<LineWrap>(line));
 
 
@@ -185,28 +185,29 @@ void TestDetection() {
                                                 weak_ptr<LineWrap>(l7)};*/
 
     if (Match(model, segments))
-        for (auto & a : model.atoms)
+        for (auto &a : model.atoms) {
             cout << a->name << " <-> ("
                  << a.get()->asignment.lock().get()->start.first << ", "
                  << a.get()->asignment.lock().get()->start.second << ") ("
                  << a.get()->asignment.lock().get()->end.first << ", "
                  << a.get()->asignment.lock().get()->end.second << ")"
                  << endl;
-    else
+
+            auto detection = vector<LineSegment>();
+            for (auto &a : model.atoms)
+                detection.push_back(a->asignment.lock()->GetLineSegment());
+
+            string detectionFile = inFile + ".detection.svg";
+            SvgWriterInterface::Ptr svg2(new ElsdSvgWriter);
+            svg2->setImageSize(image->xsize(), image->ysize());
+            svg2->addLineSegments(detection.begin(), detection.end());
+            ofs.open(detectionFile);
+            ofs << *svg2 << "</svg>";
+            ofs.close();
+        }
+    else {
         cout << "Non match";
-
-
-    auto detection = vector<LineSegment>();
-    for (auto & a : model.atoms)
-        detection.push_back(a->asignment.lock()->GetLineSegment());
-
-    string detectionFile = inFile + ".detection.svg";
-    SvgWriterInterface::Ptr svg2(new ElsdSvgWriter);
-    svg2->setImageSize(image->xsize(), image->ysize());
-    svg2->addLineSegments(detection.begin(), detection.end());
-    ofs.open(detectionFile);
-    ofs << *svg2;
-    ofs.close();
+    }
 }
 
 int main() {

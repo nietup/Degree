@@ -91,14 +91,13 @@ void TestDetection() {
 
     auto model = SModel{};
 
+    /*
+     * foremny Triangle model
+     */
+    /*
     auto a1 = make_shared<Atom>(Atom{"1"});
     auto a2 = make_shared<Atom>(Atom{"2"});
     auto a3 = make_shared<Atom>(Atom{"3"});
-
-    auto f = make_shared<Constraint>([](const LineWrap &a,
-                                        const LineWrap &b) {
-        return 100.0;
-    });
 
     auto v = vector<weak_ptr<Constraint>>{
         weak_ptr<Constraint>(angle60),
@@ -123,19 +122,97 @@ void TestDetection() {
 
     model.parts.push_back(p1);
     model.parts.push_back(p2);
+    model.parts.push_back(p3);*/
+
+    /*
+     * general Triangle model
+     */
+
+    /*auto a1 = make_shared<Atom>(Atom{"1"});
+    auto a2 = make_shared<Atom>(Atom{"2"});
+    auto a3 = make_shared<Atom>(Atom{"3"});
+
+    auto v = vector<weak_ptr<Constraint>>{
+        weak_ptr<Constraint>(adjacent)
+    };
+
+    auto p1 = make_shared<Part>(Part{{a1, a2}, v});
+    auto p2 = make_shared<Part>(Part{{a1, a3}, v});
+    auto p3 = make_shared<Part>(Part{{a2, a3}, v});
+
+    a1.get()->involved.push_back(weak_ptr<Part>(p1));
+    a1.get()->involved.push_back(weak_ptr<Part>(p2));
+    a2.get()->involved.push_back(weak_ptr<Part>(p1));
+    a2.get()->involved.push_back(weak_ptr<Part>(p3));
+    a3.get()->involved.push_back(weak_ptr<Part>(p2));
+    a3.get()->involved.push_back(weak_ptr<Part>(p3));
+
+    model.atoms.push_back(a1);
+    model.atoms.push_back(a2);
+    model.atoms.push_back(a3);
+
+    model.parts.push_back(p1);
+    model.parts.push_back(p2);
+    model.parts.push_back(p3);*/
+
+    /*
+     * square model
+     */
+
+    auto a1 = make_shared<Atom>(Atom{"1"});
+    auto a2 = make_shared<Atom>(Atom{"2"});
+    auto a3 = make_shared<Atom>(Atom{"3"});
+    auto a4 = make_shared<Atom>(Atom{"4"});
+
+    auto close = vector<weak_ptr<Constraint>>{
+        weak_ptr<Constraint>(adjacent),
+        weak_ptr<Constraint>(sizeMatch),
+        weak_ptr<Constraint>(perpendicular)
+    };
+
+    auto far = vector<weak_ptr<Constraint>>{
+        weak_ptr<Constraint>(parallel),
+        weak_ptr<Constraint>(sizeMatch),
+    };
+
+    auto p1 = make_shared<Part>(Part{{a1, a2}, close});
+    auto p2 = make_shared<Part>(Part{{a1, a3}, far});
+    auto p3 = make_shared<Part>(Part{{a1, a4}, close});
+    auto p4 = make_shared<Part>(Part{{a2, a3}, close});
+    auto p5 = make_shared<Part>(Part{{a2, a4}, far});
+    auto p6 = make_shared<Part>(Part{{a3, a4}, close});
+
+    a1.get()->involved.push_back(weak_ptr<Part>(p1));
+    a1.get()->involved.push_back(weak_ptr<Part>(p2));
+    a1.get()->involved.push_back(weak_ptr<Part>(p3));
+    a2.get()->involved.push_back(weak_ptr<Part>(p1));
+    a2.get()->involved.push_back(weak_ptr<Part>(p4));
+    a2.get()->involved.push_back(weak_ptr<Part>(p5));
+    a3.get()->involved.push_back(weak_ptr<Part>(p2));
+    a3.get()->involved.push_back(weak_ptr<Part>(p4));
+    a3.get()->involved.push_back(weak_ptr<Part>(p6));
+    a4.get()->involved.push_back(weak_ptr<Part>(p3));
+    a4.get()->involved.push_back(weak_ptr<Part>(p5));
+    a4.get()->involved.push_back(weak_ptr<Part>(p6));
+
+    model.atoms.push_back(a1);
+    model.atoms.push_back(a2);
+    model.atoms.push_back(a3);
+    model.atoms.push_back(a4);
+
+    model.parts.push_back(p1);
+    model.parts.push_back(p2);
     model.parts.push_back(p3);
-
-
-
-
-
+    model.parts.push_back(p4);
+    model.parts.push_back(p5);
+    model.parts.push_back(p6);
 
     /*
      * ELSD image processing
      * detect segments and save them in separate image for testing purposes
      */
 
-    cout << "PGM file name: ";
+    cout << "file name: ";
     auto inFile = string{};
     cin >> inFile;
     inFile = "./" + inFile;
@@ -149,7 +226,7 @@ void TestDetection() {
     const vector<LineSegment> &lines = detector->getLineSegments();
     svg->addLineSegments(lines.begin(), lines.end());
     ofstream ofs(outFile, ofstream::out);
-    ofs << *svg;
+    ofs << *svg << "</svg>";
     ofs.close();
 
     /*
@@ -166,26 +243,6 @@ void TestDetection() {
     for (const auto &line : segsShared)
         segments.push_back(weak_ptr<LineWrap>(line));
 
-
-
-
-
-
-    /*auto l1 = make_shared<LineWrap>(LineWrap{ {0.0, 0.0}, {1.0, 0.0} });
-    auto l2 = make_shared<LineWrap>(LineWrap{ {0.0, 0.0}, {0.5, 0.866025404} });
-    auto l3 = make_shared<LineWrap>(LineWrap{ {0.10, 0.10}, {1.1, 0.1} });
-    auto l4 = make_shared<LineWrap>(LineWrap{ {0.10, 0.10}, {0.6, 0.966025404} });
-    auto l5 = make_shared<LineWrap>(LineWrap{ {0.20, 0.20}, {1.2, 0.2} });
-    auto l6 = make_shared<LineWrap>(LineWrap{ {0.20, 0.20}, {0.7, 1.066025404} });
-    auto l7 = make_shared<LineWrap>(LineWrap{ {0.7, 1.066025404}, {1.2, 0.2} });
-
-    auto segments = vector<weak_ptr<LineWrap>>{ weak_ptr<LineWrap>(l6),
-                                                weak_ptr<LineWrap>(l1),
-                                                weak_ptr<LineWrap>(l4),
-                                                weak_ptr<LineWrap>(l5),
-                                                weak_ptr<LineWrap>(l2),
-                                                weak_ptr<LineWrap>(l3),
-                                                weak_ptr<LineWrap>(l7)};*/
 
     if (Match(model, segments))
         for (auto &a : model.atoms) {
@@ -209,7 +266,7 @@ void TestDetection() {
             ofs.close();
         }
     else {
-        cout << "Non match";
+        cout << "Non match" << endl;
     }
 }
 

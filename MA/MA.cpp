@@ -240,7 +240,7 @@ int main() {
     auto model = SModel{};
 
     auto a1 = make_shared<Atom>(Atom{ "1" });
-    auto a2 = make_shared<Atom>(Atom{ "2" });
+    auto a2 = make_shared<Atom>(Atom{ "ij2" });
     auto a3 = make_shared<Atom>(Atom{ "3" });
 
     auto f = make_shared<Constraint>([](const LineWrap & a,

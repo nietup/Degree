@@ -135,7 +135,10 @@ void TestDetection() {
      * detect segments and save them in separate image for testing purposes
      */
 
-    string inFile = "./5.pgm";
+    cout << "PGM file name: ";
+    auto inFile = string{};
+    cin >> inFile;
+    inFile = "./" + inFile;
     ImageInterface::Ptr image(new ElsdPgmFileReader(inFile));
     ShapesDetectorInterface::Ptr detector(new ElsDetector);
     detector->run(image);

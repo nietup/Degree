@@ -43,8 +43,8 @@ void TestDetection() {
     //* returns double in range [0, 1], where 0 is the best match
     auto angle60 = make_shared<Constraint>([](const LineWrap &a,
                                               const LineWrap &b) {
-        /*cout << "angle: " << (2*abs(0.5 - abs(a.GetCos(b))))
-             << endl
+        //cout << "angle: " << (2*abs(0.5 - abs(a.GetCos(b))))
+            /* << endl
             << " ax1: " << a.start.first
 
             << " | ay1: " << a.start.second
@@ -62,8 +62,8 @@ void TestDetection() {
             << " | by2: " << b.end.second
             << endl << endl
 
-            << "cos ab: " << a.GetCos(b)
-            << endl;*/
+            << "cos ab: " << a.GetCos(b)*/
+         //   << endl;
 
         return 2 * abs(0.5 - abs(a.GetCos(b)));
     });
@@ -73,7 +73,7 @@ void TestDetection() {
     auto adjacent = make_shared<Constraint>([](const LineWrap &a,
                                                const LineWrap &b) {
         double d = a.Distance(b);
-        /*cout << " ("
+        /*cout /*<< " ("
              << a.start.first << ", "
              << a.start.second << ")("
              << a.end.first << ", "
@@ -82,9 +82,9 @@ void TestDetection() {
              << b.start.first << ", "
              << b.start.second << ")("
              << b.end.first << ", "
-             << b.end.second << ") "
-             << "adjacent: " << (d / (d + 1000))
-             << endl;*/
+             << b.end.second << ") "*/
+             //<< "adjacent: " << (d / (d + 1000))
+             //<< endl;
         return d / (d + 1000);
     });
 
@@ -94,7 +94,7 @@ void TestDetection() {
     /*
      * foremny Triangle model
      */
-    /*
+
     auto a1 = make_shared<Atom>(Atom{"1"});
     auto a2 = make_shared<Atom>(Atom{"2"});
     auto a3 = make_shared<Atom>(Atom{"3"});
@@ -122,7 +122,7 @@ void TestDetection() {
 
     model.parts.push_back(p1);
     model.parts.push_back(p2);
-    model.parts.push_back(p3);*/
+    model.parts.push_back(p3);
 
     /*
      * general Triangle model
@@ -159,7 +159,7 @@ void TestDetection() {
      * square model
      */
 
-    auto a1 = make_shared<Atom>(Atom{"1"});
+    /*auto a1 = make_shared<Atom>(Atom{"1"});
     auto a2 = make_shared<Atom>(Atom{"2"});
     auto a3 = make_shared<Atom>(Atom{"3"});
     auto a4 = make_shared<Atom>(Atom{"4"});
@@ -205,7 +205,7 @@ void TestDetection() {
     model.parts.push_back(p3);
     model.parts.push_back(p4);
     model.parts.push_back(p5);
-    model.parts.push_back(p6);
+    model.parts.push_back(p6);*/
 
     /*
      * ELSD image processing

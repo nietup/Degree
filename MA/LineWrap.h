@@ -24,6 +24,9 @@ public:
 
     double Distance(const PointWrap & p) const;
     double Distance(const LineWrap & l) const ;
+    double VertexDistance(int vertex, const PointWrap & p) const;
+    double VertexDistance(int myVertex, int otherVertex,
+                          const LineWrap & p) const;
     double Length() const;
     double Dot(const LineWrap & a) const;
     double GetCos(const LineWrap & a) const;

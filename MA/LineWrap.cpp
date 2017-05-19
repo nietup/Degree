@@ -64,3 +64,32 @@ double LineWrap::Dot(const LineWrap & a) const {
 double LineWrap::GetCos(const LineWrap & a) const {
     return Dot(a) / (Length() * a.Length());
 }
+
+double LineWrap::VertexDistance(int vertex, const PointWrap &p) const {
+    if (0 == vertex) {
+        return start.Distance(p);
+    }
+    else {
+        if (1 == vertex) {
+            return end.Distance(p);
+        }
+        else {
+            return 0;
+        }
+    }
+}
+
+double LineWrap::VertexDistance(int myVertex, int otherVertex,
+                                const LineWrap &p) const {
+    if (0 == otherVertex) {
+        return VertexDistance(myVertex, p.start);
+    }
+    else {
+        if (1 == otherVertex) {
+            return VertexDistance(myVertex, p.end);
+        }
+        else {
+            return 0;
+        }
+    }
+}

@@ -106,18 +106,26 @@ bool Consistent(const LineWrap & segment, const Atom & atom) {
         }
 
         for (auto constraint : part.lock().get()->constraints) {
+            if (part.lock()->atoms.first.lock().get() == const_cast<Atom *>(&atom)) {
                 if (threshold <
                     constraint.lock()->operator()(segment,
                                                   *otherSegment.lock())) {
                     return false;
                 }
+            }
+            else {
+                if (threshold <
+                    constraint.lock()->operator()(*otherSegment.lock(),
+                                                  segment)) {
+                    return false;
+                }
+            }
         }
     }
 
     return true;
 }
 
-//here you should ensure that most constrained first
 weak_ptr<LineWrap> FindSegment(const vector<weak_ptr<LineWrap>> & segments,
                                vector<weak_ptr<LineWrap>> & discarded,
                                const Atom & atom) {

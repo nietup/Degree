@@ -112,9 +112,19 @@ bool Consistent(const LineWrap & segment, const Atom & atom) {
         }
 
         for (auto constraint : part.lock().get()->constraints) {
-            if (threshold <
-                constraint.lock()->operator()(segment, *otherSegment.lock())) {
-                return false;
+            if (myInvolvedScore > theirInvolvedScore) {
+                if (threshold <
+                    constraint.lock()->operator()(segment,
+                                                  *otherSegment.lock())) {
+                    return false;
+                }
+            }
+            else {
+                if (threshold <
+                    constraint.lock()->operator()(*otherSegment.lock(),
+                                                  segment)) {
+                    return false;
+                }
             }
         }
     }

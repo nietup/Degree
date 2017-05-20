@@ -91,8 +91,49 @@ void TestDetection() {
     //function opposite to adjacent
     //* returns double in range [0, inf), where inf is touching
     auto far = make_shared<Constraint>([](const LineWrap & a,
-                                               const LineWrap & b) {
-        return 1.0 / a.Distance(b);
+                                          const LineWrap & b) {
+        return 10.0 / a.Distance(b);
+    });
+
+    //function scoring adjacency between start of line a and line b
+    //* returns double in range [0, 1], where 0 is the best match
+    auto adjacentStart = make_shared<Constraint>([](const LineWrap & a,
+                                                    const LineWrap & b) {
+        auto d = b.Distance(a.start);
+        cout << "start: " << d / (d+1000.0) << endl;
+        return d / (d+1000.0);
+    });
+
+    //function scoring adjacency between end  of line a and line b
+    //* returns double in range [0, 1], where 0 is the best match
+    auto adjacentEnd = make_shared<Constraint>([](const LineWrap & a,
+                                                    const LineWrap & b) {
+        auto d = b.Distance(a.end);
+        cout << "end: " << d / (d+1000.0) << endl;
+        return d / (d+1000.0);
+    });
+
+    //function scoring adjacency between vertices of line a b
+    //* returns double in range [0, 1], where 0 is the best match
+    auto vertexAdjacent = make_shared<Constraint>([](const LineWrap & a,
+                                                    const LineWrap & b) {
+        auto a1 = b.Distance(a.start);
+        auto a2 = b.Distance(a.end);
+        a1 = a1 < a2 ? a1 : a2;
+
+        auto b1 = a.Distance(b.start);
+        auto b2 = a.Distance(b.end);
+        b1 = b1 < b2 ? b1 : b2;
+
+        a1 = a1 < b1 ? a1 : b1;
+
+        cout << "a: " << a.start.first << " " << a.start.second
+             << "  "  << a.end.first << " " << a.end.second << endl
+             << "b: " << b.start.first << " " << b.start.second
+             << "  "  << b.end.first << " " << b.end.second << endl
+             << "res: " << a1 / (a1 + 1000.0) << endl;
+
+        return a1 / (a1 + 1000.0);
     });
 
 
@@ -102,7 +143,7 @@ void TestDetection() {
      * foremny Triangle model
      */
 
-    auto a1 = make_shared<Atom>(Atom{"1"});
+    /*auto a1 = make_shared<Atom>(Atom{"1"});
     auto a2 = make_shared<Atom>(Atom{"2"});
     auto a3 = make_shared<Atom>(Atom{"3"});
 
@@ -129,13 +170,13 @@ void TestDetection() {
 
     model.parts.push_back(p1);
     model.parts.push_back(p2);
-    model.parts.push_back(p3);
+    model.parts.push_back(p3);*/
 
     /*
      * general Triangle model
      */
 
-    /*auto a1 = make_shared<Atom>(Atom{"1"});
+    auto a1 = make_shared<Atom>(Atom{"1"});
     auto a2 = make_shared<Atom>(Atom{"2"});
     auto a3 = make_shared<Atom>(Atom{"3"});
 
@@ -143,8 +184,16 @@ void TestDetection() {
         weak_ptr<Constraint>(adjacent)
     };
 
-    auto p1 = make_shared<Part>(Part{{a1, a2}, v});
-    auto p2 = make_shared<Part>(Part{{a1, a3}, v});
+    auto vs = vector<weak_ptr<Constraint>>{
+        weak_ptr<Constraint>(adjacentStart)
+    };
+
+    auto ve = vector<weak_ptr<Constraint>>{
+        weak_ptr<Constraint>(adjacentEnd)
+    };
+
+    auto p1 = make_shared<Part>(Part{{a1, a2}, vs});
+    auto p2 = make_shared<Part>(Part{{a1, a3}, ve});
     auto p3 = make_shared<Part>(Part{{a2, a3}, v});
 
     a1.get()->involved.push_back(weak_ptr<Part>(p1));
@@ -160,7 +209,7 @@ void TestDetection() {
 
     model.parts.push_back(p1);
     model.parts.push_back(p2);
-    model.parts.push_back(p3);*/
+    model.parts.push_back(p3);
 
     /*
      * square model
@@ -171,23 +220,24 @@ void TestDetection() {
     auto a3 = make_shared<Atom>(Atom{"3"});
     auto a4 = make_shared<Atom>(Atom{"4"});
 
-    auto close = vector<weak_ptr<Constraint>>{
+    auto closeEdges = vector<weak_ptr<Constraint>>{
         weak_ptr<Constraint>(adjacent),
         weak_ptr<Constraint>(sizeMatch),
         weak_ptr<Constraint>(perpendicular)
     };
 
-    auto far = vector<weak_ptr<Constraint>>{
+    auto farEdges = vector<weak_ptr<Constraint>>{
         weak_ptr<Constraint>(parallel),
         weak_ptr<Constraint>(sizeMatch),
+        weak_ptr<Constraint>(far)
     };
 
-    auto p1 = make_shared<Part>(Part{{a1, a2}, close});
-    auto p2 = make_shared<Part>(Part{{a1, a3}, far});
-    auto p3 = make_shared<Part>(Part{{a1, a4}, close});
-    auto p4 = make_shared<Part>(Part{{a2, a3}, close});
-    auto p5 = make_shared<Part>(Part{{a2, a4}, far});
-    auto p6 = make_shared<Part>(Part{{a3, a4}, close});
+    auto p1 = make_shared<Part>(Part{{a1, a2}, closeEdges});
+    auto p2 = make_shared<Part>(Part{{a1, a3}, farEdges});
+    auto p3 = make_shared<Part>(Part{{a1, a4}, closeEdges});
+    auto p4 = make_shared<Part>(Part{{a2, a3}, closeEdges});
+    auto p5 = make_shared<Part>(Part{{a2, a4}, farEdges});
+    auto p6 = make_shared<Part>(Part{{a3, a4}, closeEdges});
 
     a1.get()->involved.push_back(weak_ptr<Part>(p1));
     a1.get()->involved.push_back(weak_ptr<Part>(p2));
@@ -233,7 +283,8 @@ void TestDetection() {
     const vector<LineSegment> &lines = detector->getLineSegments();
     svg->addLineSegments(lines.begin(), lines.end());
     ofstream ofs(outFile, ofstream::out);
-    ofs << *svg << "</svg>";
+    ofs << *svg
+        << "</svg>";
     ofs.close();
 
     /*
@@ -245,6 +296,11 @@ void TestDetection() {
     auto segsShared = vector<shared_ptr<LineWrap>>();
     for (const auto &line : lines)
         segsShared.push_back(make_shared<LineWrap>(line));
+
+    //square debug part
+    /*segsShared.push_back(make_shared<LineWrap>(
+        LineWrap{{351.0,146.0},{351.0,351.0}}
+    ));*/
 
     auto segments = vector<weak_ptr<LineWrap>>();
     for (const auto &line : segsShared)

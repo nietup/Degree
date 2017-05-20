@@ -50,7 +50,6 @@ MA/Debug/
 
 MA/.idea/*
 MA/Models
-MA/cmake-build-debug/
 *.xml
 MA/.idea/workspace.xml
 
@@ -66,4 +65,34 @@ MA/cmake_modules/
 opncvconfig.txt
 *.txt
 test_data/
+
+MA/cmake-build-debug/CMakeFiles/3.7.2/CMakeCCompiler.cmake
+MA/cmake-build-debug/CMakeFiles/3.7.2/CMakeCXXCompiler.cmake
+MA/cmake-build-debug/CMakeFiles/3.7.2/CMakeDetermineCompilerABI_C.bin
+MA/cmake-build-debug/CMakeFiles/3.7.2/CMakeDetermineCompilerABI_CXX.bin
+MA/cmake-build-debug/CMakeFiles/3.7.2/CMakeSystem.cmake
+MA/cmake-build-debug/CMakeFiles/3.7.2/CompilerIdC/CMakeCCompilerId.c
+MA/cmake-build-debug/CMakeFiles/3.7.2/CompilerIdC/a.out
+MA/cmake-build-debug/CMakeFiles/3.7.2/CompilerIdCXX/CMakeCXXCompilerId.cpp
+MA/cmake-build-debug/CMakeFiles/3.7.2/CompilerIdCXX/a.out
+MA/cmake-build-debug/CMakeFiles/CMakeDirectoryInformation.cmake
+MA/cmake-build-debug/CMakeFiles/Degree.dir/CXX.includecache
+MA/cmake-build-debug/CMakeFiles/Degree.dir/DependInfo.cmake
+MA/cmake-build-debug/CMakeFiles/Degree.dir/build.make
+MA/cmake-build-debug/CMakeFiles/Degree.dir/cmake_clean.cmake
+MA/cmake-build-debug/CMakeFiles/Degree.dir/depend.internal
+MA/cmake-build-debug/CMakeFiles/Degree.dir/depend.make
+MA/cmake-build-debug/CMakeFiles/Degree.dir/flags.make
+MA/cmake-build-debug/CMakeFiles/Degree.dir/progress.make
+MA/cmake-build-debug/CMakeFiles/Makefile.cmake
+MA/cmake-build-debug/CMakeFiles/Makefile2
+MA/cmake-build-debug/CMakeFiles/cmake.check_cache
+MA/cmake-build-debug/CMakeFiles/feature_tests.bin
+MA/cmake-build-debug/CMakeFiles/feature_tests.c
+MA/cmake-build-debug/CMakeFiles/feature_tests.cxx
+MA/cmake-build-debug/CMakeFiles/progress.marks
+MA/cmake-build-debug/cmake_install.cmake
+MA/cmake-build-debug/Degree
+MA/cmake-build-debug/Degree.cbp
+MA/cmake-build-debug/Makefile
 

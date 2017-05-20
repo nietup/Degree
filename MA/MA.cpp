@@ -88,6 +88,13 @@ void TestDetection() {
         return d / (d + 1000);
     });
 
+    //function opposite to adjacent
+    //* returns double in range [0, inf), where inf is touching
+    auto far = make_shared<Constraint>([](const LineWrap & a,
+                                               const LineWrap & b) {
+        return 1.0 / a.Distance(b);
+    });
+
 
     auto model = SModel{};
 

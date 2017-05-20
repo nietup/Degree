@@ -89,10 +89,6 @@ weak_ptr<Atom> FindAtom(const SearchTree & tree) {
 
 //is it so far consistent to match segment with atom?
 bool Consistent(const LineWrap & segment, const Atom & atom) {
-    //we want to provide most constrained first to the scoring function
-    auto myInvolvedScore = atom.involved.size();
-    auto theirInvolvedScore = double{};
-
     for (auto & part : atom.involved) {
         auto atoms = part.lock().get()->atoms;
 
@@ -104,34 +100,24 @@ bool Consistent(const LineWrap & segment, const Atom & atom) {
         weak_ptr<LineWrap> otherSegment;
         if (atoms.first.lock()->asignment.expired()) {
             otherSegment = atoms.second.lock().get()->asignment;
-            theirInvolvedScore = atoms.second.lock()->involved.size();
         }
         else {
             otherSegment = atoms.first.lock().get()->asignment;
-            theirInvolvedScore = atoms.first.lock()->involved.size();
         }
 
         for (auto constraint : part.lock().get()->constraints) {
-            if (myInvolvedScore > theirInvolvedScore) {
                 if (threshold <
                     constraint.lock()->operator()(segment,
                                                   *otherSegment.lock())) {
                     return false;
                 }
-            }
-            else {
-                if (threshold <
-                    constraint.lock()->operator()(*otherSegment.lock(),
-                                                  segment)) {
-                    return false;
-                }
-            }
         }
     }
 
     return true;
 }
 
+//here you should ensure that most constrained first
 weak_ptr<LineWrap> FindSegment(const vector<weak_ptr<LineWrap>> & segments,
                                vector<weak_ptr<LineWrap>> & discarded,
                                const Atom & atom) {

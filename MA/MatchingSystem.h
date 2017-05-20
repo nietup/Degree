@@ -14,7 +14,7 @@
 using namespace std;
 using namespace elsd;
 
-const auto threshold = 0.05;
+const auto threshold = 0.1;
 
 using Constraint = function<double(const LineWrap &, const LineWrap &)>;
 

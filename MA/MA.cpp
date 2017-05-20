@@ -39,6 +39,11 @@ void TestDetection() {
         return 1.0 - abs(a.GetCos(b));
     });
 
+    auto notParallel = make_shared<Constraint>([](const LineWrap &a,
+                                               const LineWrap &b) {
+        return 0.9 < abs(a.GetCos(b)) ? 1.0 : 0.0;
+    });
+
     //function scoring closeness to 60 degrees between lines
     //* returns double in range [0, 1], where 0 is the best match
     auto angle60 = make_shared<Constraint>([](const LineWrap &a,
@@ -85,7 +90,7 @@ void TestDetection() {
              << b.end.second << ") "*/
              //<< "adjacent: " << (d / (d + 1000))
              //<< endl;
-        return d / (d + 1000);
+        return d / (d + 300);
     });
 
     //function opposite to adjacent
@@ -100,8 +105,12 @@ void TestDetection() {
     auto adjacentStart = make_shared<Constraint>([](const LineWrap & a,
                                                     const LineWrap & b) {
         auto d = b.Distance(a.start);
-        cout << "start: " << d / (d+1000.0) << endl;
-        return d / (d+1000.0);
+        cout << "start\na: " << a.start.first << " " << a.start.second
+             << "  "  << a.end.first << " " << a.end.second << endl
+             << "b: " << b.start.first << " " << b.start.second
+             << "  "  << b.end.first << " " << b.end.second << endl
+             << "res: " << d / (d + 300.0) << endl;
+        return d / (d+300.0);
     });
 
     //function scoring adjacency between end  of line a and line b
@@ -109,8 +118,12 @@ void TestDetection() {
     auto adjacentEnd = make_shared<Constraint>([](const LineWrap & a,
                                                     const LineWrap & b) {
         auto d = b.Distance(a.end);
-        cout << "end: " << d / (d+1000.0) << endl;
-        return d / (d+1000.0);
+        cout << "end\na: " << a.start.first << " " << a.start.second
+             << "  "  << a.end.first << " " << a.end.second << endl
+             << "b: " << b.start.first << " " << b.start.second
+             << "  "  << b.end.first << " " << b.end.second << endl
+             << "res: " << d / (d + 300.0) << endl;
+        return d / (d+300.0);
     });
 
     //function scoring adjacency between vertices of line a b
@@ -127,13 +140,13 @@ void TestDetection() {
 
         a1 = a1 < b1 ? a1 : b1;
 
-        cout << "a: " << a.start.first << " " << a.start.second
+        /*cout << "a: " << a.start.first << " " << a.start.second
              << "  "  << a.end.first << " " << a.end.second << endl
              << "b: " << b.start.first << " " << b.start.second
              << "  "  << b.end.first << " " << b.end.second << endl
-             << "res: " << a1 / (a1 + 1000.0) << endl;
+             << "res: " << a1 / (a1 + 1000.0) << endl;*/
 
-        return a1 / (a1 + 1000.0);
+        return a1 / (a1 + 300.0);
     });
 
 
@@ -181,15 +194,18 @@ void TestDetection() {
     auto a3 = make_shared<Atom>(Atom{"3"});
 
     auto v = vector<weak_ptr<Constraint>>{
-        weak_ptr<Constraint>(adjacent)
+        weak_ptr<Constraint>(adjacent),
+        weak_ptr<Constraint>(notParallel)
     };
 
     auto vs = vector<weak_ptr<Constraint>>{
-        weak_ptr<Constraint>(adjacentStart)
+        weak_ptr<Constraint>(adjacentStart),
+        weak_ptr<Constraint>(notParallel)
     };
 
     auto ve = vector<weak_ptr<Constraint>>{
-        weak_ptr<Constraint>(adjacentEnd)
+        weak_ptr<Constraint>(adjacentEnd),
+        weak_ptr<Constraint>(notParallel)
     };
 
     auto p1 = make_shared<Part>(Part{{a1, a2}, vs});

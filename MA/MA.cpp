@@ -105,11 +105,11 @@ void TestDetection() {
     auto adjacentStart = make_shared<Constraint>([](const LineWrap & a,
                                                     const LineWrap & b) {
         auto d = b.Distance(a.start);
-        cout << "start\na: " << a.start.first << " " << a.start.second
+        /*cout << "start\na: " << a.start.first << " " << a.start.second
              << "  "  << a.end.first << " " << a.end.second << endl
              << "b: " << b.start.first << " " << b.start.second
              << "  "  << b.end.first << " " << b.end.second << endl
-             << "res: " << d / (d + 300.0) << endl;
+             << "res: " << d / (d + 300.0) << endl;*/
         return d / (d+300.0);
     });
 
@@ -118,11 +118,11 @@ void TestDetection() {
     auto adjacentEnd = make_shared<Constraint>([](const LineWrap & a,
                                                     const LineWrap & b) {
         auto d = b.Distance(a.end);
-        cout << "end\na: " << a.start.first << " " << a.start.second
+        /*cout << "end\na: " << a.start.first << " " << a.start.second
              << "  "  << a.end.first << " " << a.end.second << endl
              << "b: " << b.start.first << " " << b.start.second
              << "  "  << b.end.first << " " << b.end.second << endl
-             << "res: " << d / (d + 300.0) << endl;
+             << "res: " << d / (d + 300.0) << endl;*/
         return d / (d+300.0);
     });
 

@@ -27,6 +27,12 @@ bool Consistent(const Hypothesis & a, const Hypothesis & b) {
     return true;
 }
 
+pair<uint, uint> unpair(uint i) {
+    int y = (int) floor(0.5 * (sqrt(8.0 * i + 1.0) + 1.0));
+    int x = (int) (0.5 * (y * y + y - 2 * i) - 1);
+    return pair<uint, uint>{x, y};
+};
+
 Hypothesis Extract(const vector<weak_ptr<LineWrap>> & sample, uint pairCount,
                    const vector<shared_ptr<Constraint>> & constraints) {
 
@@ -35,9 +41,11 @@ Hypothesis Extract(const vector<weak_ptr<LineWrap>> & sample, uint pairCount,
                                                              NO));
 
     for(auto i = 0; i < pairCount; i++) {
+        auto segsPair = unpair(i);
         for (auto j = 0; j < constraintCount; j++) {
-            if (threshold < constraints[j]->operator()(*sample[0].lock(),
-                                                       *sample[0].lock())) {
+            if (threshold < constraints[j]->operator()(
+                *sample[segsPair.first].lock(),
+                *sample[segsPair.second].lock())) {
                 hypothesis[i][j] = YES;
             }
         }
@@ -47,8 +55,44 @@ Hypothesis Extract(const vector<weak_ptr<LineWrap>> & sample, uint pairCount,
 }
 
 //returns false if cannot be further specialized
-bool Specialize(Hypothesis & h, const vector<Hypothesis> & g,
-    const Hypothesis & counterexample);
+bool Specialize(Hypothesis & h, vector<Hypothesis> & g,
+                const Hypothesis & counterexample) {
+
+    //chose right DNC
+    auto pairCount = h.size();
+    auto constraintCount = h[0].size();
+    auto DNCi = -1;
+    auto DNCj = -1;
+    auto shouldBreak = false;
+    for(auto i = 0; i < pairCount; i++) {
+        for (auto j = 0; j < constraintCount; j++) {
+            if (DNC == h[i][j]) {
+                for (auto & otherHypothesis : g) {
+                    if (DNC != otherHypothesis[i][j]) {
+                        shouldBreak = true;
+                        break;
+                    }
+                }
+                if (shouldBreak) {
+                    shouldBreak = false;
+                }
+                else {
+                    DNCi = i;
+                    DNCj = j;
+                    i = pairCount;
+                    j = constraintCount;
+                }
+            }
+        }
+    }
+
+    if (-1 == DNCi)
+        return false;
+    
+    h[DNCi][DNCj] = (YES == counterexample[DNCi][DNCj]) ? NO : YES;
+
+    return true;
+}
 
 unique_ptr<SModel> GenerateModel(
     const vector<vector<weak_ptr<LineWrap>>> & positiveSamples,

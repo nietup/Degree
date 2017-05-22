@@ -9,8 +9,42 @@ enum BoolPlus {YES, NO, DNC};
 
 using Hypothesis = vector<vector<BoolPlus>>;
 
-Hypothesis Extract(const vector<weak_ptr<LineWrap>> & sample);
-bool Consistent(const Hypothesis & a, const Hypothesis & b);
+bool Consistent(const Hypothesis & a, const Hypothesis & b) {
+    if (!a.size())
+        return true;
+
+    auto pairCount = a.size();
+    auto constraintCount = a[0].size();
+
+    for(auto i = 0; i < pairCount; i++) {
+        for (auto j = 0; j < constraintCount; j++) {
+            if (DNC != a[i][j] && DNC != b[i][j] && a[i][j] != b[i][j]) {
+                return false;
+            }
+        }
+    }
+
+    return true;
+}
+
+Hypothesis Extract(const vector<weak_ptr<LineWrap>> & sample, uint pairCount,
+                   const vector<shared_ptr<Constraint>> & constraints) {
+
+    auto constraintCount = constraints.size();
+    auto hypothesis = Hypothesis(pairCount, vector<BoolPlus>(constraintCount,
+                                                             NO));
+
+    for(auto i = 0; i < pairCount; i++) {
+        for (auto j = 0; j < constraintCount; j++) {
+            if (threshold < constraints[j]->operator()(*sample[0].lock(),
+                                                       *sample[0].lock())) {
+                hypothesis[i][j] = YES;
+            }
+        }
+    }
+
+    return hypothesis;
+}
 
 //returns false if cannot be further specialized
 bool Specialize(Hypothesis & h, const vector<Hypothesis> & g,
@@ -68,7 +102,7 @@ unique_ptr<SModel> GenerateModel(
 
     for (const auto & sample : positiveSamples) {
         //we need to prepare sample in our format
-        auto const extract = Extract(sample);
+        auto const extract = Extract(sample, pairCount, constraints);
 
         for (auto i = 0; i < pairCount; i++) {
             for (auto j = 0; j < constraintCount; j++) {
@@ -87,7 +121,7 @@ unique_ptr<SModel> GenerateModel(
 
     for (const auto & sample : negativeSamples) {
         //we need to prepare sample in our format
-        auto const extract = Extract(sample);
+        auto const extract = Extract(sample, pairCount, constraints);
 
         for (auto & hypothesis : g) {
             if (Consistent(hypothesis, extract)) {

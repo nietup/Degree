@@ -55,7 +55,7 @@ Hypothesis Extract(const vector<weak_ptr<LineWrap>> & sample, uint pairCount,
 }
 
 //returns false if cannot be further specialized
-bool Specialize(Hypothesis & h, vector<Hypothesis> & g,
+bool Specialize(Hypothesis & h, const Hypothesis & s, vector<Hypothesis> & g,
                 const Hypothesis & counterexample) {
 
     //chose right DNC
@@ -67,10 +67,15 @@ bool Specialize(Hypothesis & h, vector<Hypothesis> & g,
     for(auto i = 0; i < pairCount; i++) {
         for (auto j = 0; j < constraintCount; j++) {
             if (DNC == h[i][j]) {
-                for (auto & otherHypothesis : g) {
-                    if (DNC != otherHypothesis[i][j]) {
-                        shouldBreak = true;
-                        break;
+                if (s[i][j] == counterexample[i][j] || DNC == s[i][j]) {
+                    shouldBreak = true;
+                }
+                else {
+                    for (auto &otherHypothesis : g) {
+                        if (DNC != otherHypothesis[i][j]) {
+                            shouldBreak = true;
+                            break;
+                        }
                     }
                 }
                 if (shouldBreak) {
@@ -88,8 +93,9 @@ bool Specialize(Hypothesis & h, vector<Hypothesis> & g,
 
     if (-1 == DNCi)
         return false;
-    
+
     h[DNCi][DNCj] = (YES == counterexample[DNCi][DNCj]) ? NO : YES;
+    //we must add multiple specializations!
 
     return true;
 }
@@ -169,7 +175,7 @@ unique_ptr<SModel> GenerateModel(
 
         for (auto & hypothesis : g) {
             if (Consistent(hypothesis, extract)) {
-                if(!Specialize(hypothesis, g, extract)) {
+                if(!Specialize(hypothesis, s, g, extract)) {
                     g.erase(find(g.begin(), g.end(), hypothesis));
                 }
             }

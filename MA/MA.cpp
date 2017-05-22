@@ -12,9 +12,9 @@
 using namespace std;
 using namespace elsd;
 
-unique_ptr<SModel> GenerateModel(vector<vector<weak_ptr<LineWrap>>> samples) {
-    return unique_ptr<SModel>();
-}
+unique_ptr<SModel> GenerateModel(
+    const vector<vector<weak_ptr<LineWrap>>> & samples,
+    const vector<shared_ptr<Constraint>> & constraints);
 
 void TestGeneration() {
     //function scoring size match
@@ -160,7 +160,7 @@ void TestGeneration() {
 
     auto samples = vector<vector<weak_ptr<LineWrap>>>{};
 
-    auto sampleFiles = vector<string>{/*"l1.PGM", "l2.PGM", "l3.PGM", "l4.PGM"*/};
+    auto sampleFiles = vector<string>{/*"l1.PGM","l2.PGM","l3.PGM","l4.PGM"*/};
     for (auto & sampleFile : sampleFiles) {
         auto inFile = sampleFile;
         inFile = "./" + inFile;
@@ -191,7 +191,47 @@ void TestGeneration() {
         samples.push_back(segments);
     }
 
-    auto GeneratedModel = GenerateModel(samples);
+    auto constraints = vector<shared_ptr<Constraint>>{};
+
+    auto GeneratedModel = GenerateModel(samples, constraints);
+}
+
+unique_ptr<SModel> GenerateModel(
+    const vector<vector<weak_ptr<LineWrap>>> & samples,
+    const vector<shared_ptr<Constraint>> & constraints) {
+    /*Algorytm CEA
+
+    input:
+        samples = vector<vector<lineSegment>>
+        n = liczba atomów w modelu (samples[0].size) dla uproszczenia na razie
+        cosntraints = vector<Constraint>
+        s = matrix<bool+don't care>[constraints.size()][0.5*n*(n-1)]
+            {first positive sample}
+        g = vector<matrix<bool+don't care>[constraints.size()][0.5*n*(n-1)]>
+
+    algorithm:
+        foreach sample in samples do
+            if sample is positive then
+                if !consistent with s on s[x][y] then
+                    s[x][y] = don't care
+                end
+                if !consistent with s on g[i] then
+                    g.del(i)
+                end
+            else
+                foreach g[i] that is consistent with sample do
+                    change one don't care in g to sth that would reject sample
+                    this field can't already be used in another hipothesis in g
+                    //if several spetializations possible do several???
+                    //if no spetialization possible g.del(i)???
+                end
+            end
+        end
+    */
+    auto model = unique_ptr<SModel>(new SModel);
+    auto atomCount = samples[0].size();
+
+    return model;
 }
 
 int main() {

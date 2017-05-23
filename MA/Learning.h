@@ -185,6 +185,29 @@ unique_ptr<SModel> GenerateModel(
         }
     }
 
+
+
+    cout << "S: \n";
+    for (auto & pair : s) {
+        for (auto & field : pair) {
+            cout << field << " ";
+        }
+        cout << endl;
+    }
+
+    cout << "G: \n";
+    for (auto & h : g){
+        for (auto & pair : h) {
+            for (auto &field : pair) {
+                cout << field << " ";
+            }
+            cout << endl;
+        }
+        cout << endl;
+    }
+
+
+
     auto model = unique_ptr<SModel>(new SModel);
     return model;
 }

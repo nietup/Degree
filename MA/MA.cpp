@@ -188,8 +188,6 @@ void TestGeneration() {
         samples.push_back(segments);
     }
 
-    auto constraints = vector<shared_ptr<Constraint>>{};
-
     /* test case 1
      * constraints = 1: A
      * atoms = 3
@@ -219,11 +217,16 @@ void TestGeneration() {
      *
      * expected output
      * S: <<YES>, <DNC>, <YES>>
-     * G: <<<DNC>,<DNC>,<DNC>>>
+     * G: <<<DNC>, <DNC>, <DNC>>>
      */
 
+    auto constraints = vector<shared_ptr<Constraint>>{};
 
-    GenerateModel(samples, samples, constraints);
+    auto l1 = make_shared<LineWrap>({1,0},{0,0});
+    auto posSamples = vector<vector<weak_ptr<LineWrap>>>{};
+    auto negSamples = vector<vector<weak_ptr<LineWrap>>>{};
+
+    GenerateModel(posSamples, negSamples, constraints);
 }
 
 int main() {

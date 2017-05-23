@@ -190,7 +190,40 @@ void TestGeneration() {
 
     auto constraints = vector<shared_ptr<Constraint>>{};
 
-    auto GeneratedModel = GenerateModel(samples, samples, constraints);
+    /* test case 1
+     * constraints = 1: A
+     * atoms = 3
+     * parts = 1: atom0, atom2, A
+     *
+     * positive samples:
+     * sample #0
+     * pair0: line0, line1: A
+     * pair1: line1, line2: ~A
+     * pair2: line0, line2: A
+     *
+     * sample #1
+     * pair0: line0, line1: A
+     * pair1: line1, line2: A
+     * pair2: line0, line2: A
+     *
+     * negative samples:
+     * sample #0
+     * pair0: line0, line1: ~A
+     * pair1: line1, line2: A
+     * pair2: line0, line2: ~A
+     *
+     * sample #1
+     * pair0: line0, line1: A
+     * pair1: line1, line2: ~A
+     * pair2: line0, line2: ~A
+     *
+     * expected output
+     * S: <<YES>, <DNC>, <YES>>
+     * G: <<<DNC>,<DNC>,<DNC>>>
+     */
+
+
+    GenerateModel(samples, samples, constraints);
 }
 
 int main() {
@@ -203,7 +236,11 @@ int main() {
 		SM.Render();
 	}*/
 
-    TestGeneration();
+    //TestGeneration();
+
+    for (auto i = 0; i < 10; i++) {
+        cout << i << ": " << unpair(i).first  << " "<< unpair(i).second << endl;
+    }
 
 	return 0;
 }

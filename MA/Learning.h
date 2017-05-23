@@ -55,8 +55,8 @@ Hypothesis Extract(const vector<weak_ptr<LineWrap>> & sample, uint pairCount,
 }
 
 //returns false if cannot be further specialized
-bool Specialize(Hypothesis & h, const Hypothesis & s, vector<Hypothesis> & g,
-                const Hypothesis & counterexample) {
+bool Specialize(const Hypothesis & h, const Hypothesis & s,
+                vector<Hypothesis> & g, const Hypothesis & counterexample) {
 
     //chose right DNC
     auto pairCount = h.size();
@@ -89,19 +89,24 @@ bool Specialize(Hypothesis & h, const Hypothesis & s, vector<Hypothesis> & g,
         }
     }
 
+    auto hIndex = 0;
+    for (auto & a : g)
+        if (h == a)
+            break;
+        else
+            hIndex++;
+
     for (auto & field : fieldsOfSpecialization) {
         auto newSpecialized = Hypothesis(pairCount,
                                          vector<BoolPlus>(constraintCount));
 
-//        copy(h.begin(), h.end(), back_inserter(newSpecialized));
-        newSpecialized = h;
+        //copy(h.begin(), h.end(), back_inserter(newSpecialized));
+        newSpecialized = g[hIndex];
         newSpecialized[field.first][field.second] =
             (YES == counterexample[field.first][field.second]) ? NO : YES;
 
         g.push_back(newSpecialized);
     }
-
-    g.erase(find(g.begin(), g.end(), h));
 
     if (!fieldsOfSpecialization.size())
         return false;
@@ -180,10 +185,18 @@ unique_ptr<SModel> GenerateModel(
         //we need to prepare sample in our format
         auto const extract = Extract(sample, pairCount, constraints);
 
+        auto willBeDeleted = vector<int>();
+        auto badIndex = 0;
         for (auto & hypothesis : g) {
             if (Consistent(hypothesis, extract)) {
                 Specialize(hypothesis, s, g, extract);
+                willBeDeleted.push_back(badIndex);
             }
+            badIndex++;
+        }
+
+        for (auto i : willBeDeleted) {
+            g.erase(find(g.begin(), g.end(), g[i]));
         }
     }
 

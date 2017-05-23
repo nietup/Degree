@@ -221,7 +221,7 @@ void TestGeneration() {
      * negative samples:
      */
 
-    auto testConstraint = make_shared<Constraint>([](const LineWrap & a,
+    auto c0 = make_shared<Constraint>([](const LineWrap & a,
                                                      const LineWrap & b) {
         //sample p0
         if (0 == a.start.first && 0 == a.start.second &&
@@ -249,7 +249,117 @@ void TestGeneration() {
             1 == b.start.first && 2 == b.start.second)
             return 0.0;
 
-        //sample n0
+        //sample p2
+        if (2 == a.start.first && 0 == a.start.second &&
+            2 == b.start.first && 1 == b.start.second)
+            return 0.0;
+
+        if (2 == a.start.first && 1 == a.start.second &&
+            2 == b.start.first && 2 == b.start.second)
+            return 1.0;
+
+        if (2 == a.start.first && 0 == a.start.second &&
+            2 == b.start.first && 2 == b.start.second)
+            return 0.0;
+
+        //sample p3
+        if (3 == a.start.first && 0 == a.start.second &&
+            3 == b.start.first && 1 == b.start.second)
+            return 0.0;
+
+        if (3 == a.start.first && 1 == a.start.second &&
+            3 == b.start.first && 2 == b.start.second)
+            return 0.0;
+
+        if (3 == a.start.first && 0 == a.start.second &&
+            3 == b.start.first && 2 == b.start.second)
+            return 0.0;
+    });
+
+    auto c1 = make_shared<Constraint>([](const LineWrap & a,
+                                         const LineWrap & b) {
+        //sample p0
+        if (0 == a.start.first && 0 == a.start.second &&
+            0 == b.start.first && 1 == b.start.second)
+            return 0.0;
+
+        if (0 == a.start.first && 1 == a.start.second &&
+            0 == b.start.first && 2 == b.start.second)
+            return 1.0;
+
+        if (0 == a.start.first && 0 == a.start.second &&
+            0 == b.start.first && 2 == b.start.second)
+            return 1.0;
+
+        //sample p1
+        if (1 == a.start.first && 0 == a.start.second &&
+            1 == b.start.first && 1 == b.start.second)
+            return 0.0;
+
+        if (1 == a.start.first && 1 == a.start.second &&
+            1 == b.start.first && 2 == b.start.second)
+            return 1.0;
+
+        if (1 == a.start.first && 0 == a.start.second &&
+            1 == b.start.first && 2 == b.start.second)
+            return 0.0;
+
+        //sample p2
+        if (2 == a.start.first && 0 == a.start.second &&
+            2 == b.start.first && 1 == b.start.second)
+            return 1.0;
+
+        if (2 == a.start.first && 1 == a.start.second &&
+            2 == b.start.first && 2 == b.start.second)
+            return 1.0;
+
+        if (2 == a.start.first && 0 == a.start.second &&
+            2 == b.start.first && 2 == b.start.second)
+            return 1.0;
+
+        //sample p3
+        if (3 == a.start.first && 0 == a.start.second &&
+            3 == b.start.first && 1 == b.start.second)
+            return 0.0;
+
+        if (3 == a.start.first && 1 == a.start.second &&
+            3 == b.start.first && 2 == b.start.second)
+            return 0.0;
+
+        if (3 == a.start.first && 0 == a.start.second &&
+            3 == b.start.first && 2 == b.start.second)
+            return 0.0;
+    });
+
+    auto c2 = make_shared<Constraint>([](const LineWrap & a,
+                                         const LineWrap & b) {
+        //sample p0
+        if (0 == a.start.first && 0 == a.start.second &&
+            0 == b.start.first && 1 == b.start.second)
+            return 1.0;
+
+        if (0 == a.start.first && 1 == a.start.second &&
+            0 == b.start.first && 2 == b.start.second)
+            return 0.0;
+
+        if (0 == a.start.first && 0 == a.start.second &&
+            0 == b.start.first && 2 == b.start.second)
+            return 0.0;
+
+        //sample p1
+        if (1 == a.start.first && 0 == a.start.second &&
+            1 == b.start.first && 1 == b.start.second)
+            return 1.0;
+
+        if (1 == a.start.first && 1 == a.start.second &&
+            1 == b.start.first && 2 == b.start.second)
+            return 0.0;
+
+        if (1 == a.start.first && 0 == a.start.second &&
+            1 == b.start.first && 2 == b.start.second)
+            return 0.0;
+
+        //sample p2
         if (2 == a.start.first && 0 == a.start.second &&
             2 == b.start.first && 1 == b.start.second)
             return 1.0;
@@ -260,23 +370,23 @@ void TestGeneration() {
 
         if (2 == a.start.first && 0 == a.start.second &&
             2 == b.start.first && 2 == b.start.second)
-            return 1.0;
+            return 0.0;
 
-        //sample n1
+        //sample p3
         if (3 == a.start.first && 0 == a.start.second &&
             3 == b.start.first && 1 == b.start.second)
             return 0.0;
 
         if (3 == a.start.first && 1 == a.start.second &&
             3 == b.start.first && 2 == b.start.second)
-            return 1.0;
+            return 0.0;
 
         if (3 == a.start.first && 0 == a.start.second &&
             3 == b.start.first && 2 == b.start.second)
-            return 1.0;
+            return 0.0;
     });
 
-    auto constraints = vector<shared_ptr<Constraint>>{testConstraint};
+    auto constraints = vector<shared_ptr<Constraint>>{c0, c1, c2};
 
     //positive sample 0
     auto l00 = make_shared<LineWrap>(LineWrap{{0,0},{0,0}});

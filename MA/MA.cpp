@@ -274,6 +274,45 @@ void TestGeneration() {
         if (3 == a.start.first && 0 == a.start.second &&
             3 == b.start.first && 2 == b.start.second)
             return 0.0;
+
+        //sample n0
+        if (4 == a.start.first && 0 == a.start.second &&
+            4 == b.start.first && 1 == b.start.second)
+            return 1.0;
+
+        if (4 == a.start.first && 1 == a.start.second &&
+            4 == b.start.first && 2 == b.start.second)
+            return 0.0;
+
+        if (4 == a.start.first && 0 == a.start.second &&
+            4 == b.start.first && 2 == b.start.second)
+            return 0.0;
+
+        //sample n1
+        if (5 == a.start.first && 0 == a.start.second &&
+            5 == b.start.first && 1 == b.start.second)
+            return 0.0;
+
+        if (5 == a.start.first && 1 == a.start.second &&
+            5 == b.start.first && 2 == b.start.second)
+            return 0.0;
+
+        if (5 == a.start.first && 0 == a.start.second &&
+            5 == b.start.first && 2 == b.start.second)
+            return 1.0;
+
+        //sample n2
+        if (6 == a.start.first && 0 == a.start.second &&
+            6 == b.start.first && 1 == b.start.second)
+            return 0.0;
+
+        if (6 == a.start.first && 1 == a.start.second &&
+            6 == b.start.first && 2 == b.start.second)
+            return 0.0;
+
+        if (6 == a.start.first && 0 == a.start.second &&
+            6 == b.start.first && 2 == b.start.second)
+            return 0.0;
     });
 
     auto c1 = make_shared<Constraint>([](const LineWrap & a,
@@ -328,6 +367,45 @@ void TestGeneration() {
 
         if (3 == a.start.first && 0 == a.start.second &&
             3 == b.start.first && 2 == b.start.second)
+            return 0.0;
+
+        //sample n0
+        if (4 == a.start.first && 0 == a.start.second &&
+            4 == b.start.first && 1 == b.start.second)
+            return 0.0;
+
+        if (4 == a.start.first && 1 == a.start.second &&
+            4 == b.start.first && 2 == b.start.second)
+            return 1.0;
+
+        if (4 == a.start.first && 0 == a.start.second &&
+            4 == b.start.first && 2 == b.start.second)
+            return 1.0;
+
+        //sample n1
+        if (5 == a.start.first && 0 == a.start.second &&
+            5 == b.start.first && 1 == b.start.second)
+            return 1.0;
+
+        if (5 == a.start.first && 1 == a.start.second &&
+            5 == b.start.first && 2 == b.start.second)
+            return 0.0;
+
+        if (5 == a.start.first && 0 == a.start.second &&
+            5 == b.start.first && 2 == b.start.second)
+            return 0.0;
+
+        //sample n2
+        if (6 == a.start.first && 0 == a.start.second &&
+            6 == b.start.first && 1 == b.start.second)
+            return 0.0;
+
+        if (6 == a.start.first && 1 == a.start.second &&
+            6 == b.start.first && 2 == b.start.second)
+            return 0.0;
+
+        if (6 == a.start.first && 0 == a.start.second &&
+            6 == b.start.first && 2 == b.start.second)
             return 0.0;
     });
 
@@ -384,6 +462,45 @@ void TestGeneration() {
         if (3 == a.start.first && 0 == a.start.second &&
             3 == b.start.first && 2 == b.start.second)
             return 0.0;
+
+        //sample n0
+        if (4 == a.start.first && 0 == a.start.second &&
+            4 == b.start.first && 1 == b.start.second)
+            return 1.0;
+
+        if (4 == a.start.first && 1 == a.start.second &&
+            4 == b.start.first && 2 == b.start.second)
+            return 1.0;
+
+        if (4 == a.start.first && 0 == a.start.second &&
+            4 == b.start.first && 2 == b.start.second)
+            return 0.0;
+
+        //sample n1
+        if (5 == a.start.first && 0 == a.start.second &&
+            5 == b.start.first && 1 == b.start.second)
+            return 0.0;
+
+        if (5 == a.start.first && 1 == a.start.second &&
+            5 == b.start.first && 2 == b.start.second)
+            return 0.0;
+
+        if (5 == a.start.first && 0 == a.start.second &&
+            5 == b.start.first && 2 == b.start.second)
+            return 1.0;
+
+        //sample n2
+        if (6 == a.start.first && 0 == a.start.second &&
+            6 == b.start.first && 1 == b.start.second)
+            return 0.0;
+
+        if (6 == a.start.first && 1 == a.start.second &&
+            6 == b.start.first && 2 == b.start.second)
+            return 0.0;
+
+        if (6 == a.start.first && 0 == a.start.second &&
+            6 == b.start.first && 2 == b.start.second)
+            return 1.0;
     });
 
     auto constraints = vector<shared_ptr<Constraint>>{c0, c1, c2};
@@ -412,8 +529,26 @@ void TestGeneration() {
     auto l32 = make_shared<LineWrap>(LineWrap{{3,2},{0,0}});
     auto p3 = vector<weak_ptr<LineWrap>>{l30, l31, l32};
 
+    //negative sample 0
+    auto l40 = make_shared<LineWrap>(LineWrap{{4,0},{0,0}});
+    auto l41 = make_shared<LineWrap>(LineWrap{{4,1},{0,0}});
+    auto l42 = make_shared<LineWrap>(LineWrap{{4,2},{0,0}});
+    auto n0 = vector<weak_ptr<LineWrap>>{l40, l41, l42};
+
+    //negative sample 1
+    auto l50 = make_shared<LineWrap>(LineWrap{{5,0},{0,0}});
+    auto l51 = make_shared<LineWrap>(LineWrap{{5,1},{0,0}});
+    auto l52 = make_shared<LineWrap>(LineWrap{{5,2},{0,0}});
+    auto n1 = vector<weak_ptr<LineWrap>>{l50, l51, l52};
+
+    //negative sample 2
+    auto l60 = make_shared<LineWrap>(LineWrap{{5,0},{0,0}});
+    auto l61 = make_shared<LineWrap>(LineWrap{{5,1},{0,0}});
+    auto l62 = make_shared<LineWrap>(LineWrap{{5,2},{0,0}});
+    auto n2 = vector<weak_ptr<LineWrap>>{l60, l61, l62};
+
     auto posSamples = vector<vector<weak_ptr<LineWrap>>>{p0, p1, p2, p3};
-    auto negSamples = vector<vector<weak_ptr<LineWrap>>>{};
+    auto negSamples = vector<vector<weak_ptr<LineWrap>>>{n0, n1, n2};
 
     GenerateModel(posSamples, negSamples, constraints);
 }

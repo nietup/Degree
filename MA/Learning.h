@@ -90,12 +90,14 @@ bool Specialize(Hypothesis & h, const Hypothesis & s, vector<Hypothesis> & g,
     }
 
     for (auto & field : fieldsOfSpecialization) {
-        //maybe data loss
         auto newSpecialized = Hypothesis(pairCount,
                                          vector<BoolPlus>(constraintCount));
-        copy(h.begin(), h.end(), newSpecialized.begin());
+
+//        copy(h.begin(), h.end(), back_inserter(newSpecialized));
+        newSpecialized = h;
         newSpecialized[field.first][field.second] =
             (YES == counterexample[field.first][field.second]) ? NO : YES;
+
         g.push_back(newSpecialized);
     }
 

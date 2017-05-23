@@ -198,6 +198,17 @@ unique_ptr<SModel> GenerateModel(
         for (auto i : willBeDeleted) {
             g.erase(find(g.begin(), g.end(), g[i]));
         }
+        cout << "\nG: \n";
+        for (auto & h : g){
+            for (auto & pair : h) {
+                for (auto &field : pair) {
+                    cout << field << " ";
+                }
+                cout << endl;
+            }
+            cout << endl;
+        }
+        cout << "------------------\n";
     }
 
     cout << "S: \n";

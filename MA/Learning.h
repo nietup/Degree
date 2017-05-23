@@ -61,12 +61,12 @@ bool Specialize(Hypothesis & h, const Hypothesis & s, vector<Hypothesis> & g,
     //chose right DNC
     auto pairCount = h.size();
     auto constraintCount = h[0].size();
-    auto DNCi = -1;
-    auto DNCj = -1;
+    auto fieldsOfSpecialization = vector<pair<int, int>>{};
     auto shouldBreak = false;
     for(auto i = 0; i < pairCount; i++) {
         for (auto j = 0; j < constraintCount; j++) {
             if (DNC == h[i][j]) {
+                //if counterexample is consistent with s on this field then skip
                 if (s[i][j] == counterexample[i][j] || DNC == s[i][j]) {
                     shouldBreak = true;
                 }
@@ -78,25 +78,30 @@ bool Specialize(Hypothesis & h, const Hypothesis & s, vector<Hypothesis> & g,
                         }
                     }
                 }
+
                 if (shouldBreak) {
                     shouldBreak = false;
                 }
                 else {
-                    DNCi = i;
-                    DNCj = j;
-                    i = pairCount;
-                    j = constraintCount;
+                    fieldsOfSpecialization.push_back({i, j});
                 }
             }
         }
     }
 
-    if (-1 == DNCi)
+    for (auto & field : fieldsOfSpecialization) {
+        //maybe data loss
+        auto newSpecialized = h;
+        newSpecialized[field.first][field.second] =
+            (YES == counterexample[field.first][field.second]) ? NO : YES;
+        g.push_back(newSpecialized);
+    }
+
+    g.erase(find(g.begin(), g.end(), h));
+
+    if (!fieldsOfSpecialization.size())
         return false;
-
-    h[DNCi][DNCj] = (YES == counterexample[DNCi][DNCj]) ? NO : YES;
-    //we must add multiple specializations!
-
+    
     return true;
 }
 
@@ -175,9 +180,7 @@ unique_ptr<SModel> GenerateModel(
 
         for (auto & hypothesis : g) {
             if (Consistent(hypothesis, extract)) {
-                if(!Specialize(hypothesis, s, g, extract)) {
-                    g.erase(find(g.begin(), g.end(), hypothesis));
-                }
+                Specialize(hypothesis, s, g, extract);
             }
         }
     }

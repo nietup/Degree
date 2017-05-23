@@ -71,7 +71,7 @@ bool Specialize(Hypothesis & h, const Hypothesis & s, vector<Hypothesis> & g,
                     shouldBreak = true;
                 }
                 else {
-                    for (auto &otherHypothesis : g) {
+                    for (auto & otherHypothesis : g) {
                         if (DNC != otherHypothesis[i][j]) {
                             shouldBreak = true;
                             break;
@@ -91,7 +91,9 @@ bool Specialize(Hypothesis & h, const Hypothesis & s, vector<Hypothesis> & g,
 
     for (auto & field : fieldsOfSpecialization) {
         //maybe data loss
-        auto newSpecialized = h;
+        auto newSpecialized = Hypothesis(pairCount,
+                                         vector<BoolPlus>(constraintCount));
+        copy(h.begin(), h.end(), newSpecialized.begin());
         newSpecialized[field.first][field.second] =
             (YES == counterexample[field.first][field.second]) ? NO : YES;
         g.push_back(newSpecialized);
@@ -138,15 +140,13 @@ unique_ptr<SModel> GenerateModel(
             end
         end
     */
-    const auto atomCount = 4;//samples[0].size();
+    const auto atomCount = positiveSamples[0].size();
     const auto pairCount = (uint)(0.5*atomCount*(atomCount-1));
-    const auto constraintCount = 3;//constraints.size();
+    const auto constraintCount = constraints.size();
 
     //first - pair id, second - constraint in pair
-    auto s = Hypothesis(
-        pairCount,
-        vector<BoolPlus>(constraintCount, NO)
-    );
+    //S must be initialized by first positive sample
+    auto s = Extract(positiveSamples[0], pairCount, constraints);
 
     auto g = vector<Hypothesis>{
         Hypothesis(
@@ -185,8 +185,6 @@ unique_ptr<SModel> GenerateModel(
         }
     }
 
-
-
     cout << "S: \n";
     for (auto & pair : s) {
         for (auto & field : pair) {
@@ -205,8 +203,6 @@ unique_ptr<SModel> GenerateModel(
         }
         cout << endl;
     }
-
-
 
     auto model = unique_ptr<SModel>(new SModel);
     return model;

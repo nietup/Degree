@@ -188,36 +188,37 @@ void TestGeneration() {
         samples.push_back(segments);
     }
 
-    /* test case 1
-     * constraints = 1: A
+    /* test case 2
+     * constraints = 3: c0, c1, c2
      * atoms = 3
-     * parts = 1: atom0, atom2, A
+     * parts = 3:
+     * MODEL
+     * 1 ? 1
+     * ? ? 1
+     * 1 ? ?
      *
      * positive samples:
      * sample #0
-     * pair0: line0, line1: A
-     * pair1: line1, line2: ~A
-     * pair2: line0, line2: A
+     * pair0: line0, line1: 1 1 0
+     * pair1: line1, line2: 0 0 1
+     * pair2: line0, line2: 1 0 1
      *
      * sample #1
-     * pair0: line0, line1: A
-     * pair1: line1, line2: A
-     * pair2: line0, line2: A
+     * pair0: line0, line1: 1 1 0
+     * pair1: line1, line2: 1 0 1
+     * pair2: line0, line2: 1 1 1
+     *
+     * sample #2
+     * pair0: line0, line1: 1 0 0
+     * pair1: line1, line2: 0 0 1
+     * pair2: line0, line2: 1 0 1
+     *
+     * sample #4
+     * pair0: line0, line1: 1 1 1
+     * pair1: line1, line2: 1 1 1
+     * pair2: line0, line2: 1 1 1
      *
      * negative samples:
-     * sample #0
-     * pair0: line0, line1: ~A
-     * pair1: line1, line2: A
-     * pair2: line0, line2: ~A
-     *
-     * sample #1
-     * pair0: line0, line1: A
-     * pair1: line1, line2: ~A
-     * pair2: line0, line2: ~A
-     *
-     * expected output
-     * S: <<YES>, <DNC>, <YES>>
-     * G: <<<DNC>, <DNC>, <DNC>>>
      */
 
     auto testConstraint = make_shared<Constraint>([](const LineWrap & a,
@@ -277,32 +278,32 @@ void TestGeneration() {
 
     auto constraints = vector<shared_ptr<Constraint>>{testConstraint};
 
-    //positive sample 1
+    //positive sample 0
     auto l00 = make_shared<LineWrap>(LineWrap{{0,0},{0,0}});
     auto l01 = make_shared<LineWrap>(LineWrap{{0,1},{0,0}});
     auto l02 = make_shared<LineWrap>(LineWrap{{0,2},{0,0}});
     auto p0 = vector<weak_ptr<LineWrap>>{l00, l01, l02};
 
-    //positive sample 2
+    //positive sample 1
     auto l10 = make_shared<LineWrap>(LineWrap{{1,0},{0,0}});
     auto l11 = make_shared<LineWrap>(LineWrap{{1,1},{0,0}});
     auto l12 = make_shared<LineWrap>(LineWrap{{1,2},{0,0}});
     auto p1 = vector<weak_ptr<LineWrap>>{l10, l11, l12};
 
-    //negative sample 1
+    //positive sample 2
     auto l20 = make_shared<LineWrap>(LineWrap{{2,0},{0,0}});
     auto l21 = make_shared<LineWrap>(LineWrap{{2,1},{0,0}});
     auto l22 = make_shared<LineWrap>(LineWrap{{2,2},{0,0}});
-    auto n0 = vector<weak_ptr<LineWrap>>{l20, l21, l22};
+    auto p2 = vector<weak_ptr<LineWrap>>{l20, l21, l22};
 
-    //negative sample 2
+    //positive sample 3
     auto l30 = make_shared<LineWrap>(LineWrap{{3,0},{0,0}});
     auto l31 = make_shared<LineWrap>(LineWrap{{3,1},{0,0}});
     auto l32 = make_shared<LineWrap>(LineWrap{{3,2},{0,0}});
-    auto n1 = vector<weak_ptr<LineWrap>>{l30, l31, l32};
+    auto p3 = vector<weak_ptr<LineWrap>>{l30, l31, l32};
 
-    auto posSamples = vector<vector<weak_ptr<LineWrap>>>{p0, p1};
-    auto negSamples = vector<vector<weak_ptr<LineWrap>>>{n0, n1};
+    auto posSamples = vector<vector<weak_ptr<LineWrap>>>{p0, p1, p2, p3};
+    auto negSamples = vector<vector<weak_ptr<LineWrap>>>{};
 
     GenerateModel(posSamples, negSamples, constraints);
 }

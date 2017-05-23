@@ -319,6 +319,10 @@ int main() {
 
     TestGeneration();
 
+    cout << "\n\nYES = " << YES
+         << "\nNO = " << NO
+         << "\nDNC = " << DNC;
+
 	return 0;
 }
 

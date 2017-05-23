@@ -5,7 +5,7 @@
 #ifndef DEGREE_LEARNING_H
 #define DEGREE_LEARNING_H
 
-enum BoolPlus {YES, NO, DNC};
+enum BoolPlus {NO, YES, DNC};
 
 using Hypothesis = vector<vector<BoolPlus>>;
 
@@ -43,7 +43,7 @@ Hypothesis Extract(const vector<weak_ptr<LineWrap>> & sample, uint pairCount,
     for(auto i = 0; i < pairCount; i++) {
         auto segsPair = unpair(i);
         for (auto j = 0; j < constraintCount; j++) {
-            if (threshold < constraints[j]->operator()(
+            if (threshold > constraints[j]->operator()(
                 *sample[segsPair.first].lock(),
                 *sample[segsPair.second].lock())) {
                 hypothesis[i][j] = YES;

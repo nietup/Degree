@@ -27,6 +27,26 @@ bool Consistent(const Hypothesis & a, const Hypothesis & b) {
     return true;
 }
 
+//more general or equal
+//change that
+//bardziej generalna jest DOKLADNIE TAKA SAMA
+//rozni sie tylko na jednym jedynym ?
+bool MoreGeneral(const Hypothesis & a, const Hypothesis & b) {
+    auto pairCount = a.size();
+    auto constraintCount = a[0].size();
+    auto ret = false;
+
+    for(auto i = 0; i < pairCount; i++) {
+        for (auto j = 0; j < constraintCount; j++) {
+            if (DNC == a[i][j] && DNC != b[i][j]) {
+                return true;
+            }
+        }
+    }
+
+    return ret;
+}
+
 pair<uint, uint> unpair(uint i) {
     int y = (int) floor(0.5 * (sqrt(8.0 * i + 1.0) + 1.0));
     int x = (int) (0.5 * (y * y + y - 2 * i) - 1);
@@ -173,15 +193,28 @@ unique_ptr<SModel> GenerateModel(
 
         auto willBeDeleted = vector<int>();
         auto willBeAdded = vector<Hypothesis>();
-        auto badIndex = 0;
+        //auto badIndex = 0;
         for (auto & hypothesis : g) {
             if (Consistent(hypothesis, extract)) {
                 auto spetializations = Specialize(hypothesis, s, g, extract);
                 willBeAdded.insert(willBeAdded.end(), spetializations.begin(),
                     spetializations.end());
-                willBeDeleted.push_back(badIndex);
+
+                //if there are some more general hypothesis than the new one
+                //they should be deleted
+                for (auto i = 0; i < g.size(); i++) {
+                    for (auto j = 0; j < spetializations.size(); j++) {
+                        if (MoreGeneral(g[i], spetializations[j])) {
+                            if (willBeDeleted.end() ==
+                                find(willBeDeleted.begin(),
+                                     willBeDeleted.end(), i)) {
+                                willBeDeleted.push_back(i);
+                            }
+                        }
+                    }
+                }
             }
-            badIndex++;
+            //badIndex++;
         }
 
         for (auto i : willBeDeleted) {

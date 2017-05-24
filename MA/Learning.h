@@ -55,8 +55,8 @@ Hypothesis Extract(const vector<weak_ptr<LineWrap>> & sample, uint pairCount,
 }
 
 //returns false if cannot be further specialized
-bool Specialize(const Hypothesis & h, const Hypothesis & s,
-                vector<Hypothesis> & g, const Hypothesis & counterexample) {
+vector<Hypothesis> Specialize(const Hypothesis & h, const Hypothesis & s,
+    const vector<Hypothesis> & g, const Hypothesis & counterexample) {
 
     //chose right DNC
     auto pairCount = h.size();
@@ -71,12 +71,12 @@ bool Specialize(const Hypothesis & h, const Hypothesis & s,
                     shouldBreak = true;
                 }
                 else {
-                    for (auto & otherHypothesis : g) {
+                    /*for (auto & otherHypothesis : g) {
                         if (DNC != otherHypothesis[i][j]) {
                             shouldBreak = true;
                             break;
                         }
-                    }
+                    }*/
                 }
 
                 if (shouldBreak) {
@@ -95,7 +95,7 @@ bool Specialize(const Hypothesis & h, const Hypothesis & s,
             break;
         else
             hIndex++;
-
+    auto retVals = vector<Hypothesis>{};
     for (auto & field : fieldsOfSpecialization) {
         auto newSpecialized = Hypothesis(pairCount,
                                          vector<BoolPlus>(constraintCount));
@@ -105,13 +105,13 @@ bool Specialize(const Hypothesis & h, const Hypothesis & s,
         newSpecialized[field.first][field.second] =
             (YES == counterexample[field.first][field.second]) ? NO : YES;
 
-        g.push_back(newSpecialized);
+        retVals.push_back(newSpecialized);
     }
 
     if (!fieldsOfSpecialization.size())
-        return false;
+        return vector<Hypothesis>{};
     
-    return true;
+    return retVals;
 }
 
 unique_ptr<SModel> GenerateModel(
@@ -186,10 +186,13 @@ unique_ptr<SModel> GenerateModel(
         auto const extract = Extract(sample, pairCount, constraints);
 
         auto willBeDeleted = vector<int>();
+        auto willBeAdded = vector<Hypothesis>();
         auto badIndex = 0;
         for (auto & hypothesis : g) {
             if (Consistent(hypothesis, extract)) {
-                Specialize(hypothesis, s, g, extract);
+                auto spetializations = Specialize(hypothesis, s, g, extract);
+                willBeAdded.insert(willBeAdded.end(), spetializations.begin(),
+                    spetializations.end());
                 willBeDeleted.push_back(badIndex);
             }
             badIndex++;
@@ -198,6 +201,7 @@ unique_ptr<SModel> GenerateModel(
         for (auto i : willBeDeleted) {
             g.erase(find(g.begin(), g.end(), g[i]));
         }
+        g.insert(g.end(), willBeAdded.begin(), willBeAdded.end());
         cout << "\nG: \n";
         for (auto & h : g){
             for (auto & pair : h) {

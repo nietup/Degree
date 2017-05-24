@@ -542,9 +542,9 @@ void TestGeneration() {
     auto n1 = vector<weak_ptr<LineWrap>>{l50, l51, l52};
 
     //negative sample 2
-    auto l60 = make_shared<LineWrap>(LineWrap{{5,0},{0,0}});
-    auto l61 = make_shared<LineWrap>(LineWrap{{5,1},{0,0}});
-    auto l62 = make_shared<LineWrap>(LineWrap{{5,2},{0,0}});
+    auto l60 = make_shared<LineWrap>(LineWrap{{6,0},{0,0}});
+    auto l61 = make_shared<LineWrap>(LineWrap{{6,1},{0,0}});
+    auto l62 = make_shared<LineWrap>(LineWrap{{6,2},{0,0}});
     auto n2 = vector<weak_ptr<LineWrap>>{l60, l61, l62};
 
     auto posSamples = vector<vector<weak_ptr<LineWrap>>>{p0, p1, p2, p3};

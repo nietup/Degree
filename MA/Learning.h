@@ -62,29 +62,15 @@ vector<Hypothesis> Specialize(const Hypothesis & h, const Hypothesis & s,
     auto pairCount = h.size();
     auto constraintCount = h[0].size();
     auto fieldsOfSpecialization = vector<pair<int, int>>{};
-    auto shouldBreak = false;
+
     for(auto i = 0; i < pairCount; i++) {
         for (auto j = 0; j < constraintCount; j++) {
             if (DNC == h[i][j]) {
                 //if counterexample is consistent with s on this field then skip
                 if (s[i][j] == counterexample[i][j] || DNC == s[i][j]) {
-                    shouldBreak = true;
+                    continue;
                 }
-                else {
-                    /*for (auto & otherHypothesis : g) {
-                        if (DNC != otherHypothesis[i][j]) {
-                            shouldBreak = true;
-                            break;
-                        }
-                    }*/
-                }
-
-                if (shouldBreak) {
-                    shouldBreak = false;
-                }
-                else {
-                    fieldsOfSpecialization.push_back({i, j});
-                }
+                fieldsOfSpecialization.push_back({i, j});
             }
         }
     }

@@ -27,24 +27,22 @@ bool Consistent(const Hypothesis & a, const Hypothesis & b) {
     return true;
 }
 
-//more general or equal
-//change that
-//bardziej generalna jest DOKLADNIE TAKA SAMA
-//rozni sie tylko na jednym jedynym ?
-bool MoreGeneral(const Hypothesis & a, const Hypothesis & b) {
+bool MoreGeneralOrEqual(const Hypothesis & a, const Hypothesis & b) {
     auto pairCount = a.size();
     auto constraintCount = a[0].size();
-    auto ret = false;
+    auto changes = 0;
 
     for(auto i = 0; i < pairCount; i++) {
         for (auto j = 0; j < constraintCount; j++) {
-            if (DNC == a[i][j] && DNC != b[i][j]) {
-                return true;
+            if (a[i][j] != b[i][j]) {
+                changes++;
+                if (1 < changes || DNC != a[i][j])
+                    return false;
             }
         }
     }
 
-    return ret;
+    return true;
 }
 
 pair<uint, uint> unpair(uint i) {
@@ -193,7 +191,6 @@ unique_ptr<SModel> GenerateModel(
 
         auto willBeDeleted = vector<int>();
         auto willBeAdded = vector<Hypothesis>();
-        //auto badIndex = 0;
         for (auto & hypothesis : g) {
             if (Consistent(hypothesis, extract)) {
                 auto spetializations = Specialize(hypothesis, s, g, extract);
@@ -204,7 +201,7 @@ unique_ptr<SModel> GenerateModel(
                 //they should be deleted
                 for (auto i = 0; i < g.size(); i++) {
                     for (auto j = 0; j < spetializations.size(); j++) {
-                        if (MoreGeneral(g[i], spetializations[j])) {
+                        if (MoreGeneralOrEqual(g[i], spetializations[j])) {
                             if (willBeDeleted.end() ==
                                 find(willBeDeleted.begin(),
                                      willBeDeleted.end(), i)) {
@@ -214,24 +211,12 @@ unique_ptr<SModel> GenerateModel(
                     }
                 }
             }
-            //badIndex++;
         }
 
         for (auto i : willBeDeleted) {
             g.erase(find(g.begin(), g.end(), g[i]));
         }
         g.insert(g.end(), willBeAdded.begin(), willBeAdded.end());
-        cout << "\nG: \n";
-        for (auto & h : g){
-            for (auto & pair : h) {
-                for (auto &field : pair) {
-                    cout << field << " ";
-                }
-                cout << endl;
-            }
-            cout << endl;
-        }
-        cout << "------------------\n";
     }
 
     cout << "S: \n";
@@ -242,7 +227,7 @@ unique_ptr<SModel> GenerateModel(
         cout << endl;
     }
 
-    cout << "G: \n";
+    cout << "\nG: \n";
     for (auto & h : g){
         for (auto & pair : h) {
             for (auto &field : pair) {

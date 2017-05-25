@@ -7,8 +7,10 @@
 
 enum BoolPlus {NO, YES, DNC};
 
+//needs to be remade
 using Hypothesis = vector<vector<BoolPlus>>;
 
+//will be totally replaced with matching algoritm
 bool Consistent(const Hypothesis & a, const Hypothesis & b) {
     if (!a.size())
         return true;
@@ -27,6 +29,7 @@ bool Consistent(const Hypothesis & a, const Hypothesis & b) {
     return true;
 }
 
+//I don't even now how to tackle negative samples that way
 bool MoreGeneralOrEqual(const Hypothesis & a, const Hypothesis & b) {
     auto pairCount = a.size();
     auto constraintCount = a[0].size();
@@ -72,6 +75,7 @@ Hypothesis Extract(const vector<weak_ptr<LineWrap>> & sample, uint pairCount,
     return hypothesis;
 }
 
+//I don't even now how to tackle negative samples that way
 //returns false if cannot be further specialized
 vector<Hypothesis> Specialize(const Hypothesis & h, const Hypothesis & s,
     const vector<Hypothesis> & g, const Hypothesis & counterexample) {
@@ -122,35 +126,6 @@ unique_ptr<SModel> GenerateModel(
     const vector<vector<weak_ptr<LineWrap>>> & positiveSamples,
     const vector<vector<weak_ptr<LineWrap>>> & negativeSamples,
     const vector<shared_ptr<Constraint>> & constraints) {
-    /*Algorytm CEA
-
-    input:
-        samples = vector<vector<lineSegment>>
-        n = liczba atomów w modelu (samples[0].size) dla uproszczenia na razie
-        cosntraints = vector<Constraint>
-        s = matrix<bool+don't care>[constraints.size()][0.5*n*(n-1)]
-            {first positive sample}
-        g = vector<matrix<bool+don't care>[constraints.size()][0.5*n*(n-1)]>
-
-    algorithm:
-        foreach sample in samples do
-            if sample is positive then
-                if !consistent with s on s[x][y] then
-                    s[x][y] = don't care
-                end
-                if !consistent with s on g[i] then
-                    g.del(i)
-                end
-            else
-                foreach g[i] that is consistent with sample do
-                    change one don't care in g to sth that would reject sample
-                    this field can't already be used in another hipothesis in g
-                    //if several spetializations possible do several???
-                    //if no spetialization possible g.del(i)???
-                end
-            end
-        end
-    */
     const auto atomCount = positiveSamples[0].size();
     const auto pairCount = (uint)(0.5*atomCount*(atomCount-1));
     const auto constraintCount = constraints.size();
@@ -167,56 +142,11 @@ unique_ptr<SModel> GenerateModel(
     };
 
     for (const auto & sample : positiveSamples) {
-        //we need to prepare sample in our format
-        auto const extract = Extract(sample, pairCount, constraints);
-
-        for (auto i = 0; i < pairCount; i++) {
-            for (auto j = 0; j < constraintCount; j++) {
-                if (extract[i][j] != s[i][j]) {
-                    s[i][j] = DNC;
-                }
-            }
-        }
-
-        for (auto & hypothesis : g) {
-            if (!Consistent(hypothesis, extract)) {
-                g.erase(find(g.begin(), g.end(), hypothesis));
-            }
-        }
+        //New matching done here
     }
 
     for (const auto & sample : negativeSamples) {
-        //we need to prepare sample in our format
-        auto const extract = Extract(sample, pairCount, constraints);
-
-        auto willBeDeleted = vector<int>();
-        auto willBeAdded = vector<Hypothesis>();
-        for (auto & hypothesis : g) {
-            if (Consistent(hypothesis, extract)) {
-                auto spetializations = Specialize(hypothesis, s, g, extract);
-                willBeAdded.insert(willBeAdded.end(), spetializations.begin(),
-                    spetializations.end());
-
-                //if there are some more general hypothesis than the new one
-                //they should be deleted
-                for (auto i = 0; i < g.size(); i++) {
-                    for (auto j = 0; j < spetializations.size(); j++) {
-                        if (MoreGeneralOrEqual(g[i], spetializations[j])) {
-                            if (willBeDeleted.end() ==
-                                find(willBeDeleted.begin(),
-                                     willBeDeleted.end(), i)) {
-                                willBeDeleted.push_back(i);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        for (auto i : willBeDeleted) {
-            g.erase(find(g.begin(), g.end(), g[i]));
-        }
-        g.insert(g.end(), willBeAdded.begin(), willBeAdded.end());
+        //we leave neg samples for now
     }
 
     cout << "S: \n";

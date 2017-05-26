@@ -132,7 +132,8 @@ unique_ptr<SModel> GenerateModel(
 
     //first - pair id, second - constraint in pair
     //S must be initialized by first positive sample
-    auto s = Extract(positiveSamples[0], pairCount, constraints);
+    //auto s = Extract(positiveSamples[0], pairCount, constraints);
+    auto s = unique_ptr<SModel>(new SModel);
 
     auto g = vector<Hypothesis>{
         Hypothesis(
@@ -143,13 +144,89 @@ unique_ptr<SModel> GenerateModel(
 
     for (const auto & sample : positiveSamples) {
         //New matching done here
+        //intro stuff
+        auto isModelMatched = true;
+        auto furthestPart = weak_ptr<Part>();
+        auto AtomsSize = s->atoms.size();
+        auto PartsSize = s->parts.size();
+        if (!AtomsSize || !PartsSize)
+            isModelMatched = false;
+        s->atoms[0]->asignment = sample[0];
+        sample[0].lock()->matched = true;
+        auto match = SearchTree{ TreeNode {s->atoms[0]} };
+
+        //main loop
+        auto i = 1u;
+        while (i < AtomsSize) {
+            //if root didn't work out -- move to separate function later
+            if (i == 0) {
+                //find next segment for root
+                match[0].atom.lock()->asignment.lock()->matched = false;
+                match[0].discardedAtoms.clear();
+                auto nextSegment = weak_ptr<LineWrap>();
+                int j = 1;
+                for (auto & seg : sample) {
+                    if (seg.lock() == match[0].atom.lock()->asignment.lock()) {
+                        if (j < sample.size())
+                            nextSegment = *(&seg + 1);
+                        break;
+                    }
+                    j++;
+                }
+
+                if (nextSegment.expired()) {
+                    //if we have tried all segments as roots then
+                    // it is non match
+                    isModelMatched = false;
+                    i = AtomsSize;
+                    break;
+                }
+                else { //we found next segment for tree
+                    match[0].atom.lock()->asignment = nextSegment;
+                    nextSegment.lock()->matched = true;
+                    i++;
+                }
+            }
+
+            auto nextAtom = weak_ptr<Atom>{};
+            tie(nextAtom, furthestPart) = FindAtom(match);
+            if (nextAtom.expired()) {
+                if (i > 1) {
+                    match[i - 2].discardedSegments.
+                        push_back(match[i - 1].atom.lock()->asignment);
+                    match[i - 1].atom.lock()->asignment.lock()->matched = false;
+                    match[i - 1].atom.lock()->asignment.reset();
+                    match.pop_back();
+                }
+
+                i--;
+                continue;
+            }
+
+            auto nextSegment = FindSegment(sample,
+                match[i - 1].discardedSegments, *nextAtom.lock());
+            if (nextSegment.expired()) {
+                match[i - 1].discardedAtoms.push_back(nextAtom);
+                match[i - 1].discardedSegments.clear();
+                continue;
+            }
+
+            nextSegment.lock().get()->matched = true;
+            nextAtom.lock().get()->asignment = nextSegment;
+            match.push_back(TreeNode{ nextAtom });
+
+            i++;
+        }
+        if (!isModelMatched) {
+            //generalize and match again
+        }
     }
 
     for (const auto & sample : negativeSamples) {
         //we leave neg samples for now
     }
 
-    cout << "S: \n";
+    /*cout << "S: \n";
     for (auto & pair : s) {
         for (auto & field : pair) {
             cout << field << " ";
@@ -166,10 +243,9 @@ unique_ptr<SModel> GenerateModel(
             cout << endl;
         }
         cout << endl;
-    }
+    }*/
 
-    auto model = unique_ptr<SModel>(new SModel);
-    return model;
+    return s;
 }
 
 #endif //DEGREE_LEARNING_H

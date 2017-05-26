@@ -59,7 +59,7 @@ bool myContains(weak_ptr<T> object, const vector<weak_ptr<T>> & v) {
     return false;
 }
 
-weak_ptr<Atom> FindAtom(const SearchTree & tree) {
+pair<weak_ptr<Atom>, weak_ptr<Part>> FindAtom(const SearchTree & tree) {
     int node = tree.size() - 1;
     auto & discarded = tree[node].discardedAtoms;
 
@@ -71,21 +71,22 @@ weak_ptr<Atom> FindAtom(const SearchTree & tree) {
             if (atoms.first.lock().get() == &atom) {
                 if (atoms.second.lock().get()->asignment.expired()) {
                     if (!myContains<Atom>(atoms.second, discarded)) {
-                        return atoms.second;
+                        return {atoms.second, weak_ptr<Part>(part)};
                     }
                 }
             }
             else {
                 if (atoms.first.lock().get()->asignment.expired()) {
                     if (!myContains<Atom>(atoms.first, discarded)) {
-                        return atoms.first;
+                        return {atoms.first, weak_ptr<Part>(part)};
                     }
                 }
             }
         }
     }
-    return weak_ptr<Atom>();
+    return pair<weak_ptr<Atom>, weak_ptr<Part>>();
 }
+
 
 //is it so far consistent to match segment with atom?
 bool Consistent(const LineWrap & segment, const Atom & atom) {
@@ -210,7 +211,7 @@ bool Match(SModel & model, const vector<weak_ptr<LineWrap>> & segments) {
             }
         }
 
-        auto nextAtom = FindAtom(match);
+        auto nextAtom = FindAtom(match).first;
         if (nextAtom.expired()) {
             if (i > 1) {
                 match[i - 2].discardedSegments.

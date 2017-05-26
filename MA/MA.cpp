@@ -13,6 +13,11 @@
 using namespace std;
 using namespace elsd;
 
+template<typename T, typename... Args>
+std::unique_ptr<T> make_unique(Args&&... args) {
+    return std::unique_ptr<T>(new T(std::forward<Args>(args)...));
+}
+
 void TestGeneration() {
     //function scoring size match
     //* returns double in range [0, 1], where 0 is the best match
@@ -201,6 +206,107 @@ void TestGeneration() {
     GenerateModel(posSamples, negSamples, constraints);
 }
 
+void TestMatching() {
+    auto sizeMatch = [](const LineWrap &a,
+                                                const LineWrap &b) {
+        double lenA = a.Length(),
+            lenB = b.Length();
+        return lenA < lenB ? 1 - (lenA / lenB) : 1 - (lenB / lenA);
+    };
+
+    auto angle60 = [](const LineWrap &a,
+                                              const LineWrap &b) {
+        return 2 * abs(0.5 - abs(a.GetCos(b)));
+    };
+
+    auto adjacent = [](const LineWrap &a,
+                                               const LineWrap &b) {
+        double d = a.Distance(b);
+        return d / (d + 300);
+    };
+
+    auto model = SModel{};
+
+    auto a1 = make_shared<Atom>(Atom{"1"});
+    auto a2 = make_shared<Atom>(Atom{"2"});
+    auto a3 = make_shared<Atom>(Atom{"3"});
+
+    model.constraints = vector<unique_ptr<Constraint>>(1);
+    model.constraints[0] = make_unique(angle60);
+    model.constraints[1] = make_unique(adjacent);
+    model.constraints[2] = make_unique(sizeMatch);
+
+    auto p1 = make_shared<Part>(Part{{a1, a2}, {0, 1, 2}});
+    auto p2 = make_shared<Part>(Part{{a1, a3}, {0, 1, 2}});
+    auto p3 = make_shared<Part>(Part{{a2, a3}, {0, 1, 2}});
+
+    a1.get()->involved.push_back(weak_ptr<Part>(p1));
+    a1.get()->involved.push_back(weak_ptr<Part>(p2));
+    a2.get()->involved.push_back(weak_ptr<Part>(p1));
+    a2.get()->involved.push_back(weak_ptr<Part>(p3));
+    a3.get()->involved.push_back(weak_ptr<Part>(p2));
+    a3.get()->involved.push_back(weak_ptr<Part>(p3));
+
+    model.atoms.push_back(a1);
+    model.atoms.push_back(a2);
+    model.atoms.push_back(a3);
+
+    model.parts.push_back(p1);
+    model.parts.push_back(p2);
+    model.parts.push_back(p3);
+
+    auto inFile = string{};
+    inFile = "./" + inFile;
+    ImageInterface::Ptr image(new ElsdPgmFileReader(inFile));
+    ShapesDetectorInterface::Ptr detector(new ElsDetector);
+    detector->run(image);
+
+    string outFile = inFile + ".svg";
+    SvgWriterInterface::Ptr svg(new ElsdSvgWriter);
+    svg->setImageSize(image->xsize(), image->ysize());
+    const vector<LineSegment> &lines = detector->getLineSegments();
+    svg->addLineSegments(lines.begin(), lines.end());
+    ofstream ofs(outFile, ofstream::out);
+    ofs << *svg
+        << "</svg>";
+    ofs.close();
+
+    //Create vector of wrapped segments
+    //TODO fix so there is no copy
+    auto segsShared = vector<shared_ptr<LineWrap>>();
+    for (const auto &line : lines)
+        segsShared.push_back(make_shared<LineWrap>(line));
+
+    auto segments = vector<weak_ptr<LineWrap>>();
+    for (const auto &line : segsShared)
+        segments.push_back(weak_ptr<LineWrap>(line));
+
+    if (Match(model, segments).first)
+        for (auto &a : model.atoms) {
+            cout << a->name << " <-> ("
+                 << a.get()->asignment.lock().get()->start.first << ", "
+                 << a.get()->asignment.lock().get()->start.second << ") ("
+                 << a.get()->asignment.lock().get()->end.first << ", "
+                 << a.get()->asignment.lock().get()->end.second << ")"
+                 << endl;
+
+            auto detection = vector<LineSegment>();
+            for (auto &a : model.atoms)
+                detection.push_back(a->asignment.lock()->GetLineSegment());
+
+            string detectionFile = inFile + ".detection.svg";
+            SvgWriterInterface::Ptr svg2(new ElsdSvgWriter);
+            svg2->setImageSize(image->xsize(), image->ysize());
+            svg2->addLineSegments(detection.begin(), detection.end());
+            ofs.open(detectionFile);
+            ofs << *svg2 << "</svg>";
+            ofs.close();
+        }
+    else {
+        cout << "Non match" << endl;
+    }
+}
+
 int main() {
 /*	StateMachine SM(800, 600, 60, "Akwizycja Modeli");
 	MenuState Menu(&SM);
@@ -211,7 +317,8 @@ int main() {
 		SM.Render();
 	}*/
 
-    TestGeneration();
+    //TestGeneration();
+    TestMatching();
 
 	return 0;
 }

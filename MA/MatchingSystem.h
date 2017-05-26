@@ -30,7 +30,8 @@ struct Atom {
 
 struct Part {
     pair<weak_ptr<Atom>, weak_ptr<Atom>> atoms;
-    vector<weak_ptr<Constraint>> constraints;
+    //vector<weak_ptr<Constraint>> constraints;
+    vector<uint> constraints;
 };
 
 struct SModel {
@@ -38,6 +39,8 @@ struct SModel {
 
     //should be sorted by most constrained first
     vector<shared_ptr<Atom>> atoms;
+
+    vector<unique_ptr<Constraint>> constraints;
 };
 
 struct TreeNode {
@@ -49,7 +52,7 @@ struct TreeNode {
 using SearchTree = vector<TreeNode>;
 
 template <class T>
-bool myContains(weak_ptr<T> object, const vector<weak_ptr<T>> & v) {
+ bool myContains(weak_ptr<T> object, const vector<weak_ptr<T>> & v) {
     for (auto & a : v) {
         if (object.lock().get() == a.lock().get()) {
             return true;
@@ -89,7 +92,8 @@ pair<weak_ptr<Atom>, weak_ptr<Part>> FindAtom(const SearchTree & tree) {
 
 
 //is it so far consistent to match segment with atom?
-bool Consistent(const LineWrap & segment, const Atom & atom) {
+bool Consistent(const LineWrap & segment, const Atom & atom,
+                const SModel & model) {
     for (auto & part : atom.involved) {
         auto atoms = part.lock().get()->atoms;
 
@@ -107,17 +111,17 @@ bool Consistent(const LineWrap & segment, const Atom & atom) {
         }
 
         for (auto constraint : part.lock().get()->constraints) {
-            if (part.lock()->atoms.first.lock().get() == const_cast<Atom *>(&atom)) {
+            if (part.lock()->atoms.first.lock().get() ==
+                const_cast<Atom *>(&atom)) {
                 if (threshold <
-                    constraint.lock()->operator()(segment,
+                    model.constraints[constraint]->operator()(segment,
                                                   *otherSegment.lock())) {
                     return false;
                 }
             }
             else {
-                if (threshold <
-                    constraint.lock()->operator()(*otherSegment.lock(),
-                                                  segment)) {
+                if (threshold < model.constraints[constraint]->
+                        operator()(*otherSegment.lock(), segment)) {
                     return false;
                 }
             }
@@ -129,11 +133,11 @@ bool Consistent(const LineWrap & segment, const Atom & atom) {
 
 weak_ptr<LineWrap> FindSegment(const vector<weak_ptr<LineWrap>> & segments,
                                vector<weak_ptr<LineWrap>> & discarded,
-                               const Atom & atom) {
+                               const Atom & atom, const SModel & model) {
     for (auto & segment : segments) {
         if (!segment.lock().get()->matched) {
             if (!myContains<LineWrap>(segment, discarded)) {
-                if (Consistent(*segment.lock().get(), atom)) {
+                if (Consistent(*segment.lock().get(), atom, model)) {
                     return segment;
                 }
                 else {
@@ -149,7 +153,8 @@ weak_ptr<LineWrap> FindSegment(const vector<weak_ptr<LineWrap>> & segments,
 //assumption: no independent graphs in model
 //return value: true if match, false if non match
 //if no nmatch returns weak prt to the furthest achieved part
-pair<bool, weak_ptr<Part>> Match(SModel model, const vector<weak_ptr<LineWrap>> & segments) {
+pair<bool, weak_ptr<Part>> Match(SModel model,
+                                 const vector<weak_ptr<LineWrap>> & segments) {
     /*
     i = 0
     while i < Atoms.size() do
@@ -229,7 +234,7 @@ pair<bool, weak_ptr<Part>> Match(SModel model, const vector<weak_ptr<LineWrap>> 
         }
 
         auto nextSegment = FindSegment(segments, match[i - 1].discardedSegments,
-                                       *nextAtom.lock());
+                                       *nextAtom.lock(), model);
         if (nextSegment.expired()) {
             match[i - 1].discardedAtoms.push_back(nextAtom);
             match[i - 1].discardedSegments.clear();

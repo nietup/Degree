@@ -148,7 +148,8 @@ weak_ptr<LineWrap> FindSegment(const vector<weak_ptr<LineWrap>> & segments,
 
 //assumption: no independent graphs in model
 //return value: true if match, false if non match
-bool Match(SModel & model, const vector<weak_ptr<LineWrap>> & segments) {
+//if no nmatch returns weak prt to the furthest achieved part
+pair<bool, weak_ptr<Part>> Match(SModel model, const vector<weak_ptr<LineWrap>> & segments) {
     /*
     i = 0
     while i < Atoms.size() do
@@ -173,10 +174,11 @@ bool Match(SModel & model, const vector<weak_ptr<LineWrap>> & segments) {
     */
 
     //intro stuff
+    auto furthestPart = weak_ptr<Part>{};
     auto AtomsSize = model.atoms.size();
     auto PartsSize = model.parts.size();
     if (!AtomsSize || !PartsSize)
-        return false;
+        return {false, weak_ptr<Part>{}};
     model.atoms[0]->asignment = segments[0];
     segments[0].lock()->matched = true;
     auto match = SearchTree{ TreeNode {model.atoms[0]} };
@@ -202,7 +204,7 @@ bool Match(SModel & model, const vector<weak_ptr<LineWrap>> & segments) {
 
             if (nextSegment.expired()) {
                 //if we have tried all segments as roots then it is non match
-                return false;
+                return {false, furthestPart};
             }
             else { //we found next segment for tree
                 match[0].atom.lock()->asignment = nextSegment;
@@ -211,7 +213,8 @@ bool Match(SModel & model, const vector<weak_ptr<LineWrap>> & segments) {
             }
         }
 
-        auto nextAtom = FindAtom(match).first;
+        auto nextAtom = weak_ptr<Atom>{};
+        tie(nextAtom, furthestPart) = FindAtom(match);
         if (nextAtom.expired()) {
             if (i > 1) {
                 match[i - 2].discardedSegments.
@@ -240,7 +243,7 @@ bool Match(SModel & model, const vector<weak_ptr<LineWrap>> & segments) {
         i++;
     }
 
-    return true;
+    return {true, weak_ptr<Part>{}};
 }
 
 

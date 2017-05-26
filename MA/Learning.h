@@ -75,6 +75,63 @@ Hypothesis Extract(const vector<weak_ptr<LineWrap>> & sample, uint pairCount,
     return hypothesis;
 }
 
+//this function does change furthest part in the model so that it is consistent
+//with the most similar part from sample
+void Generalize(Part & furthestPart,
+    const vector<weak_ptr<LineWrap>> & sample,
+    const vector<shared_ptr<Constraint>> & constraints) {
+
+    auto pairCount = (uint)0.5*sample.size()*(sample.size()-1);
+    auto extract = Extract(sample, pairCount, constraints);
+
+    struct BestMatch {
+        uint index;
+        vector<uint> diffs;
+    } bestMatch{0, {}};
+
+    /*
+     * extract be like:
+     *          A B C D E F
+     * row 1    0 1 0 1 1 0
+     *          ...
+     *
+     * part be like:
+     * part 1   B D E
+     */
+    auto partRow = Hypothesis{}; // do conversion
+
+    auto extractSize = extract.size();
+    for (auto i = 0; i < extractSize; i++) {
+        auto rowSize = extract[i].size();
+        auto rowScore = vector<uint>{};
+        for (auto j = 0u; j < rowSize; j++) {
+            if (extract[i][j] != partRow[i][j]) {
+                rowScore.push_back(j);
+            }
+        }//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        if (rowScore.size() < bestMatch.diffs.size() ||
+            !bestMatch.diffs.size()) {
+            bestMatch.index = i;
+            bestMatch.diffs = rowScore;
+            //bestMatch = {i, rowScore};
+        }
+    }
+
+    //update part
+    for (auto i : bestMatch.diffs) {
+        for (auto & constr : furthestPart.constraints) {
+            if (constr.lock() == constraints[i]) {
+                furthestPart.constraints.erase(
+                    find(furthestPart.constraints.begin(),
+                         furthestPart.constraints.end(), constr)
+                );
+                break;
+            }
+        }
+    }
+}
+
+
 //I don't even now how to tackle negative samples that way
 //returns false if cannot be further specialized
 vector<Hypothesis> Specialize(const Hypothesis & h, const Hypothesis & s,
@@ -149,6 +206,8 @@ unique_ptr<SModel> GenerateModel(
         tie(isMatched, furthestPart) = Match(*s, sample);
         if (!isMatched) {
             //generalize and match again
+            Generalize(*furthestPart.lock(), sample, constraints);
+            tie(isMatched, furthestPart) = Match(*s, sample);
         }
     }
 

@@ -66,7 +66,7 @@ template <class T>
 pair<weak_ptr<Atom>, weak_ptr<Part>> FindAtom(const SearchTree & tree) {
     int node = tree.size() - 1;
     auto & discarded = tree[node].discardedAtoms;
-
+    auto furthestPart = tree[0].atom.lock()->involved[0];
     for (; node >= 0; node--) {
         auto & atom = *tree[node].atom.lock();
 
@@ -75,20 +75,21 @@ pair<weak_ptr<Atom>, weak_ptr<Part>> FindAtom(const SearchTree & tree) {
             if (atoms.first.lock().get() == &atom) {
                 if (atoms.second.lock().get()->asignment.expired()) {
                     if (!myContains<Atom>(atoms.second, discarded)) {
-                        return {atoms.second, weak_ptr<Part>(part)};
+                        furthestPart = part;
+                        return {atoms.second, weak_ptr<Part>(furthestPart)};
                     }
                 }
-            }
-            else {
+            } else {
                 if (atoms.first.lock().get()->asignment.expired()) {
                     if (!myContains<Atom>(atoms.first, discarded)) {
-                        return {atoms.first, weak_ptr<Part>(part)};
+                        furthestPart = part;
+                        return {atoms.first, weak_ptr<Part>(furthestPart)};
                     }
                 }
             }
         }
     }
-    return pair<weak_ptr<Atom>, weak_ptr<Part>>();
+    return pair<weak_ptr<Atom>, weak_ptr<Part>>{{}, {}};
 }
 
 
@@ -114,7 +115,10 @@ bool Consistent(const LineWrap & segment, const Atom & atom,
 
         auto constrSize = part.lock()->constraints.size();
         for (auto i = 0; i < constrSize; i++) {
-            if (1 == part.lock()->constraints[i]) {
+            if (DNC == part.lock()->constraints[i]) {
+                continue;
+            }
+            if (YES == part.lock()->constraints[i]) {
                 if (part.lock()->atoms.first.lock().get() ==
                     const_cast<Atom *>(&atom)) {
                     if (threshold < model.constraints[i]->
@@ -127,7 +131,7 @@ bool Consistent(const LineWrap & segment, const Atom & atom,
                         return false;
                     }
                 }
-            } else if (0 == part.lock()->constraints[i]) {
+            } else if (NO == part.lock()->constraints[i]) {
                 if (part.lock()->atoms.first.lock().get() ==
                     const_cast<Atom *>(&atom)) {
                     if (threshold > model.constraints[i]->
@@ -162,7 +166,6 @@ weak_ptr<LineWrap> FindSegment(const vector<weak_ptr<LineWrap>> & segments,
             }
         }
     }
-
     return weak_ptr<LineWrap>();
 }
 
@@ -214,7 +217,7 @@ pair<bool, weak_ptr<Part>> Match(SModel model,
             match[0].discardedAtoms.clear();
             auto nextSegment = weak_ptr<LineWrap>();
             int j = 1;
-            for (auto & seg : segments) {
+            for (auto &seg : segments) {
                 if (seg.lock() == match[0].atom.lock()->asignment.lock()) {
                     if (j < segments.size())
                         nextSegment = *(&seg + 1);
@@ -226,8 +229,7 @@ pair<bool, weak_ptr<Part>> Match(SModel model,
             if (nextSegment.expired()) {
                 //if we have tried all segments as roots then it is non match
                 return {false, furthestPart};
-            }
-            else { //we found next segment for tree
+            } else { //we found next segment for tree
                 match[0].atom.lock()->asignment = nextSegment;
                 nextSegment.lock()->matched = true;
                 i++;
@@ -235,8 +237,13 @@ pair<bool, weak_ptr<Part>> Match(SModel model,
         }
 
         auto nextAtom = weak_ptr<Atom>{};
-        tie(nextAtom, furthestPart) = FindAtom(match);
+        auto nextPart = weak_ptr<Part>{};
+        tie(nextAtom, nextPart) = FindAtom(match);
+
         if (nextAtom.expired()) {
+            if (furthestPart.expired()) {
+                furthestPart = model.atoms[0]->involved[0];
+            }
             if (i > 1) {
                 match[i - 2].discardedSegments.
                     push_back(match[i - 1].atom.lock()->asignment);
@@ -252,6 +259,7 @@ pair<bool, weak_ptr<Part>> Match(SModel model,
         auto nextSegment = FindSegment(segments, match[i - 1].discardedSegments,
                                        *nextAtom.lock(), model);
         if (nextSegment.expired()) {
+            furthestPart = nextPart;
             match[i - 1].discardedAtoms.push_back(nextAtom);
             match[i - 1].discardedSegments.clear();
             continue;

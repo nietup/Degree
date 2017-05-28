@@ -195,11 +195,19 @@ void TestGeneration() {
     auto constraints = vector<shared_ptr<Constraint>>{adjacent, sizeMatch,
         parallel, perpendicular};
 
-    //samples need to be remade to contain realistic line segments
-    auto l00 = make_shared<LineWrap>(LineWrap{{0,0},{0,0}});
-    auto p0 = vector<weak_ptr<LineWrap>>{l00};
+    auto l00 = make_shared<LineWrap>(LineWrap{{0,0},{100,0}});
+    auto l01 = make_shared<LineWrap>(LineWrap{{100,100},{100,0}});
+    auto l02 = make_shared<LineWrap>(LineWrap{{0,0},{0,100}});
+    auto l03 = make_shared<LineWrap>(LineWrap{{0,100},{100,100}});
+    auto p0 = vector<weak_ptr<LineWrap>>{l00, l01, l02, l03};
 
-    auto posSamples = vector<vector<weak_ptr<LineWrap>>>{};
+    auto l10 = make_shared<LineWrap>(LineWrap{{0,0},{500,0}});
+    auto l11 = make_shared<LineWrap>(LineWrap{{500,100},{500,0}});
+    auto l12 = make_shared<LineWrap>(LineWrap{{0,0},{0,100}});
+    auto l13 = make_shared<LineWrap>(LineWrap{{0,100},{500,100}});
+    auto p1 = vector<weak_ptr<LineWrap>>{l10, l11, l12, l13};
+
+    auto posSamples = vector<vector<weak_ptr<LineWrap>>>{p0, p1};
     auto negSamples = vector<vector<weak_ptr<LineWrap>>>{};
 
     GenerateModel(posSamples, negSamples, constraints);

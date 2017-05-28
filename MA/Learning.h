@@ -78,49 +78,51 @@ Hypothesis Extract(const vector<weak_ptr<LineWrap>> & sample, uint pairCount,
     return hypothesis;
 }
 
+void PrintHypothesis(Hypothesis h) {
+    cout << "\nHypothesis\n";
+    for (auto & row : h) {
+        for (auto & field : row) {
+            cout << field << " ";
+        }
+        cout << endl;
+    }
+}
+
 //this function does change furthest part in the model so that it is consistent
 //with the most similar part from sample
-void Generalize(Part & furthestPart,
+void Generalize(Part * furthestPart,
     const vector<weak_ptr<LineWrap>> & sample,
     const vector<shared_ptr<Constraint>> & constraints) {
 
-    auto pairCount = (uint)0.5*sample.size()*(sample.size()-1);
+    auto pairCount = 0.5*sample.size()*(sample.size()-1);
     auto extract = Extract(sample, pairCount, constraints);
 
     struct BestMatch {
         uint index;
         vector<int> diffs;
     };
-    auto bestMatch = BestMatch{0, {}};
 
-    /*
-     * extract be like:
-     *          A B C D E F
-     * row 1    0 1 0 1 1 0
-     * row 2    ...
-     *
-     * part be like:
-     * (constraints: A B C D E F)
-     * part 1   0 3 4 5
-     */
-    auto partRow = furthestPart.constraints;
+    auto cSize = constraints.size();
+    auto bestMatch = BestMatch{0, vector<int>(cSize+1)};
 
-    auto extractSize = extract.size();
-    for (auto i = 0; i < extractSize; i++) {
+    auto partRow = furthestPart->constraints;
+
+    for (auto i = 0; i < pairCount; i++) {
         auto thisRowScore = BestMatch{i, {}};
-        auto cSize = constraints.size();
         for (auto j = 0; j < cSize; j++) {
             if (DNC != partRow[j] && extract[i][j] != partRow[j]) {
                 thisRowScore.diffs.push_back(j);
             }
         }
-        if (bestMatch.diffs.size() < thisRowScore.diffs.size()) {
+        if (bestMatch.diffs.size() > thisRowScore.diffs.size()) {
             bestMatch = thisRowScore;
         }
     }
 
+    for (auto a : bestMatch.diffs) cout << a << " ";
+
     for (auto i : bestMatch.diffs) {
-        partRow[i] = DNC;
+        furthestPart->constraints[i] = DNC;
     }
 }
 
@@ -195,21 +197,26 @@ shared_ptr<SModel> GenerateModel(
     auto sExtract = Extract(positiveSamples[0], pairCount, constraints);
 
     //make vector of atoms
-    auto atoms = vector<shared_ptr<Atom>>(atomCount);
+    auto atoms = vector<shared_ptr<Atom>>();
+    for (auto i = 0; i < atomCount; i++) {
+        atoms.push_back(make_shared<Atom>(Atom{}));
+    }
 
     //make vector of parts
-    auto parts = vector<shared_ptr<Part>>(pairCount);
+    auto parts = vector<shared_ptr<Part>>();
 
     //connects parts with atoms
     for (auto i = 0; i < pairCount; i++) {
+        parts.push_back(make_shared<Part>(Part{}));
         parts[i]->constraints = sExtract[i];
         auto atomsI = unpair(i);
-        parts[i]->atoms = atomsI;
+        parts[i]->atoms = {weak_ptr<Atom>{atoms[atomsI.first]},
+                           weak_ptr<Atom>{atoms[atomsI.second]}};
         atoms[atomsI.first]->involved.push_back(weak_ptr<Part>{parts[i]});
         atoms[atomsI.second]->involved.push_back(weak_ptr<Part>{parts[i]});
     }
 
-    auto s = make_shared<SModel>({parts, atoms, constraints});
+    auto s = make_shared<SModel>(SModel{parts, atoms, constraints});
 
 
     auto g = vector<Hypothesis>{
@@ -224,9 +231,31 @@ shared_ptr<SModel> GenerateModel(
         auto isMatched = bool{};
         auto furthestPart = weak_ptr<Part>{};
         tie(isMatched, furthestPart) = Match(*s, sample);
-        if (!isMatched) {
+        //reset assignments in atoms
+        for (auto & a : s.get()->atoms) {
+            a.get()->asignment.reset();
+        }
+        while (!isMatched) {
+            cout << "\nS: \n";
+            for (auto & pair : s->parts) {
+                for (auto & field : pair->constraints) {
+                    cout << field << " ";
+                }
+                cout << endl;
+            }
+            cout << "-";
+            for (auto & a : furthestPart.lock()->constraints)
+                cout << "|" << a << "|";
+            auto cccccc = 0;
+            for (auto & p : s->parts) {
+                if (furthestPart.lock() == p) {
+                    break;
+                }
+                cccccc++;
+            }
+            cout << "- part " << cccccc << endl;
             //generalize and match again
-            Generalize(*furthestPart.lock(), sample, constraints);
+            Generalize(furthestPart.lock().get(), sample, constraints);
             tie(isMatched, furthestPart) = Match(*s, sample);
         }
     }

@@ -231,10 +231,10 @@ void TestMatching() {
     auto a2 = make_shared<Atom>(Atom{"2"});
     auto a3 = make_shared<Atom>(Atom{"3"});
 
-    model.constraints = vector<unique_ptr<Constraint>>(1);
-    model.constraints[0] = make_unique(angle60);
-    model.constraints[1] = make_unique(adjacent);
-    model.constraints[2] = make_unique(sizeMatch);
+    model.constraints = vector<shared_ptr<Constraint>>(3);
+    model.constraints[0] = make_shared<Constraint>(angle60);
+    model.constraints[1] = make_shared<Constraint>(adjacent);
+    model.constraints[2] = make_shared<Constraint>(sizeMatch);
 
     auto p1 = make_shared<Part>(Part{{a1, a2}, {0, 1, 2}});
     auto p2 = make_shared<Part>(Part{{a1, a3}, {0, 1, 2}});
@@ -255,7 +255,7 @@ void TestMatching() {
     model.parts.push_back(p2);
     model.parts.push_back(p3);
 
-    auto inFile = string{};
+    auto inFile = string{"5.pgm"};
     inFile = "./" + inFile;
     ImageInterface::Ptr image(new ElsdPgmFileReader(inFile));
     ShapesDetectorInterface::Ptr detector(new ElsDetector);

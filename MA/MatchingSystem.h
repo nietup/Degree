@@ -40,7 +40,7 @@ struct SModel {
     //should be sorted by most constrained first
     vector<shared_ptr<Atom>> atoms;
 
-    vector<unique_ptr<Constraint>> constraints;
+    vector<shared_ptr<Constraint>> constraints;
 };
 
 struct TreeNode {

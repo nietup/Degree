@@ -16,6 +16,8 @@ using namespace elsd;
 
 const auto threshold = 0.1;
 
+enum BoolPlus {NO, YES, DNC};
+
 using Constraint = function<double(const LineWrap &, const LineWrap &)>;
 
 struct Part;
@@ -31,7 +33,7 @@ struct Atom {
 struct Part {
     pair<weak_ptr<Atom>, weak_ptr<Atom>> atoms;
     //vector<weak_ptr<Constraint>> constraints;
-    vector<uint> constraints;
+    vector<BoolPlus> constraints;
 };
 
 struct SModel {
@@ -110,19 +112,34 @@ bool Consistent(const LineWrap & segment, const Atom & atom,
             otherSegment = atoms.first.lock().get()->asignment;
         }
 
-        for (auto constraint : part.lock().get()->constraints) {
-            if (part.lock()->atoms.first.lock().get() ==
-                const_cast<Atom *>(&atom)) {
-                if (threshold <
-                    model.constraints[constraint]->operator()(segment,
-                                                  *otherSegment.lock())) {
-                    return false;
-                }
-            }
-            else {
-                if (threshold < model.constraints[constraint]->
+
+        auto constrSize = part.lock()->constraints.size();
+        for (auto i = 0; i < constrSize; i++) {
+            if (1 == part.lock()->constraints[i]) {
+                if (part.lock()->atoms.first.lock().get() ==
+                    const_cast<Atom *>(&atom)) {
+                    if (threshold < model.constraints[i]->
+                        operator()(segment, *otherSegment.lock())) {
+                        return false;
+                    }
+                } else {
+                    if (threshold < model.constraints[i]->
                         operator()(*otherSegment.lock(), segment)) {
-                    return false;
+                        return false;
+                    }
+                }
+            } else if (0 == part.lock()->constraints[i]) {
+                if (part.lock()->atoms.first.lock().get() ==
+                    const_cast<Atom *>(&atom)) {
+                    if (threshold > model.constraints[i]->
+                        operator()(segment, *otherSegment.lock())) {
+                        return false;
+                    }
+                } else {
+                    if (threshold > model.constraints[i]->
+                        operator()(*otherSegment.lock(), segment)) {
+                        return false;
+                    }
                 }
             }
         }

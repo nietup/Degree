@@ -7,7 +7,6 @@
 #include <ctime>
 #include <fstream>
 #include "LineWrap.h"
-#include "MatchingSystem.h"
 #include "Learning.h"
 
 using namespace std;
@@ -236,9 +235,9 @@ void TestMatching() {
     model.constraints[1] = make_shared<Constraint>(adjacent);
     model.constraints[2] = make_shared<Constraint>(sizeMatch);
 
-    auto p1 = make_shared<Part>(Part{{a1, a2}, {0, 1, 2}});
-    auto p2 = make_shared<Part>(Part{{a1, a3}, {0, 1, 2}});
-    auto p3 = make_shared<Part>(Part{{a2, a3}, {0, 1, 2}});
+    auto p1 = make_shared<Part>(Part{{a1, a2}, {YES, YES, YES}});
+    auto p2 = make_shared<Part>(Part{{a1, a3}, {YES, YES, YES}});
+    auto p3 = make_shared<Part>(Part{{a2, a3}, {YES, YES, YES}});
 
     a1.get()->involved.push_back(weak_ptr<Part>(p1));
     a1.get()->involved.push_back(weak_ptr<Part>(p2));
@@ -255,7 +254,7 @@ void TestMatching() {
     model.parts.push_back(p2);
     model.parts.push_back(p3);
 
-    auto inFile = string{"5.pgm"};
+    auto inFile = string{"a6.PGM"};
     inFile = "./" + inFile;
     ImageInterface::Ptr image(new ElsdPgmFileReader(inFile));
     ShapesDetectorInterface::Ptr detector(new ElsDetector);
@@ -317,8 +316,8 @@ int main() {
 		SM.Render();
 	}*/
 
-    //TestGeneration();
-    TestMatching();
+    //TestMatching();
+    TestGeneration();
 
 	return 0;
 }

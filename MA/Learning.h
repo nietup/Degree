@@ -5,7 +5,7 @@
 #ifndef DEGREE_LEARNING_H
 #define DEGREE_LEARNING_H
 
-enum BoolPlus {NO, YES, DNC};
+#include "MatchingSystem.h"
 
 //needs to be remade
 using Hypothesis = vector<vector<BoolPlus>>;
@@ -79,59 +79,46 @@ Hypothesis Extract(const vector<weak_ptr<LineWrap>> & sample, uint pairCount,
 //with the most similar part from sample
 void Generalize(Part & furthestPart,
     const vector<weak_ptr<LineWrap>> & sample,
-    vector<shared_ptr<Constraint>> constraints) {
-/*
+    const vector<shared_ptr<Constraint>> & constraints) {
+
     auto pairCount = (uint)0.5*sample.size()*(sample.size()-1);
     auto extract = Extract(sample, pairCount, constraints);
 
     struct BestMatch {
         uint index;
-        vector<uint> diffs;
+        vector<int> diffs;
     };
     auto bestMatch = BestMatch{0, {}};
 
-    *//*
+    /*
      * extract be like:
      *          A B C D E F
      * row 1    0 1 0 1 1 0
-     *          ...
+     * row 2    ...
      *
      * part be like:
-     * part 1   B D E
-     *//*
-    auto partRow = Hypothesis{}; // do conversion
+     * (constraints: A B C D E F)
+     * part 1   0 3 4 5
+     */
+    auto partRow = furthestPart.constraints;
 
     auto extractSize = extract.size();
     for (auto i = 0; i < extractSize; i++) {
-        auto rowSize = extract[i].size();
-        auto rowScore = vector<uint>{};
-        for (auto j = 0u; j < rowSize; j++) {
-            if (extract[i][j] != partRow[i][j]) {
-                rowScore.push_back(j);
+        auto thisRowScore = BestMatch{i, {}};
+        auto cSize = constraints.size();
+        for (auto j = 0; j < cSize; j++) {
+            if (DNC != partRow[j] && extract[i][j] != partRow[j]) {
+                thisRowScore.diffs.push_back(j);
             }
         }
-        if (rowScore.size() < bestMatch.diffs.size() ||
-            !bestMatch.diffs.size()) {
-            bestMatch.index = i;
-            bestMatch.diffs = rowScore;
-            //bestMatch = {i, rowScore};
+        if (bestMatch.diffs.size() < thisRowScore.diffs.size()) {
+            bestMatch = thisRowScore;
         }
     }
 
-    auto diffConstraints = vector<weak_ptr<Constraint>>{};
     for (auto i : bestMatch.diffs) {
-        diffConstraints.push_back(weak_ptr<Constraint >{constraints[i]});
+        partRow[i] = DNC;
     }
-    for (auto & constraint : furthestPart.constraints) {
-        if (diffConstraints.end() != find(diffConstraints.begin(),
-                                          diffConstraints.end(),
-                                          constraint.lock())) {
-            furthestPart.constraints.erase(
-                find(furthestPart.constraints.begin(),
-                     furthestPart.constraints.end(), constraint)
-            );
-        }
-    }*/
 }
 
 

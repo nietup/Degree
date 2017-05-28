@@ -23,7 +23,6 @@ using Constraint = function<double(const LineWrap &, const LineWrap &)>;
 struct Part;
 
 struct Atom {
-    string name;
     weak_ptr<LineWrap> asignment;
 
     //should be sorted by most constrained first

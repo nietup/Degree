@@ -226,9 +226,9 @@ void TestMatching() {
 
     auto model = SModel{};
 
-    auto a1 = make_shared<Atom>(Atom{"1"});
-    auto a2 = make_shared<Atom>(Atom{"2"});
-    auto a3 = make_shared<Atom>(Atom{"3"});
+    auto a1 = make_shared<Atom>(Atom{});
+    auto a2 = make_shared<Atom>(Atom{});
+    auto a3 = make_shared<Atom>(Atom{});
 
     model.constraints = vector<shared_ptr<Constraint>>(3);
     model.constraints[0] = make_shared<Constraint>(angle60);
@@ -282,7 +282,7 @@ void TestMatching() {
 
     if (Match(model, segments).first)
         for (auto &a : model.atoms) {
-            cout << a->name << " <-> ("
+            cout << " <-> ("
                  << a.get()->asignment.lock().get()->start.first << ", "
                  << a.get()->asignment.lock().get()->start.second << ") ("
                  << a.get()->asignment.lock().get()->end.first << ", "

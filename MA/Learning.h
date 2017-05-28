@@ -5,7 +5,10 @@
 #ifndef DEGREE_LEARNING_H
 #define DEGREE_LEARNING_H
 
+#include <iostream>
 #include "MatchingSystem.h"
+
+using namespace std;
 
 //needs to be remade
 using Hypothesis = vector<vector<BoolPlus>>;
@@ -169,18 +172,45 @@ vector<Hypothesis> Specialize(const Hypothesis & h, const Hypothesis & s,
     return retVals;
 }
 
-unique_ptr<SModel> GenerateModel(
+uint GetPairsCount(uint pairsCount) {
+    for (auto i = 1u; i < pairsCount; i++) {
+        if (0.5*i*(i-1) == pairsCount) {
+            return i;
+        }
+    }
+    return 0u;
+}
+
+shared_ptr<SModel> GenerateModel(
     const vector<vector<weak_ptr<LineWrap>>> & positiveSamples,
     const vector<vector<weak_ptr<LineWrap>>> & negativeSamples,
     const vector<shared_ptr<Constraint>> & constraints) {
+
     const auto atomCount = positiveSamples[0].size();
     const auto pairCount = (uint)(0.5*atomCount*(atomCount-1));
     const auto constraintCount = constraints.size();
 
-    //first - pair id, second - constraint in pair
+    //creation of first hypothesis
     //S must be initialized by first positive sample
-    //auto s = Extract(positiveSamples[0], pairCount, constraints);
-    auto s = unique_ptr<SModel>(new SModel);
+    auto sExtract = Extract(positiveSamples[0], pairCount, constraints);
+
+    //make vector of atoms
+    auto atoms = vector<shared_ptr<Atom>>(atomCount);
+
+    //make vector of parts
+    auto parts = vector<shared_ptr<Part>>(pairCount);
+
+    //connects parts with atoms
+    for (auto i = 0; i < pairCount; i++) {
+        parts[i]->constraints = sExtract[i];
+        auto atomsI = unpair(i);
+        parts[i]->atoms = atomsI;
+        atoms[atomsI.first]->involved.push_back(weak_ptr<Part>{parts[i]});
+        atoms[atomsI.second]->involved.push_back(weak_ptr<Part>{parts[i]});
+    }
+
+    auto s = make_shared<SModel>({parts, atoms, constraints});
+
 
     auto g = vector<Hypothesis>{
         Hypothesis(
@@ -205,14 +235,14 @@ unique_ptr<SModel> GenerateModel(
         //we leave neg samples for now
     }
 
-    /*cout << "S: \n";
-    for (auto & pair : s) {
-        for (auto & field : pair) {
+    cout << "S: \n";
+    for (auto & pair : s->parts) {
+        for (auto & field : pair->constraints) {
             cout << field << " ";
         }
         cout << endl;
     }
-
+/*
     cout << "\nG: \n";
     for (auto & h : g){
         for (auto & pair : h) {

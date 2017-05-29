@@ -78,7 +78,7 @@ Hypothesis Extract(const vector<weak_ptr<LineWrap>> & sample, uint pairCount,
     return hypothesis;
 }
 
-void PrintHypothesis(Hypothesis h) {
+/*void PrintHypothesis(Hypothesis h) {
     cout << "\nHypothesis\n";
     for (auto & row : h) {
         for (auto & field : row) {
@@ -86,7 +86,7 @@ void PrintHypothesis(Hypothesis h) {
         }
         cout << endl;
     }
-}
+}*/
 
 //this function does change furthest part in the model so that it is consistent
 //with the most similar part from sample
@@ -118,8 +118,6 @@ void Generalize(Part * furthestPart,
             bestMatch = thisRowScore;
         }
     }
-
-    for (auto a : bestMatch.diffs) cout << a << " ";
 
     for (auto i : bestMatch.diffs) {
         furthestPart->constraints[i] = DNC;
@@ -236,24 +234,6 @@ shared_ptr<SModel> GenerateModel(
             a.get()->asignment.reset();
         }
         while (!isMatched) {
-            cout << "\nS: \n";
-            for (auto & pair : s->parts) {
-                for (auto & field : pair->constraints) {
-                    cout << field << " ";
-                }
-                cout << endl;
-            }
-            cout << "-";
-            for (auto & a : furthestPart.lock()->constraints)
-                cout << "|" << a << "|";
-            auto cccccc = 0;
-            for (auto & p : s->parts) {
-                if (furthestPart.lock() == p) {
-                    break;
-                }
-                cccccc++;
-            }
-            cout << "- part " << cccccc << endl;
             //generalize and match again
             Generalize(furthestPart.lock().get(), sample, constraints);
             tie(isMatched, furthestPart) = Match(*s, sample);

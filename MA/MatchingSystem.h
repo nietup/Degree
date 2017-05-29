@@ -94,7 +94,7 @@ pair<weak_ptr<Atom>, weak_ptr<Part>> FindAtom(const SearchTree & tree) {
 
 
 //is it so far consistent to match segment with atom?
-bool Consistent(const LineWrap & segment, const Atom & atom,
+pair<bool, weak_ptr<Part>> Consistent(const LineWrap & segment, const Atom & atom,
                 const SModel & model) {
     for (auto & part : atom.involved) {
         auto atoms = part.lock().get()->atoms;
@@ -123,12 +123,12 @@ bool Consistent(const LineWrap & segment, const Atom & atom,
                     const_cast<Atom *>(&atom)) {
                     if (threshold < model.constraints[i]->
                         operator()(segment, *otherSegment.lock())) {
-                        return false;
+                        return {false, part};
                     }
                 } else {
                     if (threshold < model.constraints[i]->
                         operator()(*otherSegment.lock(), segment)) {
-                        return false;
+                        return {false, part};
                     }
                 }
             } else if (NO == part.lock()->constraints[i]) {
@@ -136,29 +136,32 @@ bool Consistent(const LineWrap & segment, const Atom & atom,
                     const_cast<Atom *>(&atom)) {
                     if (threshold > model.constraints[i]->
                         operator()(segment, *otherSegment.lock())) {
-                        return false;
+                        return {false, part};
                     }
                 } else {
                     if (threshold > model.constraints[i]->
                         operator()(*otherSegment.lock(), segment)) {
-                        return false;
+                        return {false, part};
                     }
                 }
             }
         }
     }
 
-    return true;
+    return {true, {}};
 }
 
-weak_ptr<LineWrap> FindSegment(const vector<weak_ptr<LineWrap>> & segments,
+pair<weak_ptr<LineWrap>, weak_ptr<Part>> FindSegment(const vector<weak_ptr<LineWrap>> & segments,
                                vector<weak_ptr<LineWrap>> & discarded,
                                const Atom & atom, const SModel & model) {
+    auto furthestPart = weak_ptr<Part>{};
     for (auto & segment : segments) {
         if (!segment.lock().get()->matched) {
             if (!myContains<LineWrap>(segment, discarded)) {
-                if (Consistent(*segment.lock().get(), atom, model)) {
-                    return segment;
+                auto consistent = bool{};
+                tie(consistent, furthestPart) = Consistent(*segment.lock().get(), atom, model);
+                if (consistent) {
+                    return {segment, {}};
                 }
                 else {
                     discarded.push_back(segment);
@@ -166,7 +169,7 @@ weak_ptr<LineWrap> FindSegment(const vector<weak_ptr<LineWrap>> & segments,
             }
         }
     }
-    return weak_ptr<LineWrap>();
+    return {weak_ptr<LineWrap>(), furthestPart};
 }
 
 //assumption: no independent graphs in model
@@ -199,6 +202,9 @@ pair<bool, weak_ptr<Part>> Match(SModel model,
 
     //intro stuff
     auto furthestPart = weak_ptr<Part>{};
+    auto prevPart = weak_ptr<Part>{};
+    auto furthestVector = vector<int>{};
+    auto partsMatched = vector<int>{};
     auto AtomsSize = model.atoms.size();
     auto PartsSize = model.parts.size();
     if (!AtomsSize || !PartsSize)
@@ -228,6 +234,10 @@ pair<bool, weak_ptr<Part>> Match(SModel model,
 
             if (nextSegment.expired()) {
                 //if we have tried all segments as roots then it is non match
+                if (!furthestVector.empty()) {
+                    furthestPart =
+                        model.parts[furthestVector[furthestVector.size()-1]];
+                }
                 return {false, furthestPart};
             } else { //we found next segment for tree
                 match[0].atom.lock()->asignment = nextSegment;
@@ -239,6 +249,28 @@ pair<bool, weak_ptr<Part>> Match(SModel model,
         auto nextAtom = weak_ptr<Atom>{};
         auto nextPart = weak_ptr<Part>{};
         tie(nextAtom, nextPart) = FindAtom(match);
+
+        auto wasPut = false;
+        if (!nextPart.expired()) {
+            //get index of nextPart
+            auto npi = 0;
+            for (auto & p : model.parts) {
+                if (nextPart.lock() == p) {
+                    break;
+                }
+                npi++;
+            }
+
+            //check if its already added and if it is not in matched prevs
+            if (furthestVector.end() ==
+                find(furthestVector.begin(), furthestVector.end(), npi)) {
+                if (partsMatched.end() ==
+                    find(partsMatched.begin(), partsMatched.end(), npi)) {
+                    furthestVector.push_back(npi);
+                    wasPut = true;
+                }
+            }
+        }
 
         if (nextAtom.expired()) {
             if (furthestPart.expired()) {
@@ -256,13 +288,33 @@ pair<bool, weak_ptr<Part>> Match(SModel model,
             continue;
         }
 
-        auto nextSegment = FindSegment(segments, match[i - 1].discardedSegments,
+        auto nextSegment = weak_ptr<LineWrap>{};
+        tie(nextSegment, nextPart) = FindSegment(segments, match[i - 1].discardedSegments,
                                        *nextAtom.lock(), model);
         if (nextSegment.expired()) {
-            furthestPart = nextPart;
+            //get index of nextPart
+            if (!nextPart.expired()) {
+                auto npi = 0;
+                for (auto &p : model.parts) {
+                    if (nextPart.lock() == p) {
+                        break;
+                    }
+                    npi++;
+                }
+                if (partsMatched.end() ==
+                    find(partsMatched.begin(), partsMatched.end(), npi)) {
+                    furthestVector.push_back(npi);
+                }
+            }
             match[i - 1].discardedAtoms.push_back(nextAtom);
             match[i - 1].discardedSegments.clear();
             continue;
+        }
+
+        if (wasPut) {
+            partsMatched.push_back(furthestVector[furthestVector.size() - 1]);
+            furthestVector.pop_back();
+            wasPut = false;
         }
 
         nextSegment.lock().get()->matched = true;

@@ -217,12 +217,9 @@ shared_ptr<SModel> GenerateModel(
     auto s = make_shared<SModel>(SModel{parts, atoms, constraints});
 
 
-    auto g = vector<Hypothesis>{
-        Hypothesis(
-            pairCount,
-            vector<BoolPlus>(constraintCount, DNC)
-        )
-    };
+    //auto g = vector<BoolPlus>(constraintCount, DNC);
+    //auto gg = vector<vector<BoolPlus>>(pairCount, vector<BoolPlus>(constraintCount, DNC));
+    auto g = Hypothesis{};
 
     for (const auto & sample : positiveSamples) {
         //New matching done here
@@ -242,15 +239,42 @@ shared_ptr<SModel> GenerateModel(
 
     for (const auto & sample : negativeSamples) {
         auto extract = Extract(sample, pairCount, constraints);
+
         //change oder to maximally match s
+        for (auto & row : s->parts) {
+            for (auto j = 0; j < constraintCount; j++) {
+                auto bestScore = {};
+                for (auto k = 0; k < pairCount; k++) {
+                    ;//todo
+                }
+            }
+        }
+
         auto eSize = extract.size();
         for (auto i = 0; i < eSize; i++) {
             for (auto j = 0; j < constraintCount; j++) {
-                ;// if consistent with s then change to ?
-                 // else negate
+                if (DNC == s->parts[i]->constraints[j]
+                    || extract[i][j] == s->parts[i]->constraints[j]) {
+                    extract[i][j] = DNC;
+                } else {
+                    if (YES == extract[i][j]) {
+                        extract[i][j] = NO;
+                    } else if (NO == extract[i][j]) {
+                        extract[i][j] = YES;
+                    }
+                }
             }
         }
+
+
         //sum with G
+        for (auto i = 0; i < eSize; i++) {
+            for (auto j = 0; j < constraintCount; j++) {
+                if (DNC != g[i][j]) {
+                    extract[i][j] = g[i][j];
+                }
+            }
+        }
     }
 
     cout << "S: \n";

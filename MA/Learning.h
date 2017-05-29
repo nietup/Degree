@@ -241,7 +241,16 @@ shared_ptr<SModel> GenerateModel(
     }
 
     for (const auto & sample : negativeSamples) {
-        //we leave neg samples for now
+        auto extract = Extract(sample, pairCount, constraints);
+        //change oder to maximally match s
+        auto eSize = extract.size();
+        for (auto i = 0; i < eSize; i++) {
+            for (auto j = 0; j < constraintCount; j++) {
+                ;// if consistent with s then change to ?
+                 // else negate
+            }
+        }
+        //sum with G
     }
 
     cout << "S: \n";

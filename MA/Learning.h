@@ -217,9 +217,13 @@ shared_ptr<SModel> GenerateModel(
     auto s = make_shared<SModel>(SModel{parts, atoms, constraints});
 
 
-    //auto g = vector<BoolPlus>(constraintCount, DNC);
-    //auto gg = vector<vector<BoolPlus>>(pairCount, vector<BoolPlus>(constraintCount, DNC));
     auto g = Hypothesis{};
+    for (auto i = 0; i < pairCount; i++) {
+        g.push_back(vector<BoolPlus>{});
+        for (auto j = 0; j < constraintCount; j++) {
+            g[i].push_back(DNC);
+        }
+    }
 
     for (const auto & sample : positiveSamples) {
         //New matching done here
@@ -240,15 +244,31 @@ shared_ptr<SModel> GenerateModel(
     for (const auto & sample : negativeSamples) {
         auto extract = Extract(sample, pairCount, constraints);
 
+        auto sortedExtract = Hypothesis{};
+
         //change oder to maximally match s
         for (auto & row : s->parts) {
-            for (auto j = 0; j < constraintCount; j++) {
-                auto bestScore = {};
-                for (auto k = 0; k < pairCount; k++) {
-                    ;//todo
+            auto bestScore = 0;
+            auto bestIndex = -1;
+            //for every line in extract
+                //count score / update bests
+            //best push bak sorted, pop extract
+            for (auto i = 0; i < extract.size(); i++) {
+                auto pairScore = 0;
+                for (auto j = 0; j < constraintCount; j++) {
+                    if (extract[i][j] == row->constraints[j]) {
+                        pairScore++;
+                    }
+                }
+                if (pairScore > bestScore) {
+                    bestIndex = i;
+                    bestScore = pairScore;
                 }
             }
+            sortedExtract.push_back(extract[bestIndex]);
+            extract.erase(extract.begin()+ bestIndex);
         }
+        extract = sortedExtract;
 
         auto eSize = extract.size();
         for (auto i = 0; i < eSize; i++) {
@@ -275,6 +295,7 @@ shared_ptr<SModel> GenerateModel(
                 }
             }
         }
+        g = extract;
     }
 
     cout << "S: \n";
@@ -284,17 +305,16 @@ shared_ptr<SModel> GenerateModel(
         }
         cout << endl;
     }
-/*
+
     cout << "\nG: \n";
-    for (auto & h : g){
-        for (auto & pair : h) {
+        for (auto & pair : g) {
             for (auto &field : pair) {
                 cout << field << " ";
             }
             cout << endl;
         }
         cout << endl;
-    }*/
+
 
     return s;
 }

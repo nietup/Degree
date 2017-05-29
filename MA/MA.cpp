@@ -213,8 +213,14 @@ void TestGeneration() {
     auto l23 = make_shared<LineWrap>(LineWrap{{20,97.9797},{120,97.9797}});
     auto p2 = vector<weak_ptr<LineWrap>>{l20, l21, l22, l23};
 
+    auto l30 = make_shared<LineWrap>(LineWrap{{0,0},{100,0}});
+    auto l31 = make_shared<LineWrap>(LineWrap{{0,0},{0,100}});
+    auto l32 = make_shared<LineWrap>(LineWrap{{0,100},{100,0}});
+    auto l33 = make_shared<LineWrap>(LineWrap{{0,0},{50,50}});
+    auto n0 = vector<weak_ptr<LineWrap>>{l30, l31, l32, l33};
+
     auto posSamples = vector<vector<weak_ptr<LineWrap>>>{p0, p1, p2};
-    auto negSamples = vector<vector<weak_ptr<LineWrap>>>{};
+    auto negSamples = vector<vector<weak_ptr<LineWrap>>>{n0};
 
     GenerateModel(posSamples, negSamples, constraints);
 }

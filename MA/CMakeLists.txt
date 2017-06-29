@@ -4,20 +4,29 @@ project(Degree)
 set(CMAKE_CXX_STANDARD 11)
 
 set(SOURCE_FILES MA.cpp
-        Abstract.cpp
-        Figure.cpp
-        MA.cpp
-        MenuState.cpp
-        Model.cpp
-        NewModelState.cpp
-        Primitive.cpp
-        Relationship.cpp
-        SampleSelectionState.cpp
-        Solid.cpp
-        State.cpp
-        StateMachine.cpp
-        WindowPack.cpp
-        ModelSelectionState.cpp ModelSelectionState.h ImageHandler.cpp ImageHandler.h LineWrap.cpp LineWrap.h PointWrap.cpp PointWrap.h MatchingSystem.h Learning.h)
+        #Abstract.cpp
+        #Figure.cpp
+        #MA.cpp
+        #MenuState.cpp
+        #Model.cpp
+        #NewModelState.cpp
+        #Primitive.cpp
+        #Relationship.cpp
+        #SampleSelectionState.cpp
+        #Solid.cpp
+        #State.cpp
+        #StateMachine.cpp
+        #WindowPack.cpp
+        #ModelSelectionState.cpp
+        #ModelSelectionState.h
+        #ImageHandler.cpp
+        #ImageHandler.h
+        LineWrap.cpp
+        LineWrap.h
+        PointWrap.cpp
+        PointWrap.h
+        MatchingSystem.h
+        Learning.h)
 set(EXECUTABLE_NAME Degree)
 add_executable(${EXECUTABLE_NAME} ${SOURCE_FILES})
 

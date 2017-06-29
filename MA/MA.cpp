@@ -1,6 +1,4 @@
 #include <TGUI/TGUI.hpp>
-//#include "StateMachine.h"
-
 #include <vector>
 #include <cmath>
 #include <cstdlib>
@@ -11,11 +9,6 @@
 
 using namespace std;
 using namespace elsd;
-
-template<typename T, typename... Args>
-std::unique_ptr<T> make_unique(Args&&... args) {
-    return std::unique_ptr<T>(new T(std::forward<Args>(args)...));
-}
 
 void TestGeneration() {
     //function scoring size match
@@ -327,15 +320,6 @@ void TestMatching() {
 }
 
 int main() {
-/*	StateMachine SM(800, 600, 60, "Akwizycja Modeli");
-	MenuState Menu(&SM);
-	SM.ChangeState(&Menu);
-
-	while (SM.IsRunning()) {
-		SM.Update();
-		SM.Render();
-	}*/
-
     //TestMatching();
     TestGeneration();
 

@@ -31,7 +31,6 @@ struct Atom {
 
 struct Part {
     pair<weak_ptr<Atom>, weak_ptr<Atom>> atoms;
-    //vector<weak_ptr<Constraint>> constraints;
     vector<BoolPlus> constraints;
 };
 
@@ -151,15 +150,17 @@ pair<bool, weak_ptr<Part>> Consistent(const LineWrap & segment, const Atom & ato
     return {true, {}};
 }
 
-pair<weak_ptr<LineWrap>, weak_ptr<Part>> FindSegment(const vector<weak_ptr<LineWrap>> & segments,
-                               vector<weak_ptr<LineWrap>> & discarded,
-                               const Atom & atom, const SModel & model) {
+pair<weak_ptr<LineWrap>, weak_ptr<Part>> FindSegment(
+        const vector<weak_ptr<LineWrap>> & segments,
+        vector<weak_ptr<LineWrap>> & discarded,
+        const Atom & atom, const SModel & model) {
     auto furthestPart = weak_ptr<Part>{};
     for (auto & segment : segments) {
         if (!segment.lock().get()->matched) {
             if (!myContains<LineWrap>(segment, discarded)) {
                 auto consistent = bool{};
-                tie(consistent, furthestPart) = Consistent(*segment.lock().get(), atom, model);
+                tie(consistent, furthestPart) =
+                    Consistent(*segment.lock().get(), atom, model);
                 if (consistent) {
                     return {segment, {}};
                 }
@@ -177,29 +178,6 @@ pair<weak_ptr<LineWrap>, weak_ptr<Part>> FindSegment(const vector<weak_ptr<LineW
 //if no nmatch returns weak prt to the furthest achieved part
 pair<bool, weak_ptr<Part>> Match(SModel model,
                                  const vector<weak_ptr<LineWrap>> & segments) {
-    /*
-    i = 0
-    while i < Atoms.size() do
-        Tree[i].atom = find(Atoms, first connected with Tree[i-1].atom and
-            wout assigned segment and not in discardedA array in Tree[i-1])
-        if Tree[i].atom empty then
-            Tree[i-1].discardedS.push_back(Tree[i-1].atom.segment)
-            Tree.pop(i)
-            i--
-            break
-        end
-        Tree[i].atom.segment = find(Segments, first free and
-            not in discardedS array in Tree[i-1] and
-            consistend with Tree[0..i-1])
-        if Tree[i].atom.segment empty then
-            Tree[i-1].discardedA.push_back(Tree[i].atom)
-            Tree.pop(i)
-            break
-        end
-        i++
-    end
-    */
-
     //intro stuff
     auto furthestPart = weak_ptr<Part>{};
     auto prevPart = weak_ptr<Part>{};

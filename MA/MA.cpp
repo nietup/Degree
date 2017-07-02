@@ -237,7 +237,7 @@ void TestMatching() {
         return d / (d + 300);
     };
 
-    auto model = SModel{};
+    auto model = Model{};
 
     auto a1 = make_shared<Atom>(Atom{});
     auto a2 = make_shared<Atom>(Atom{});

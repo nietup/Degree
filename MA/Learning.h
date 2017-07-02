@@ -76,7 +76,7 @@ void Generalize(Part * furthestPart,
     }
 }
 
-shared_ptr<SModel> GenerateModel(
+shared_ptr<Model> GenerateModel(
     const vector<vector<weak_ptr<LineWrap>>> & positiveSamples,
     const vector<vector<weak_ptr<LineWrap>>> & negativeSamples,
     const vector<shared_ptr<Constraint>> & constraints) {
@@ -109,7 +109,7 @@ shared_ptr<SModel> GenerateModel(
         atoms[atomsI.second]->involved.push_back(weak_ptr<Part>{parts[i]});
     }
 
-    auto s = make_shared<SModel>(SModel{parts, atoms, constraints});
+    auto s = make_shared<Model>(Model{parts, atoms, constraints});
 
 
     auto g = Hypothesis{};

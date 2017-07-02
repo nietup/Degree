@@ -10,44 +10,46 @@
 #include <cstdlib>
 #include <ctime>
 #include "LineWrap.h"
+#include "Model.h"
+#include "TreeNode.h"
 
 using namespace std;
 using namespace elsd;
 
 const auto threshold = 0.1;
 
-enum BoolPlus {NO, YES, DNC};
+/*enum BoolPlus {NO, YES, DNC};*/
 
-using Constraint = function<double(const LineWrap &, const LineWrap &)>;
+/*using Constraint = function<double(const LineWrap &, const LineWrap &)>;*/
 
-struct Part;
+//struct Part;
 
-struct Atom {
+/*struct Atom {
     weak_ptr<LineWrap> asignment;
 
     //should be sorted by most constrained first
     vector<weak_ptr<Part>> involved;
-};
+};*/
 
-struct Part {
+/*struct Part {
     pair<weak_ptr<Atom>, weak_ptr<Atom>> atoms;
     vector<BoolPlus> constraints;
-};
+};*/
 
-struct SModel {
+/*struct Model {
     vector<shared_ptr<Part>> parts;
 
     //should be sorted by most constrained first
     vector<shared_ptr<Atom>> atoms;
 
     vector<shared_ptr<Constraint>> constraints;
-};
+};*/
 
-struct TreeNode {
+/*struct TreeNode {
     weak_ptr<Atom> atom;
     vector<weak_ptr<Atom>> discardedAtoms;
     vector<weak_ptr<LineWrap>> discardedSegments;
-};
+};*/
 
 using SearchTree = vector<TreeNode>;
 
@@ -94,7 +96,7 @@ pair<weak_ptr<Atom>, weak_ptr<Part>> FindAtom(const SearchTree & tree) {
 
 //is it so far consistent to match segment with atom?
 pair<bool, weak_ptr<Part>> Consistent(const LineWrap & segment, const Atom & atom,
-                const SModel & model) {
+                const Model & model) {
     for (auto & part : atom.involved) {
         auto atoms = part.lock().get()->atoms;
 
@@ -153,7 +155,7 @@ pair<bool, weak_ptr<Part>> Consistent(const LineWrap & segment, const Atom & ato
 pair<weak_ptr<LineWrap>, weak_ptr<Part>> FindSegment(
         const vector<weak_ptr<LineWrap>> & segments,
         vector<weak_ptr<LineWrap>> & discarded,
-        const Atom & atom, const SModel & model) {
+        const Atom & atom, const Model & model) {
     auto furthestPart = weak_ptr<Part>{};
     for (auto & segment : segments) {
         if (!segment.lock().get()->matched) {
@@ -176,7 +178,7 @@ pair<weak_ptr<LineWrap>, weak_ptr<Part>> FindSegment(
 //assumption: no independent graphs in model
 //return value: true if match, false if non match
 //if no nmatch returns weak prt to the furthest achieved part
-pair<bool, weak_ptr<Part>> Match(SModel model,
+pair<bool, weak_ptr<Part>> Match(Model model,
                                  const vector<weak_ptr<LineWrap>> & segments) {
     //intro stuff
     auto furthestPart = weak_ptr<Part>{};

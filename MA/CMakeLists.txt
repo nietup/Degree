@@ -26,7 +26,7 @@ set(SOURCE_FILES MA.cpp
         PointWrap.cpp
         PointWrap.h
         MatchingSystem.h
-        Learning.h Atom.h Part.h Model.h TreeNode.h)
+        Learning.h Atom.h Part.h Model.h TreeNode.h Matcher.cpp Matcher.h Hipothesis.cpp Hipothesis.h Generator.cpp Generator.h)
 set(EXECUTABLE_NAME Degree)
 add_executable(${EXECUTABLE_NAME} ${SOURCE_FILES})
 

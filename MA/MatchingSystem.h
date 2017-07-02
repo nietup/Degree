@@ -18,39 +18,6 @@ using namespace elsd;
 
 const auto threshold = 0.1;
 
-/*enum BoolPlus {NO, YES, DNC};*/
-
-/*using Constraint = function<double(const LineWrap &, const LineWrap &)>;*/
-
-//struct Part;
-
-/*struct Atom {
-    weak_ptr<LineWrap> asignment;
-
-    //should be sorted by most constrained first
-    vector<weak_ptr<Part>> involved;
-};*/
-
-/*struct Part {
-    pair<weak_ptr<Atom>, weak_ptr<Atom>> atoms;
-    vector<BoolPlus> constraints;
-};*/
-
-/*struct Model {
-    vector<shared_ptr<Part>> parts;
-
-    //should be sorted by most constrained first
-    vector<shared_ptr<Atom>> atoms;
-
-    vector<shared_ptr<Constraint>> constraints;
-};*/
-
-/*struct TreeNode {
-    weak_ptr<Atom> atom;
-    vector<weak_ptr<Atom>> discardedAtoms;
-    vector<weak_ptr<LineWrap>> discardedSegments;
-};*/
-
 using SearchTree = vector<TreeNode>;
 
 template <class T>
@@ -64,6 +31,7 @@ template <class T>
     return false;
 }
 
+//class matcher
 pair<weak_ptr<Atom>, weak_ptr<Part>> FindAtom(const SearchTree & tree) {
     int node = tree.size() - 1;
     auto & discarded = tree[node].discardedAtoms;
@@ -93,7 +61,7 @@ pair<weak_ptr<Atom>, weak_ptr<Part>> FindAtom(const SearchTree & tree) {
     return pair<weak_ptr<Atom>, weak_ptr<Part>>{{}, {}};
 }
 
-
+//class matcher
 //is it so far consistent to match segment with atom?
 pair<bool, weak_ptr<Part>> Consistent(const LineWrap & segment, const Atom & atom,
                 const Model & model) {
@@ -152,6 +120,7 @@ pair<bool, weak_ptr<Part>> Consistent(const LineWrap & segment, const Atom & ato
     return {true, {}};
 }
 
+//class matcher
 pair<weak_ptr<LineWrap>, weak_ptr<Part>> FindSegment(
         const vector<weak_ptr<LineWrap>> & segments,
         vector<weak_ptr<LineWrap>> & discarded,
@@ -175,6 +144,7 @@ pair<weak_ptr<LineWrap>, weak_ptr<Part>> FindSegment(
     return {weak_ptr<LineWrap>(), furthestPart};
 }
 
+//class matcher
 //assumption: no independent graphs in model
 //return value: true if match, false if non match
 //if no nmatch returns weak prt to the furthest achieved part

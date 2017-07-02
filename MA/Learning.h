@@ -10,8 +10,7 @@
 
 using namespace std;
 
-//needs to be remade
-using Hypothesis = vector<vector<BoolPlus>>;
+using Hypothesis = vector<vector<BoolPlus>>; //class hipo
 
 pair<uint, uint> unpair(uint i) {
     int y = (int) floor(0.5 * (sqrt(8.0 * i + 1.0) + 1.0));
@@ -19,6 +18,7 @@ pair<uint, uint> unpair(uint i) {
     return pair<uint, uint>{x, y};
 };
 
+//class hipo
 Hypothesis Extract(const vector<weak_ptr<LineWrap>> & sample, uint pairCount,
                    const vector<shared_ptr<Constraint>> & constraints) {
 
@@ -40,6 +40,7 @@ Hypothesis Extract(const vector<weak_ptr<LineWrap>> & sample, uint pairCount,
     return hypothesis;
 }
 
+//class generator
 //this function does change furthest part in the model so that it is consistent
 //with the most similar part from sample
 void Generalize(Part * furthestPart,
@@ -76,6 +77,7 @@ void Generalize(Part * furthestPart,
     }
 }
 
+//class generator
 shared_ptr<Model> GenerateModel(
     const vector<vector<weak_ptr<LineWrap>>> & positiveSamples,
     const vector<vector<weak_ptr<LineWrap>>> & negativeSamples,

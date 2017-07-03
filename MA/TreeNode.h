@@ -9,8 +9,8 @@
 
 class TreeNode {
 public:
-    std::weak_ptr<Vertex> atom;
-    std::vector<std::weak_ptr<Vertex>> discardedAtoms;
+    std::weak_ptr<Vertex> vertex;
+    std::vector<std::weak_ptr<Vertex>> discardedVertices;
     std::vector<std::weak_ptr<LineWrap>> discardedSegments;
 };
 

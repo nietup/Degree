@@ -88,21 +88,21 @@ shared_ptr<Model> GenerateModel(
     //S must be initialized by first positive sample
     auto sExtract = Extract(positiveSamples[0], pairCount, constraints);
 
-    //make vector of atoms
+    //make vector of vertices
     auto atoms = vector<shared_ptr<Vertex>>();
     for (auto i = 0; i < atomCount; i++) {
         atoms.push_back(make_shared<Vertex>(Vertex{}));
     }
 
-    //make vector of parts
+    //make vector of edges
     auto parts = vector<shared_ptr<Edge>>();
 
-    //connects parts with atoms
+    //connects edges with vertices
     for (auto i = 0; i < pairCount; i++) {
         parts.push_back(make_shared<Edge>(Edge{}));
         parts[i]->constraints = sExtract[i];
         auto atomsI = unpair(i);
-        parts[i]->atoms = {weak_ptr<Vertex>{atoms[atomsI.first]},
+        parts[i]->vertices = {weak_ptr<Vertex>{atoms[atomsI.first]},
                            weak_ptr<Vertex>{atoms[atomsI.second]}};
         atoms[atomsI.first]->involved.push_back(weak_ptr<Edge>{parts[i]});
         atoms[atomsI.second]->involved.push_back(weak_ptr<Edge>{parts[i]});
@@ -124,8 +124,8 @@ shared_ptr<Model> GenerateModel(
         auto isMatched = bool{};
         auto furthestPart = weak_ptr<Edge>{};
         tie(isMatched, furthestPart) = Match(*s, sample);
-        //reset assignments in atoms
-        for (auto & a : s.get()->atoms) {
+        //reset assignments in vertices
+        for (auto & a : s.get()->vertices) {
             a.get()->asignment.reset();
         }
         while (!isMatched) {
@@ -141,7 +141,7 @@ shared_ptr<Model> GenerateModel(
         auto sortedExtract = Hypothesis{};
 
         //change oder to maximally match s
-        for (auto & row : s->parts) {
+        for (auto & row : s->edges) {
             auto bestScore = 0;
             auto bestIndex = -1;
             //for every line in extract
@@ -167,8 +167,8 @@ shared_ptr<Model> GenerateModel(
         auto eSize = extract.size();
         for (auto i = 0; i < eSize; i++) {
             for (auto j = 0; j < constraintCount; j++) {
-                if (DNC == s->parts[i]->constraints[j]
-                    || extract[i][j] == s->parts[i]->constraints[j]) {
+                if (DNC == s->edges[i]->constraints[j]
+                    || extract[i][j] == s->edges[i]->constraints[j]) {
                     extract[i][j] = DNC;
                 } else {
                     if (YES == extract[i][j]) {
@@ -193,7 +193,7 @@ shared_ptr<Model> GenerateModel(
     }
 
     cout << "S: \n";
-    for (auto & pair : s->parts) {
+    for (auto & pair : s->edges) {
         for (auto & field : pair->constraints) {
             cout << field << " ";
         }

@@ -11,10 +11,10 @@ using Constraint = std::function<double(const LineWrap &, const LineWrap &)>;
 
 class Model {
 public:
-    std::vector<std::shared_ptr<Edge>> parts;
+    std::vector<std::shared_ptr<Edge>> edges;
 
     //should be sorted by most constrained first
-    std::vector<std::shared_ptr<Vertex>> atoms;
+    std::vector<std::shared_ptr<Vertex>> vertices;
 
     std::vector<std::shared_ptr<Constraint>> constraints;
 };

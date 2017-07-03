@@ -258,13 +258,13 @@ void TestMatching() {
     a3.get()->involved.push_back(weak_ptr<Edge>(p2));
     a3.get()->involved.push_back(weak_ptr<Edge>(p3));
 
-    model.atoms.push_back(a1);
-    model.atoms.push_back(a2);
-    model.atoms.push_back(a3);
+    model.vertices.push_back(a1);
+    model.vertices.push_back(a2);
+    model.vertices.push_back(a3);
 
-    model.parts.push_back(p1);
-    model.parts.push_back(p2);
-    model.parts.push_back(p3);
+    model.edges.push_back(p1);
+    model.edges.push_back(p2);
+    model.edges.push_back(p3);
 
     auto inFile = string{"a6.PGM"};
     inFile = "./" + inFile;
@@ -293,7 +293,7 @@ void TestMatching() {
         segments.push_back(weak_ptr<LineWrap>(line));
 
     if (Match(model, segments).first)
-        for (auto &a : model.atoms) {
+        for (auto &a : model.vertices) {
             cout << " <-> ("
                  << a.get()->asignment.lock().get()->start.first << ", "
                  << a.get()->asignment.lock().get()->start.second << ") ("
@@ -302,7 +302,7 @@ void TestMatching() {
                  << endl;
 
             auto detection = vector<LineSegment>();
-            for (auto &a : model.atoms)
+            for (auto &a : model.vertices)
                 detection.push_back(a->asignment.lock()->GetLineSegment());
 
             string detectionFile = inFile + ".detection.svg";

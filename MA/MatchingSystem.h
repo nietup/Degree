@@ -31,13 +31,13 @@ template <class T>
 
 pair<weak_ptr<Vertex>, weak_ptr<Edge>> FindAtom(const SearchTree & tree) {
     int node = tree.size() - 1;
-    auto & discarded = tree[node].discardedAtoms;
-    auto furthestPart = tree[0].atom.lock()->involved[0];
+    auto & discarded = tree[node].discardedVertices;
+    auto furthestPart = tree[0].vertex.lock()->involved[0];
     for (; node >= 0; node--) {
-        auto & atom = *tree[node].atom.lock();
+        auto & atom = *tree[node].vertex.lock();
 
         for (auto & part : atom.involved) {
-            auto atoms = part.lock().get()->atoms;
+            auto atoms = part.lock().get()->vertices;
             if (atoms.first.lock().get() == &atom) {
                 if (atoms.second.lock().get()->asignment.expired()) {
                     if (!myContains<Vertex>(atoms.second, discarded)) {
@@ -58,11 +58,11 @@ pair<weak_ptr<Vertex>, weak_ptr<Edge>> FindAtom(const SearchTree & tree) {
     return pair<weak_ptr<Vertex>, weak_ptr<Edge>>{{}, {}};
 }
 
-//is it so far consistent to match segment with atom?
+//is it so far consistent to match segment with vertex?
 pair<bool, weak_ptr<Edge>> Consistent(const LineWrap & segment, const Vertex & atom,
                 const Model & model) {
     for (auto & part : atom.involved) {
-        auto atoms = part.lock().get()->atoms;
+        auto atoms = part.lock().get()->vertices;
 
         //if both vars in part are unassigned then it cannot be contradictory
         if (atoms.first.lock()->asignment.expired() &&
@@ -84,7 +84,7 @@ pair<bool, weak_ptr<Edge>> Consistent(const LineWrap & segment, const Vertex & a
                 continue;
             }
             if (YES == part.lock()->constraints[i]) {
-                if (part.lock()->atoms.first.lock().get() ==
+                if (part.lock()->vertices.first.lock().get() ==
                     const_cast<Vertex *>(&atom)) {
                     if (threshold < model.constraints[i]->
                         operator()(segment, *otherSegment.lock())) {
@@ -97,7 +97,7 @@ pair<bool, weak_ptr<Edge>> Consistent(const LineWrap & segment, const Vertex & a
                     }
                 }
             } else if (NO == part.lock()->constraints[i]) {
-                if (part.lock()->atoms.first.lock().get() ==
+                if (part.lock()->vertices.first.lock().get() ==
                     const_cast<Vertex *>(&atom)) {
                     if (threshold > model.constraints[i]->
                         operator()(segment, *otherSegment.lock())) {
@@ -149,13 +149,13 @@ pair<bool, weak_ptr<Edge>> Match(Model model,
     auto prevPart = weak_ptr<Edge>{};
     auto furthestVector = vector<int>{};
     auto partsMatched = vector<int>{};
-    auto AtomsSize = model.atoms.size();
-    auto PartsSize = model.parts.size();
+    auto AtomsSize = model.vertices.size();
+    auto PartsSize = model.edges.size();
     if (!AtomsSize || !PartsSize)
         return {false, weak_ptr<Edge>{}};
-    model.atoms[0]->asignment = segments[0];
+    model.vertices[0]->asignment = segments[0];
     segments[0].lock()->matched = true;
-    auto match = SearchTree{ TreeNode {model.atoms[0]} };
+    auto match = SearchTree{ TreeNode {model.vertices[0]} };
 
     //main loop
     auto i = 1u;
@@ -163,12 +163,12 @@ pair<bool, weak_ptr<Edge>> Match(Model model,
         //if root didn't work out -- move to separate function later
         if (i == 0) {
             //find next segment for root
-            match[0].atom.lock()->asignment.lock()->matched = false;
-            match[0].discardedAtoms.clear();
+            match[0].vertex.lock()->asignment.lock()->matched = false;
+            match[0].discardedVertices.clear();
             auto nextSegment = weak_ptr<LineWrap>();
             int j = 1;
             for (auto &seg : segments) {
-                if (seg.lock() == match[0].atom.lock()->asignment.lock()) {
+                if (seg.lock() == match[0].vertex.lock()->asignment.lock()) {
                     if (j < segments.size())
                         nextSegment = *(&seg + 1);
                     break;
@@ -180,11 +180,11 @@ pair<bool, weak_ptr<Edge>> Match(Model model,
                 //if we have tried all segments as roots then it is non match
                 if (!furthestVector.empty()) {
                     furthestPart =
-                        model.parts[furthestVector[furthestVector.size()-1]];
+                        model.edges[furthestVector[furthestVector.size()-1]];
                 }
                 return {false, furthestPart};
             } else { //we found next segment for tree
-                match[0].atom.lock()->asignment = nextSegment;
+                match[0].vertex.lock()->asignment = nextSegment;
                 nextSegment.lock()->matched = true;
                 i++;
             }
@@ -198,7 +198,7 @@ pair<bool, weak_ptr<Edge>> Match(Model model,
         if (!nextPart.expired()) {
             //get index of nextPart
             auto npi = 0;
-            for (auto & p : model.parts) {
+            for (auto & p : model.edges) {
                 if (nextPart.lock() == p) {
                     break;
                 }
@@ -218,13 +218,13 @@ pair<bool, weak_ptr<Edge>> Match(Model model,
 
         if (nextAtom.expired()) {
             if (furthestPart.expired()) {
-                furthestPart = model.atoms[0]->involved[0];
+                furthestPart = model.vertices[0]->involved[0];
             }
             if (i > 1) {
                 match[i - 2].discardedSegments.
-                    push_back(match[i - 1].atom.lock()->asignment);
-                match[i - 1].atom.lock()->asignment.lock()->matched = false;
-                match[i - 1].atom.lock()->asignment.reset();
+                    push_back(match[i - 1].vertex.lock()->asignment);
+                match[i - 1].vertex.lock()->asignment.lock()->matched = false;
+                match[i - 1].vertex.lock()->asignment.reset();
                 match.pop_back();
             }
 
@@ -239,7 +239,7 @@ pair<bool, weak_ptr<Edge>> Match(Model model,
             //get index of nextPart
             if (!nextPart.expired()) {
                 auto npi = 0;
-                for (auto &p : model.parts) {
+                for (auto &p : model.edges) {
                     if (nextPart.lock() == p) {
                         break;
                     }
@@ -250,7 +250,7 @@ pair<bool, weak_ptr<Edge>> Match(Model model,
                     furthestVector.push_back(npi);
                 }
             }
-            match[i - 1].discardedAtoms.push_back(nextAtom);
+            match[i - 1].discardedVertices.push_back(nextAtom);
             match[i - 1].discardedSegments.clear();
             continue;
         }

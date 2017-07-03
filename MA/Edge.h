@@ -11,7 +11,7 @@ enum BoolPlus {NO, YES, DNC};
 
 class Edge {
 public:
-    std::pair<std::weak_ptr<Vertex>, std::weak_ptr<Vertex>> atoms;
+    std::pair<std::weak_ptr<Vertex>, std::weak_ptr<Vertex>> vertices;
     std::vector<BoolPlus> constraints;
 };
 

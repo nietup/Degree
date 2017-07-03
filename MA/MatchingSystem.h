@@ -9,9 +9,7 @@
 #include <cmath>
 #include <cstdlib>
 #include <ctime>
-#include "LineWrap.h"
 #include "Model.h"
-#include "TreeNode.h"
 
 using namespace std;
 using namespace elsd;
@@ -31,7 +29,6 @@ template <class T>
     return false;
 }
 
-//class matcher
 pair<weak_ptr<Atom>, weak_ptr<Part>> FindAtom(const SearchTree & tree) {
     int node = tree.size() - 1;
     auto & discarded = tree[node].discardedAtoms;
@@ -61,7 +58,6 @@ pair<weak_ptr<Atom>, weak_ptr<Part>> FindAtom(const SearchTree & tree) {
     return pair<weak_ptr<Atom>, weak_ptr<Part>>{{}, {}};
 }
 
-//class matcher
 //is it so far consistent to match segment with atom?
 pair<bool, weak_ptr<Part>> Consistent(const LineWrap & segment, const Atom & atom,
                 const Model & model) {
@@ -120,7 +116,6 @@ pair<bool, weak_ptr<Part>> Consistent(const LineWrap & segment, const Atom & ato
     return {true, {}};
 }
 
-//class matcher
 pair<weak_ptr<LineWrap>, weak_ptr<Part>> FindSegment(
         const vector<weak_ptr<LineWrap>> & segments,
         vector<weak_ptr<LineWrap>> & discarded,
@@ -144,7 +139,6 @@ pair<weak_ptr<LineWrap>, weak_ptr<Part>> FindSegment(
     return {weak_ptr<LineWrap>(), furthestPart};
 }
 
-//class matcher
 //assumption: no independent graphs in model
 //return value: true if match, false if non match
 //if no nmatch returns weak prt to the furthest achieved part

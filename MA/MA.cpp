@@ -4,7 +4,6 @@
 #include <cstdlib>
 #include <ctime>
 #include <fstream>
-#include "LineWrap.h"
 #include "Learning.h"
 
 using namespace std;

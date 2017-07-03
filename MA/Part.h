@@ -5,7 +5,8 @@
 #ifndef DEGREE_PART_H
 #define DEGREE_PART_H
 
-#include "Atom.h"
+#include "TreeNode.h"
+
 enum BoolPlus {NO, YES, DNC};
 
 class Part {

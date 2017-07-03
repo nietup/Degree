@@ -41,7 +41,7 @@ Hypothesis Extract(const vector<weak_ptr<LineWrap>> & sample, uint pairCount,
 
 //this function does change furthest part in the model so that it is consistent
 //with the most similar part from sample
-void Generalize(Part * furthestPart,
+void Generalize(Edge * furthestPart,
     const vector<weak_ptr<LineWrap>> & sample,
     const vector<shared_ptr<Constraint>> & constraints) {
 
@@ -89,23 +89,23 @@ shared_ptr<Model> GenerateModel(
     auto sExtract = Extract(positiveSamples[0], pairCount, constraints);
 
     //make vector of atoms
-    auto atoms = vector<shared_ptr<Atom>>();
+    auto atoms = vector<shared_ptr<Vertex>>();
     for (auto i = 0; i < atomCount; i++) {
-        atoms.push_back(make_shared<Atom>(Atom{}));
+        atoms.push_back(make_shared<Vertex>(Vertex{}));
     }
 
     //make vector of parts
-    auto parts = vector<shared_ptr<Part>>();
+    auto parts = vector<shared_ptr<Edge>>();
 
     //connects parts with atoms
     for (auto i = 0; i < pairCount; i++) {
-        parts.push_back(make_shared<Part>(Part{}));
+        parts.push_back(make_shared<Edge>(Edge{}));
         parts[i]->constraints = sExtract[i];
         auto atomsI = unpair(i);
-        parts[i]->atoms = {weak_ptr<Atom>{atoms[atomsI.first]},
-                           weak_ptr<Atom>{atoms[atomsI.second]}};
-        atoms[atomsI.first]->involved.push_back(weak_ptr<Part>{parts[i]});
-        atoms[atomsI.second]->involved.push_back(weak_ptr<Part>{parts[i]});
+        parts[i]->atoms = {weak_ptr<Vertex>{atoms[atomsI.first]},
+                           weak_ptr<Vertex>{atoms[atomsI.second]}};
+        atoms[atomsI.first]->involved.push_back(weak_ptr<Edge>{parts[i]});
+        atoms[atomsI.second]->involved.push_back(weak_ptr<Edge>{parts[i]});
     }
 
     auto s = make_shared<Model>(Model{parts, atoms, constraints});
@@ -122,7 +122,7 @@ shared_ptr<Model> GenerateModel(
     for (const auto & sample : positiveSamples) {
         //New matching done here
         auto isMatched = bool{};
-        auto furthestPart = weak_ptr<Part>{};
+        auto furthestPart = weak_ptr<Edge>{};
         tie(isMatched, furthestPart) = Match(*s, sample);
         //reset assignments in atoms
         for (auto & a : s.get()->atoms) {

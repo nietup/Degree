@@ -29,7 +29,7 @@ template <class T>
     return false;
 }
 
-pair<weak_ptr<Atom>, weak_ptr<Part>> FindAtom(const SearchTree & tree) {
+pair<weak_ptr<Vertex>, weak_ptr<Edge>> FindAtom(const SearchTree & tree) {
     int node = tree.size() - 1;
     auto & discarded = tree[node].discardedAtoms;
     auto furthestPart = tree[0].atom.lock()->involved[0];
@@ -40,26 +40,26 @@ pair<weak_ptr<Atom>, weak_ptr<Part>> FindAtom(const SearchTree & tree) {
             auto atoms = part.lock().get()->atoms;
             if (atoms.first.lock().get() == &atom) {
                 if (atoms.second.lock().get()->asignment.expired()) {
-                    if (!myContains<Atom>(atoms.second, discarded)) {
+                    if (!myContains<Vertex>(atoms.second, discarded)) {
                         furthestPart = part;
-                        return {atoms.second, weak_ptr<Part>(furthestPart)};
+                        return {atoms.second, weak_ptr<Edge>(furthestPart)};
                     }
                 }
             } else {
                 if (atoms.first.lock().get()->asignment.expired()) {
-                    if (!myContains<Atom>(atoms.first, discarded)) {
+                    if (!myContains<Vertex>(atoms.first, discarded)) {
                         furthestPart = part;
-                        return {atoms.first, weak_ptr<Part>(furthestPart)};
+                        return {atoms.first, weak_ptr<Edge>(furthestPart)};
                     }
                 }
             }
         }
     }
-    return pair<weak_ptr<Atom>, weak_ptr<Part>>{{}, {}};
+    return pair<weak_ptr<Vertex>, weak_ptr<Edge>>{{}, {}};
 }
 
 //is it so far consistent to match segment with atom?
-pair<bool, weak_ptr<Part>> Consistent(const LineWrap & segment, const Atom & atom,
+pair<bool, weak_ptr<Edge>> Consistent(const LineWrap & segment, const Vertex & atom,
                 const Model & model) {
     for (auto & part : atom.involved) {
         auto atoms = part.lock().get()->atoms;
@@ -85,7 +85,7 @@ pair<bool, weak_ptr<Part>> Consistent(const LineWrap & segment, const Atom & ato
             }
             if (YES == part.lock()->constraints[i]) {
                 if (part.lock()->atoms.first.lock().get() ==
-                    const_cast<Atom *>(&atom)) {
+                    const_cast<Vertex *>(&atom)) {
                     if (threshold < model.constraints[i]->
                         operator()(segment, *otherSegment.lock())) {
                         return {false, part};
@@ -98,7 +98,7 @@ pair<bool, weak_ptr<Part>> Consistent(const LineWrap & segment, const Atom & ato
                 }
             } else if (NO == part.lock()->constraints[i]) {
                 if (part.lock()->atoms.first.lock().get() ==
-                    const_cast<Atom *>(&atom)) {
+                    const_cast<Vertex *>(&atom)) {
                     if (threshold > model.constraints[i]->
                         operator()(segment, *otherSegment.lock())) {
                         return {false, part};
@@ -116,11 +116,11 @@ pair<bool, weak_ptr<Part>> Consistent(const LineWrap & segment, const Atom & ato
     return {true, {}};
 }
 
-pair<weak_ptr<LineWrap>, weak_ptr<Part>> FindSegment(
+pair<weak_ptr<LineWrap>, weak_ptr<Edge>> FindSegment(
         const vector<weak_ptr<LineWrap>> & segments,
         vector<weak_ptr<LineWrap>> & discarded,
-        const Atom & atom, const Model & model) {
-    auto furthestPart = weak_ptr<Part>{};
+        const Vertex & atom, const Model & model) {
+    auto furthestPart = weak_ptr<Edge>{};
     for (auto & segment : segments) {
         if (!segment.lock().get()->matched) {
             if (!myContains<LineWrap>(segment, discarded)) {
@@ -142,17 +142,17 @@ pair<weak_ptr<LineWrap>, weak_ptr<Part>> FindSegment(
 //assumption: no independent graphs in model
 //return value: true if match, false if non match
 //if no nmatch returns weak prt to the furthest achieved part
-pair<bool, weak_ptr<Part>> Match(Model model,
+pair<bool, weak_ptr<Edge>> Match(Model model,
                                  const vector<weak_ptr<LineWrap>> & segments) {
     //intro stuff
-    auto furthestPart = weak_ptr<Part>{};
-    auto prevPart = weak_ptr<Part>{};
+    auto furthestPart = weak_ptr<Edge>{};
+    auto prevPart = weak_ptr<Edge>{};
     auto furthestVector = vector<int>{};
     auto partsMatched = vector<int>{};
     auto AtomsSize = model.atoms.size();
     auto PartsSize = model.parts.size();
     if (!AtomsSize || !PartsSize)
-        return {false, weak_ptr<Part>{}};
+        return {false, weak_ptr<Edge>{}};
     model.atoms[0]->asignment = segments[0];
     segments[0].lock()->matched = true;
     auto match = SearchTree{ TreeNode {model.atoms[0]} };
@@ -190,8 +190,8 @@ pair<bool, weak_ptr<Part>> Match(Model model,
             }
         }
 
-        auto nextAtom = weak_ptr<Atom>{};
-        auto nextPart = weak_ptr<Part>{};
+        auto nextAtom = weak_ptr<Vertex>{};
+        auto nextPart = weak_ptr<Edge>{};
         tie(nextAtom, nextPart) = FindAtom(match);
 
         auto wasPut = false;
@@ -268,7 +268,7 @@ pair<bool, weak_ptr<Part>> Match(Model model,
         i++;
     }
 
-    return {true, weak_ptr<Part>{}};
+    return {true, weak_ptr<Edge>{}};
 }
 
 

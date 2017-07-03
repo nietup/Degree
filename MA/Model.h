@@ -5,16 +5,16 @@
 #ifndef DEGREE_MODEL_H
 #define DEGREE_MODEL_H
 
-#include "Part.h"
+#include "Edge.h"
 
 using Constraint = std::function<double(const LineWrap &, const LineWrap &)>;
 
 class Model {
 public:
-    std::vector<std::shared_ptr<Part>> parts;
+    std::vector<std::shared_ptr<Edge>> parts;
 
     //should be sorted by most constrained first
-    std::vector<std::shared_ptr<Atom>> atoms;
+    std::vector<std::shared_ptr<Vertex>> atoms;
 
     std::vector<std::shared_ptr<Constraint>> constraints;
 };

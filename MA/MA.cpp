@@ -238,25 +238,25 @@ void TestMatching() {
 
     auto model = Model{};
 
-    auto a1 = make_shared<Atom>(Atom{});
-    auto a2 = make_shared<Atom>(Atom{});
-    auto a3 = make_shared<Atom>(Atom{});
+    auto a1 = make_shared<Vertex>(Vertex{});
+    auto a2 = make_shared<Vertex>(Vertex{});
+    auto a3 = make_shared<Vertex>(Vertex{});
 
     model.constraints = vector<shared_ptr<Constraint>>(3);
     model.constraints[0] = make_shared<Constraint>(angle60);
     model.constraints[1] = make_shared<Constraint>(adjacent);
     model.constraints[2] = make_shared<Constraint>(sizeMatch);
 
-    auto p1 = make_shared<Part>(Part{{a1, a2}, {YES, YES, YES}});
-    auto p2 = make_shared<Part>(Part{{a1, a3}, {YES, YES, YES}});
-    auto p3 = make_shared<Part>(Part{{a2, a3}, {YES, YES, YES}});
+    auto p1 = make_shared<Edge>(Edge{{a1, a2}, {YES, YES, YES}});
+    auto p2 = make_shared<Edge>(Edge{{a1, a3}, {YES, YES, YES}});
+    auto p3 = make_shared<Edge>(Edge{{a2, a3}, {YES, YES, YES}});
 
-    a1.get()->involved.push_back(weak_ptr<Part>(p1));
-    a1.get()->involved.push_back(weak_ptr<Part>(p2));
-    a2.get()->involved.push_back(weak_ptr<Part>(p1));
-    a2.get()->involved.push_back(weak_ptr<Part>(p3));
-    a3.get()->involved.push_back(weak_ptr<Part>(p2));
-    a3.get()->involved.push_back(weak_ptr<Part>(p3));
+    a1.get()->involved.push_back(weak_ptr<Edge>(p1));
+    a1.get()->involved.push_back(weak_ptr<Edge>(p2));
+    a2.get()->involved.push_back(weak_ptr<Edge>(p1));
+    a2.get()->involved.push_back(weak_ptr<Edge>(p3));
+    a3.get()->involved.push_back(weak_ptr<Edge>(p2));
+    a3.get()->involved.push_back(weak_ptr<Edge>(p3));
 
     model.atoms.push_back(a1);
     model.atoms.push_back(a2);

@@ -6,14 +6,14 @@
 #define DEGREE_ATOM_H
 
 #include "LineWrap.h"
-class Part;
+class Edge;
 
-class Atom {
+class Vertex {
 public:
     std::weak_ptr<LineWrap> asignment;
 
     //should be sorted by most constrained first
-    std::vector<std::weak_ptr<Part>> involved;
+    std::vector<std::weak_ptr<Edge>> involved;
 };
 
 

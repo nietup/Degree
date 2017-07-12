@@ -10,6 +10,7 @@
 #include <cstdlib>
 #include <ctime>
 #include "Model.h"
+#include "Utilities.h"
 
 using namespace std;
 using namespace elsd;
@@ -17,17 +18,6 @@ using namespace elsd;
 const auto threshold = 0.1;
 
 using SearchTree = vector<TreeNode>;
-
-template <class T>
- bool myContains(weak_ptr<T> object, const vector<weak_ptr<T>> & v) {
-    for (auto & a : v) {
-        if (object.lock().get() == a.lock().get()) {
-            return true;
-        }
-    }
-
-    return false;
-}
 
 pair<weak_ptr<Vertex>, weak_ptr<Edge>> FindAtom(const SearchTree & tree) {
     int node = tree.size() - 1;

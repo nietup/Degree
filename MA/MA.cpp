@@ -219,19 +219,19 @@ void TestGeneration() {
 
 void TestMatching() {
     auto sizeMatch = [](const LineWrap &a,
-                                                const LineWrap &b) {
+        const LineWrap &b) {
         double lenA = a.Length(),
             lenB = b.Length();
         return lenA < lenB ? 1 - (lenA / lenB) : 1 - (lenB / lenA);
     };
 
     auto angle60 = [](const LineWrap &a,
-                                              const LineWrap &b) {
+        const LineWrap &b) {
         return 2 * abs(0.5 - abs(a.GetCos(b)));
     };
 
     auto adjacent = [](const LineWrap &a,
-                                               const LineWrap &b) {
+        const LineWrap &b) {
         double d = a.Distance(b);
         return d / (d + 300);
     };

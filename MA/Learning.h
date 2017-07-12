@@ -12,11 +12,11 @@ using namespace std;
 
 using Hypothesis = vector<vector<BoolPlus>>;
 
-pair<uint, uint> unpair(uint i) {
+/*pair<uint, uint> unpair(uint i) {
     int y = (int) floor(0.5 * (sqrt(8.0 * i + 1.0) + 1.0));
     int x = (int) (0.5 * (y * y + y - 2 * i) - 1);
     return pair<uint, uint>{x, y};
-};
+};*/
 
 Hypothesis Extract(const vector<weak_ptr<LineWrap>> & sample, uint pairCount,
                    const vector<shared_ptr<Constraint>> & constraints) {

@@ -11,12 +11,9 @@
 using namespace std;
 
 using Hypothesis = vector<vector<BoolPlus>>;
-
-/*pair<uint, uint> unpair(uint i) {
-    int y = (int) floor(0.5 * (sqrt(8.0 * i + 1.0) + 1.0));
-    int x = (int) (0.5 * (y * y + y - 2 * i) - 1);
-    return pair<uint, uint>{x, y};
-};*/
+class LearningSystem {
+public:
+    LearningSystem() {}
 
 Hypothesis Extract(const vector<weak_ptr<LineWrap>> & sample, uint pairCount,
                    const vector<shared_ptr<Constraint>> & constraints) {
@@ -212,5 +209,5 @@ shared_ptr<Model> GenerateModel(
 
     return s;
 }
-
+};
 #endif //DEGREE_LEARNING_H

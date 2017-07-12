@@ -214,7 +214,8 @@ void TestGeneration() {
     auto posSamples = vector<vector<weak_ptr<LineWrap>>>{p0, p1, p2};
     auto negSamples = vector<vector<weak_ptr<LineWrap>>>{n0};
 
-    GenerateModel(posSamples, negSamples, constraints);
+    LearningSystem ls;
+    ls.GenerateModel(posSamples, negSamples, constraints);
 }
 
 void TestMatching() {

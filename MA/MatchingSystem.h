@@ -24,7 +24,7 @@ public:
     Matcher() {}
 
 
-    pair<weak_ptr<Vertex>, weak_ptr<Edge>> FindAtom(const SearchTree &tree) {
+    pair<weak_ptr<Vertex>, weak_ptr<Edge>> FindVertex(const SearchTree &tree) {
         int node = tree.size() - 1;
         auto &discarded = tree[node].discardedVertices;
         auto furthestPart = tree[0].vertex.lock()->involved[0];
@@ -189,7 +189,7 @@ public:
 
             auto nextAtom = weak_ptr<Vertex>{};
             auto nextPart = weak_ptr<Edge>{};
-            tie(nextAtom, nextPart) = FindAtom(match);
+            tie(nextAtom, nextPart) = FindVertex(match);
 
             auto wasPut = false;
             if (!nextPart.expired()) {

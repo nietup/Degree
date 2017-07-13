@@ -29,11 +29,11 @@ public:
         auto &discarded = tree[node].discardedVertices;
         auto furthestPart = tree[0].vertex.lock()->involved[0];
         for (; node >= 0; node--) {
-            auto &atom = *tree[node].vertex.lock();
+            auto &vertex = *tree[node].vertex.lock();
 
-            for (auto &part : atom.involved) {
+            for (auto &part : vertex.involved) {
                 auto atoms = part.lock().get()->vertices;
-                if (atoms.first.lock().get() == &atom) {
+                if (atoms.first.lock().get() == &vertex) {
                     if (atoms.second.lock().get()->asignment.expired()) {
                         if (!myContains<Vertex>(atoms.second, discarded)) {
                             furthestPart = part;
@@ -56,9 +56,9 @@ public:
 
 //is it so far consistent to match segment with vertex?
     pair<bool, weak_ptr<Edge>>
-    Consistent(const LineWrap &segment, const Vertex &atom,
+    Consistent(const LineWrap &segment, const Vertex &vertex,
                const Model &model) {
-        for (auto &part : atom.involved) {
+        for (auto &part : vertex.involved) {
             auto atoms = part.lock().get()->vertices;
 
             //if both vars in part are unassigned then it cannot be contradictory
@@ -81,7 +81,7 @@ public:
                 }
                 if (YES == part.lock()->constraints[i]) {
                     if (part.lock()->vertices.first.lock().get() ==
-                        const_cast<Vertex *>(&atom)) {
+                        const_cast<Vertex *>(&vertex)) {
                         if (threshold < model.constraints[i]->
                             operator()(segment, *otherSegment.lock())) {
                             return {false, part};
@@ -94,7 +94,7 @@ public:
                     }
                 } else if (NO == part.lock()->constraints[i]) {
                     if (part.lock()->vertices.first.lock().get() ==
-                        const_cast<Vertex *>(&atom)) {
+                        const_cast<Vertex *>(&vertex)) {
                         if (threshold > model.constraints[i]->
                             operator()(segment, *otherSegment.lock())) {
                             return {false, part};
@@ -140,13 +140,13 @@ public:
     pair<bool, weak_ptr<Edge>> Match(Model model,
                                      const vector<weak_ptr<LineWrap>> &segments) {
         //intro stuff
-        auto furthestPart = weak_ptr<Edge>{};
-        auto prevPart = weak_ptr<Edge>{};
+        auto furthestEdge = weak_ptr<Edge>{};
+        auto prevEdge = weak_ptr<Edge>{};
         auto furthestVector = vector<int>{};
-        auto partsMatched = vector<int>{};
-        auto AtomsSize = model.vertices.size();
-        auto PartsSize = model.edges.size();
-        if (!AtomsSize || !PartsSize)
+        auto edgesMatched = vector<int>{};
+        auto VerticesSize = model.vertices.size();
+        auto EdgesSize = model.edges.size();
+        if (!VerticesSize || !EdgesSize)
             return {false, weak_ptr<Edge>{}};
         model.vertices[0]->asignment = segments[0];
         segments[0].lock()->matched = true;
@@ -154,7 +154,7 @@ public:
 
         //main loop
         auto i = 1u;
-        while (i < AtomsSize) {
+        while (i < VerticesSize) {
             //if root didn't work out -- move to separate function later
             if (i == 0) {
                 //find next segment for root
@@ -175,11 +175,11 @@ public:
                 if (nextSegment.expired()) {
                     //if we have tried all segments as roots then it is non match
                     if (!furthestVector.empty()) {
-                        furthestPart =
+                        furthestEdge =
                             model.edges[furthestVector[furthestVector.size() -
                                                        1]];
                     }
-                    return {false, furthestPart};
+                    return {false, furthestEdge};
                 } else { //we found next segment for tree
                     match[0].vertex.lock()->asignment = nextSegment;
                     nextSegment.lock()->matched = true;
@@ -205,8 +205,8 @@ public:
                 //check if its already added and if it is not in matched prevs
                 if (furthestVector.end() ==
                     find(furthestVector.begin(), furthestVector.end(), npi)) {
-                    if (partsMatched.end() ==
-                        find(partsMatched.begin(), partsMatched.end(), npi)) {
+                    if (edgesMatched.end() ==
+                        find(edgesMatched.begin(), edgesMatched.end(), npi)) {
                         furthestVector.push_back(npi);
                         wasPut = true;
                     }
@@ -214,8 +214,8 @@ public:
             }
 
             if (nextAtom.expired()) {
-                if (furthestPart.expired()) {
-                    furthestPart = model.vertices[0]->involved[0];
+                if (furthestEdge.expired()) {
+                    furthestEdge = model.vertices[0]->involved[0];
                 }
                 if (i > 1) {
                     match[i - 2].discardedSegments.
@@ -244,8 +244,8 @@ public:
                         }
                         npi++;
                     }
-                    if (partsMatched.end() ==
-                        find(partsMatched.begin(), partsMatched.end(), npi)) {
+                    if (edgesMatched.end() ==
+                        find(edgesMatched.begin(), edgesMatched.end(), npi)) {
                         furthestVector.push_back(npi);
                     }
                 }
@@ -255,7 +255,7 @@ public:
             }
 
             if (wasPut) {
-                partsMatched.push_back(
+                edgesMatched.push_back(
                     furthestVector[furthestVector.size() - 1]);
                 furthestVector.pop_back();
                 wasPut = false;

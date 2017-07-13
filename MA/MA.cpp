@@ -5,6 +5,7 @@
 #include <ctime>
 #include <fstream>
 #include "Learning.h"
+#include "Cli.h"
 
 using namespace std;
 using namespace elsd;
@@ -321,7 +322,10 @@ void TestMatching() {
 
 int main() {
     //TestMatching();
-    TestGeneration();
+    //TestGeneration();
+
+    auto cli = Cli();
+    cli.Run();
 
 	return 0;
 }

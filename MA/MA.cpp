@@ -172,7 +172,6 @@ void TestGeneration() {
         ofs.close();
 
         //Create vector of wrapped segments
-        //TODO fix so there is no copy
         auto segsShared = vector<shared_ptr<LineWrap>>();
         for (const auto &line : lines)
             segsShared.push_back(make_shared<LineWrap>(line));
@@ -284,7 +283,6 @@ void TestMatching() {
     ofs.close();
 
     //Create vector of wrapped segments
-    //TODO fix so there is no copy
     auto segsShared = vector<shared_ptr<LineWrap>>();
     for (const auto &line : lines)
         segsShared.push_back(make_shared<LineWrap>(line));
@@ -293,7 +291,9 @@ void TestMatching() {
     for (const auto &line : segsShared)
         segments.push_back(weak_ptr<LineWrap>(line));
 
-    if (Match(model, segments).first)
+    auto matcher = Matcher();
+
+    if (matcher.Match(model, segments).first)
         for (auto &a : model.vertices) {
             cout << " <-> ("
                  << a.get()->asignment.lock().get()->start.first << ", "

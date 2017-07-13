@@ -107,6 +107,7 @@ shared_ptr<Model> GenerateModel(
 
     auto s = make_shared<Model>(Model{parts, atoms, constraints});
 
+    auto matcher = Matcher();
 
     auto g = Hypothesis{};
     for (auto i = 0; i < pairCount; i++) {
@@ -120,7 +121,7 @@ shared_ptr<Model> GenerateModel(
         //New matching done here
         auto isMatched = bool{};
         auto furthestPart = weak_ptr<Edge>{};
-        tie(isMatched, furthestPart) = Match(*s, sample);
+        tie(isMatched, furthestPart) = matcher.Match(*s, sample);
         //reset assignments in vertices
         for (auto & a : s.get()->vertices) {
             a.get()->asignment.reset();
@@ -128,7 +129,7 @@ shared_ptr<Model> GenerateModel(
         while (!isMatched) {
             //generalize and match again
             Generalize(furthestPart.lock().get(), sample, constraints);
-            tie(isMatched, furthestPart) = Match(*s, sample);
+            tie(isMatched, furthestPart) = matcher.Match(*s, sample);
         }
     }
 

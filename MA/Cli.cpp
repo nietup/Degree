@@ -4,97 +4,6 @@
 
 #include "Cli.h"
 
-void Cli::Run() {
-    SelectMode();
-    SelectModel();
-    ShowModel();
-
-    if (mode == TEST) {
-        SelectTestingSamples();
-        Test();
-    }
-    else if (mode == LEARN) {
-        SelectLearningSamples();
-        Learn();
-        SaveModel();
-    }
-}
-
-void Cli::SelectMode() {
-    cout << "\nProsze wybrac tryb dzialania programu:" << endl
-         << "(1) Testowanie modelu" << endl
-         << "(2) Trenowanie modelu" << endl;
-
-    int response = -1;
-
-    while (1 != response and 2 != response) {
-        cin >> response;
-
-        if (1 == response) {
-            mode = TEST;
-        }
-        if (2 == response) {
-            mode = LEARN;
-        }
-    }
-}
-
-void Cli::SelectModel() {
-    cout << "\nProsze wprowadzic sciezke do modelu lub wpisac 'nowy':\n";
-    string response;
-    cin >> response;
-
-    if (response == "nowy") {
-        CreateModel();
-    }
-    else {
-        pathToModel = response;
-        LoadModel();
-    }
-}
-
-void Cli::ShowModel() {
-    cout << "\nModel:\n";
-}
-
-void Cli::SelectLearningSamples() {
-    cout << "\nProsze wprowadzic sciezke folderu z pozytywnymi przykladami uczacymi:\n";
-    string response;
-    cin >> response;
-    pathToPos = response;
-
-    cout << "\nProsze wprowadzic sciezke folderu z negatywnymi przykladami uczacymi:\n";
-    cin >> response;
-    pathToNeg = response;
-}
-
-void Cli::SelectTestingSamples() {
-    cout << "\nProsze wprowadzic sciezke folderu z przykladami testowymi:\n";
-    string response;
-    cin >> response;
-    pathToTest = response;
-}
-
-void Cli::SaveModel() {
-    cout << "\nModel zapisano do:";
-}
-
-void Cli::Test() {
-
-}
-
-void Cli::Learn() {
-
-}
-
-void Cli::CreateModel() {
-
-}
-
-void Cli::LoadModel() {
-
-}
-
 //-----------------------------------------------------------------------------
 void TestGeneration() {
     //function scoring size match
@@ -304,6 +213,7 @@ void TestGeneration() {
     ls.GenerateModel(posSamples, negSamples, constraints);
 }
 
+//-----------------------------------------------------------------------------
 void TestMatching() {
     auto sizeMatch = [](const LineWrap &a,
                         const LineWrap &b) {
@@ -405,4 +315,122 @@ void TestMatching() {
         cout << "Non match" << endl;
     }
 }
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
 
+
+//-----------------------------------------------------------------------------
+void Cli::Run() {
+    SelectMode();
+    SelectModel();
+    ShowModel();
+
+    if (mode == TEST) {
+        SelectTestingSamples();
+        Test();
+    }
+    else if (mode == LEARN) {
+        SelectLearningSamples();
+        Learn();
+        SaveModel();
+    }
+}
+
+//-----------------------------------------------------------------------------
+void Cli::SelectMode() {
+    cout << "\nProsze wybrac tryb dzialania programu:" << endl
+         << "(1) Testowanie modelu" << endl
+         << "(2) Trenowanie modelu" << endl;
+
+    int response = -1;
+
+    while (1 != response and 2 != response) {
+        cin >> response;
+
+        if (1 == response) {
+            mode = TEST;
+        }
+        if (2 == response) {
+            mode = LEARN;
+        }
+    }
+}
+
+//-----------------------------------------------------------------------------
+void Cli::SelectModel() {
+    if (mode == LEARN)
+        cout << "\nProsze wprowadzic sciezke do modelu lub wpisac 'nowy':\n";
+    else
+        cout << "\nProsze wprowadzic sciezke do modelu:\n";
+
+    string response;
+    cin >> response;
+
+    if (response == "nowy") {
+        CreateModel();
+    }
+    else {
+        pathToModel = response;
+        LoadModel();
+    }
+}
+
+//-----------------------------------------------------------------------------
+void Cli::ShowModel() {
+    cout << "\nModel:\n";
+    //TODO wypisac model
+}
+
+//-----------------------------------------------------------------------------
+void Cli::SelectLearningSamples() {
+    cout << "\nProsze wprowadzic sciezke folderu z pozytywnymi przykladami uczacymi:\n";
+    string response;
+    cin >> response;
+    pathToPos = response;
+
+    cout << "\nProsze wprowadzic sciezke folderu z negatywnymi przykladami uczacymi:\n";
+    cin >> response;
+    pathToNeg = response;
+    //TODO wczytac probki do wektora
+}
+
+//-----------------------------------------------------------------------------
+void Cli::SelectTestingSamples() {
+    cout << "\nProsze wprowadzic sciezke folderu z przykladami testowymi:\n";
+    string response;
+    cin >> response;
+    pathToTest = response;
+    //TODO wczytac probki do wektora
+}
+
+//-----------------------------------------------------------------------------
+void Cli::SaveModel() {
+    cout << "\nModel zapisano do:";
+    //TODO zapisac model
+}
+
+//-----------------------------------------------------------------------------
+void Cli::Test() {
+    TestMatching();
+    //TODO
+}
+
+//-----------------------------------------------------------------------------
+void Cli::Learn() {
+    TestGeneration();
+    //TODO
+}
+
+//-----------------------------------------------------------------------------
+void Cli::CreateModel() {
+    cout << "\nPodaj sciezke zapisu nowego modelu:\n";
+    string response;
+    cin >> response;
+    pathToModel = response;
+}
+
+//-----------------------------------------------------------------------------
+void Cli::LoadModel() {
+    //TODO wczytac model z pathToModel
+}

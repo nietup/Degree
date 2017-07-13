@@ -28,6 +28,7 @@ public:
         int node = tree.size() - 1;
         auto &discarded = tree[node].discardedVertices;
         auto furthestPart = tree[0].vertex.lock()->involved[0];
+        auto util = Utilities();
         for (; node >= 0; node--) {
             auto &vertex = *tree[node].vertex.lock();
 
@@ -35,14 +36,14 @@ public:
                 auto atoms = part.lock().get()->vertices;
                 if (atoms.first.lock().get() == &vertex) {
                     if (atoms.second.lock().get()->asignment.expired()) {
-                        if (!myContains<Vertex>(atoms.second, discarded)) {
+                        if (!util.myContains<Vertex>(atoms.second, discarded)) {
                             furthestPart = part;
                             return {atoms.second, weak_ptr<Edge>(furthestPart)};
                         }
                     }
                 } else {
                     if (atoms.first.lock().get()->asignment.expired()) {
-                        if (!myContains<Vertex>(atoms.first, discarded)) {
+                        if (!util.myContains<Vertex>(atoms.first, discarded)) {
                             furthestPart = part;
                             return {atoms.first, weak_ptr<Edge>(furthestPart)};
                         }
@@ -116,10 +117,12 @@ public:
         const vector<weak_ptr<LineWrap>> &segments,
         vector<weak_ptr<LineWrap>> &discarded,
         const Vertex &atom, const Model &model) {
+
+        auto util = Utilities();
         auto furthestPart = weak_ptr<Edge>{};
         for (auto &segment : segments) {
             if (!segment.lock().get()->matched) {
-                if (!myContains<LineWrap>(segment, discarded)) {
+                if (!util.myContains<LineWrap>(segment, discarded)) {
                     auto consistent = bool{};
                     tie(consistent, furthestPart) =
                         Consistent(*segment.lock().get(), atom, model);

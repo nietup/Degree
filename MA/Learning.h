@@ -21,9 +21,10 @@ Hypothesis Extract(const vector<weak_ptr<LineWrap>> & sample, uint pairCount,
     auto constraintCount = constraints.size();
     auto hypothesis = Hypothesis(pairCount, vector<BoolPlus>(constraintCount,
                                                              NO));
+    auto util = Utilities();
 
     for(auto i = 0; i < pairCount; i++) {
-        auto segsPair = unpair(i);
+        auto segsPair = util.unpair(i);
         for (auto j = 0; j < constraintCount; j++) {
             if (threshold > constraints[j]->operator()(
                 *sample[segsPair.first].lock(),
@@ -80,6 +81,7 @@ shared_ptr<Model> GenerateModel(
     const auto atomCount = positiveSamples[0].size();
     const auto pairCount = (uint)(0.5*atomCount*(atomCount-1));
     const auto constraintCount = constraints.size();
+    auto util = Utilities();
 
     //creation of first hypothesis
     //S must be initialized by first positive sample
@@ -98,7 +100,7 @@ shared_ptr<Model> GenerateModel(
     for (auto i = 0; i < pairCount; i++) {
         parts.push_back(make_shared<Edge>(Edge{}));
         parts[i]->constraints = sExtract[i];
-        auto atomsI = unpair(i);
+        auto atomsI = util.unpair(i);
         parts[i]->vertices = {weak_ptr<Vertex>{atoms[atomsI.first]},
                            weak_ptr<Vertex>{atoms[atomsI.second]}};
         atoms[atomsI.first]->involved.push_back(weak_ptr<Edge>{parts[i]});

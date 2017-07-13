@@ -4,6 +4,16 @@
 
 #ifndef DEGREE_CLI_H
 #define DEGREE_CLI_H
+#include <vector>
+#include <cmath>
+#include <cstdlib>
+#include <ctime>
+#include <fstream>
+#include <iostream>
+#include "Learning.h"
+
+using namespace std;
+using namespace elsd;
 
 class Cli {
 public:
@@ -17,10 +27,16 @@ public:
     void Test();
     void Learn();
     void CreateModel();
+    void LoadModel();
 
 private:
     enum Mode {TEST, LEARN};
     Mode mode;
+    string pathToModel;
+    string pathToPos;
+    string pathToNeg;
+    string pathToTest;
+    Model model;
 };
 
 

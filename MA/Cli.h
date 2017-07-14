@@ -37,6 +37,9 @@ private:
     string pathToNeg;
     string pathToTest;
     Model model;
+    vector<vector<weak_ptr<LineWrap>>> testingSamples;
+    vector<vector<weak_ptr<LineWrap>>> posSamples;
+    vector<vector<weak_ptr<LineWrap>>> negSamples;
 };
 
 

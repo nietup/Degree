@@ -107,7 +107,6 @@ void TestMatching() {
     }
 }
 
-
 //-----------------------------------------------------------------------------
 void Cli::Run() {
     SelectMode();
@@ -167,7 +166,31 @@ void Cli::SelectModel() {
 //-----------------------------------------------------------------------------
 void Cli::ShowModel() {
     cout << "\nModel:\n";
-    //TODO wypisac model
+    for (auto & edge : model.edges) {
+        //get indices of vertices
+        auto index = 0;
+        auto verticesNo = model.vertices.size();
+        for (; index < verticesNo; index++) {
+            if (model.vertices[index] == edge->vertices.first.lock()) {
+                break;
+            }
+        }
+
+        cout << index << ";";
+
+        index = 0;
+        for (; index < verticesNo; index++) {
+            if (model.vertices[index] == edge->vertices.second.lock()) {
+                break;
+            }
+        }
+
+        cout << index << ";";
+
+        for (auto & cons : edge->constraints) {
+            cout << cons << ";";
+        }
+    }
 }
 
 //-----------------------------------------------------------------------------
@@ -190,14 +213,20 @@ void Cli::SelectTestingSamples() {
     cin >> response;
     pathToTest = response;
     //TODO wczytac probki do wektora
+
+    //create vector of files
+
+    //foreach file
+
+        //elsd file
+
+        //put segments to vec
 }
 
 //-----------------------------------------------------------------------------
 void Cli::SaveModel() {
     string outFile = pathToModel;
     ofstream ofs(outFile, ofstream::out);
-
-    auto edgesNo = model.edges.size();
 
     for (auto & edge : model.edges) {
         //get indices of vertices
@@ -227,7 +256,7 @@ void Cli::SaveModel() {
 
     ofs.close();
 
-    cout << "\nModel zapisano do:";
+    cout << "\nModel zapisano do: " << pathToModel;
 }
 
 //-----------------------------------------------------------------------------
@@ -402,9 +431,11 @@ void Cli::CreateModel() {
     string response;
     cin >> response;
     pathToModel = response;
+
+    model = Model();
 }
 
 //-----------------------------------------------------------------------------
 void Cli::LoadModel() {
-    //TODO wczytac model z pathToModel
+    //TODO later wczytac model z pathToModel
 }

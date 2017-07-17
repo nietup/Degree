@@ -108,6 +108,58 @@ void TestMatching() {
 }
 
 //-----------------------------------------------------------------------------
+Cli::Cli() {
+    //sample model
+    auto sizeMatch = [](const LineWrap &a,
+                        const LineWrap &b) {
+        double lenA = a.Length(),
+            lenB = b.Length();
+        return lenA < lenB ? 1 - (lenA / lenB) : 1 - (lenB / lenA);
+    };
+
+    auto angle60 = [](const LineWrap &a,
+                      const LineWrap &b) {
+        return 2 * abs(0.5 - abs(a.GetCos(b)));
+    };
+
+    auto adjacent = [](const LineWrap &a,
+                       const LineWrap &b) {
+        double d = a.Distance(b);
+        return d / (d + 300);
+    };
+
+    auto model = Model{};
+
+    auto a1 = make_shared<Vertex>(Vertex{});
+    auto a2 = make_shared<Vertex>(Vertex{});
+    auto a3 = make_shared<Vertex>(Vertex{});
+
+    model.constraints = vector<shared_ptr<Constraint>>(3);
+    model.constraints[0] = make_shared<Constraint>(angle60);
+    model.constraints[1] = make_shared<Constraint>(adjacent);
+    model.constraints[2] = make_shared<Constraint>(sizeMatch);
+
+    auto p1 = make_shared<Edge>(Edge{{a1, a2}, {YES, YES, YES}});
+    auto p2 = make_shared<Edge>(Edge{{a1, a3}, {YES, YES, YES}});
+    auto p3 = make_shared<Edge>(Edge{{a2, a3}, {YES, YES, YES}});
+
+    a1.get()->involved.push_back(weak_ptr<Edge>(p1));
+    a1.get()->involved.push_back(weak_ptr<Edge>(p2));
+    a2.get()->involved.push_back(weak_ptr<Edge>(p1));
+    a2.get()->involved.push_back(weak_ptr<Edge>(p3));
+    a3.get()->involved.push_back(weak_ptr<Edge>(p2));
+    a3.get()->involved.push_back(weak_ptr<Edge>(p3));
+
+    model.vertices.push_back(a1);
+    model.vertices.push_back(a2);
+    model.vertices.push_back(a3);
+
+    model.edges.push_back(p1);
+    model.edges.push_back(p2);
+    model.edges.push_back(p3);
+}
+
+//-----------------------------------------------------------------------------
 void Cli::Run() {
     SelectMode();
     SelectModel();
@@ -212,15 +264,32 @@ void Cli::SelectTestingSamples() {
     string response;
     cin >> response;
     pathToTest = response;
-    //TODO wczytac probki do wektora
 
-    //create vector of files
+    /*//create vector of files
+    auto files = vector<string>();
+    GetFilesInDirectory(files, pathToTest);*/
 
-    //foreach file
+    //for (auto inFile : files) {
+        //cout << "\nPlik " << inFile;
+        ImageInterface::Ptr image(new ElsdPgmFileReader(pathToTest));
+        ShapesDetectorInterface::Ptr detector(new ElsDetector());
+        detector->run(image);
 
-        //elsd file
+        const vector<LineSegment> &lines = detector->getLineSegments();
+        string outFile = pathToTest + ".svg";
+        SvgWriterInterface::Ptr svg(new ElsdSvgWriter);
+        svg->setImageSize(image->xsize(), image->ysize());
+        svg->addLineSegments(lines.begin(), lines.end());
+        ofstream ofs(outFile, ofstream::out);
+        ofs << *svg
+            << "</svg>";
+        ofs.close();
 
-        //put segments to vec
+        //Create vector of wrapped segments
+        testingSamples.push_back(vector<shared_ptr<LineWrap>>());
+        for (const auto &line : lines)
+            testingSamples[0].push_back(make_shared<LineWrap>(line));
+    //}
 }
 
 //-----------------------------------------------------------------------------
@@ -261,8 +330,36 @@ void Cli::SaveModel() {
 
 //-----------------------------------------------------------------------------
 void Cli::Test() {
-    TestMatching();
-    //TODO
+    auto segments = vector<weak_ptr<LineWrap>>();
+    for (const auto &line : testingSamples[0])
+        segments.push_back(weak_ptr<LineWrap>(line));
+
+    auto matcher = Matcher();
+
+    if (matcher.Match(model, segments).first)
+        for (auto &a : model.vertices) {
+            cout << " <-> ("
+                 << a.get()->asignment.lock().get()->start.first << ", "
+                 << a.get()->asignment.lock().get()->start.second << ") ("
+                 << a.get()->asignment.lock().get()->end.first << ", "
+                 << a.get()->asignment.lock().get()->end.second << ")"
+                 << endl;
+
+            /*auto detection = vector<LineSegment>();
+            for (auto &a : model.vertices)
+                detection.push_back(a->asignment.lock()->GetLineSegment());
+
+            string detectionFile = pathToTest + ".detection.svg";
+            SvgWriterInterface::Ptr svg2(new ElsdSvgWriter);
+            svg2->setImageSize(image->xsize(), image->ysize());
+            svg2->addLineSegments(detection.begin(), detection.end());
+            ofs.open(detectionFile);
+            ofs << *svg2 << "</svg>";
+            ofs.close();*/
+        }
+    else {
+        cout << "\nNon match" << endl;
+    }
 }
 
 //-----------------------------------------------------------------------------
@@ -438,4 +535,34 @@ void Cli::CreateModel() {
 //-----------------------------------------------------------------------------
 void Cli::LoadModel() {
     //TODO later wczytac model z pathToModel
+}
+
+//-----------------------------------------------------------------------------
+void Cli::GetFilesInDirectory(std::vector<string> &out,
+    const string &directory) {
+
+    DIR *dir;
+    class dirent *ent;
+    class stat st;
+
+    dir = opendir(directory.c_str());
+    while ((ent = readdir(dir)) != NULL) {
+        const string file_name = ent->d_name;
+        const string full_file_name = directory + "/" + file_name;
+
+        if (file_name[0] == '.')
+            continue;
+
+        if (stat(full_file_name.c_str(), &st) == -1)
+            continue;
+
+        const bool is_directory = (st.st_mode & S_IFDIR) != 0;
+
+        if (is_directory)
+            continue;
+
+        out.push_back(full_file_name);
+    }
+    closedir(dir);
+
 }

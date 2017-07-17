@@ -10,6 +10,8 @@
 #include <ctime>
 #include <fstream>
 #include <iostream>
+#include <dirent.h>
+#include <sys/stat.h>
 #include "Learning.h"
 
 using namespace std;
@@ -17,6 +19,7 @@ using namespace elsd;
 
 class Cli {
 public:
+    Cli();
     void Run();
     void SelectMode();
     void SelectModel();
@@ -28,6 +31,8 @@ public:
     void Learn();
     void CreateModel();
     void LoadModel();
+    void GetFilesInDirectory(std::vector<string> &out,
+        const string &directory);
 
 private:
     enum Mode {TEST, LEARN};
@@ -37,9 +42,9 @@ private:
     string pathToNeg;
     string pathToTest;
     Model model;
-    vector<vector<weak_ptr<LineWrap>>> testingSamples;
-    vector<vector<weak_ptr<LineWrap>>> posSamples;
-    vector<vector<weak_ptr<LineWrap>>> negSamples;
+    vector<vector<shared_ptr<LineWrap>>> testingSamples;
+    vector<vector<shared_ptr<LineWrap>>> posSamples;
+    vector<vector<shared_ptr<LineWrap>>> negSamples;
 };
 
 

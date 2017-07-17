@@ -34,7 +34,6 @@ public:
     void GetFilesInDirectory(std::vector<string> &out,
         const string &directory);
 
-private:
     enum Mode {TEST, LEARN};
     Mode mode;
     string pathToModel;

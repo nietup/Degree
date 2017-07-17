@@ -112,8 +112,9 @@ Cli::Cli() {
     //sample model
     auto sizeMatch = [](const LineWrap &a,
                         const LineWrap &b) {
-        double lenA = a.Length(),
-            lenB = b.Length();
+        double lenA = a.Length();
+        double lenB = b.Length();
+        cout << (lenA < lenB ? 1 - (lenA / lenB) : 1 - (lenB / lenA)) << "\n";
         return lenA < lenB ? 1 - (lenA / lenB) : 1 - (lenB / lenA);
     };
 
@@ -128,16 +129,16 @@ Cli::Cli() {
         return d / (d + 300);
     };
 
-    auto model = Model{};
+    //auto model = Model{};
 
     auto a1 = make_shared<Vertex>(Vertex{});
     auto a2 = make_shared<Vertex>(Vertex{});
     auto a3 = make_shared<Vertex>(Vertex{});
 
-    model.constraints = vector<shared_ptr<Constraint>>(3);
-    model.constraints[0] = make_shared<Constraint>(angle60);
-    model.constraints[1] = make_shared<Constraint>(adjacent);
-    model.constraints[2] = make_shared<Constraint>(sizeMatch);
+    model.constraints = vector<shared_ptr<Constraint>>();
+    model.constraints.push_back(make_shared<Constraint>(angle60));
+    model.constraints.push_back(make_shared<Constraint>(adjacent));
+    model.constraints.push_back(make_shared<Constraint>(sizeMatch));
 
     auto p1 = make_shared<Edge>(Edge{{a1, a2}, {YES, YES, YES}});
     auto p2 = make_shared<Edge>(Edge{{a1, a3}, {YES, YES, YES}});
@@ -228,7 +229,7 @@ void Cli::ShowModel() {
             }
         }
 
-        cout << index << ";";
+        cout << index << ",";
 
         index = 0;
         for (; index < verticesNo; index++) {
@@ -240,8 +241,9 @@ void Cli::ShowModel() {
         cout << index << ";";
 
         for (auto & cons : edge->constraints) {
-            cout << cons << ";";
+            cout << cons << ",";
         }
+        cout << "\n";
     }
 }
 
@@ -260,7 +262,7 @@ void Cli::SelectLearningSamples() {
 
 //-----------------------------------------------------------------------------
 void Cli::SelectTestingSamples() {
-    cout << "\nProsze wprowadzic sciezke folderu z przykladami testowymi:\n";
+    cout << "\nProsze wprowadzic sciezke przykladu testowego:\n";
     string response;
     cin >> response;
     pathToTest = response;
@@ -307,7 +309,7 @@ void Cli::SaveModel() {
             }
         }
 
-        ofs << index << ";";
+        ofs << index << ",";
 
         index = 0;
         for (; index < verticesNo; index++) {
@@ -319,8 +321,9 @@ void Cli::SaveModel() {
         ofs << index << ";";
 
         for (auto & cons : edge->constraints) {
-            ofs << cons << ";";
+            ofs << cons << ",";
         }
+        ofs << "\n";
     }
 
     ofs.close();
@@ -336,7 +339,7 @@ void Cli::Test() {
 
     auto matcher = Matcher();
 
-    if (matcher.Match(model, segments).first)
+    if (matcher.Match(model, segments).first) {
         for (auto &a : model.vertices) {
             cout << " <-> ("
                  << a.get()->asignment.lock().get()->start.first << ", "
@@ -357,6 +360,7 @@ void Cli::Test() {
             ofs << *svg2 << "</svg>";
             ofs.close();*/
         }
+    }
     else {
         cout << "\nNon match" << endl;
     }

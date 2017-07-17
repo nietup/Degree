@@ -34,6 +34,7 @@ public:
     void GetFilesInDirectory(std::vector<string> &out,
         const string &directory);
 
+private:
     enum Mode {TEST, LEARN};
     Mode mode;
     string pathToModel;
@@ -44,6 +45,9 @@ public:
     vector<vector<shared_ptr<LineWrap>>> testingSamples;
     vector<vector<shared_ptr<LineWrap>>> posSamples;
     vector<vector<shared_ptr<LineWrap>>> negSamples;
+    int xsize;
+    int ysize;
+    std::vector<std::shared_ptr<Constraint>> constraints;
 };
 
 

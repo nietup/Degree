@@ -76,7 +76,8 @@ void Generalize(Edge * furthestPart,
 shared_ptr<Model> GenerateModel(
     const vector<vector<weak_ptr<LineWrap>>> & positiveSamples,
     const vector<vector<weak_ptr<LineWrap>>> & negativeSamples,
-    const vector<shared_ptr<Constraint>> & constraints) {
+    const vector<shared_ptr<Constraint>> & constraints,
+    Model model) {
 
     const auto atomCount = positiveSamples[0].size();
     const auto pairCount = (uint)(0.5*atomCount*(atomCount-1));
@@ -192,7 +193,7 @@ shared_ptr<Model> GenerateModel(
         g = extract;
     }
 
-    cout << "S: \n";
+    /*cout << "S: \n";
     for (auto & pair : s->edges) {
         for (auto & field : pair->constraints) {
             cout << field << " ";
@@ -208,7 +209,7 @@ shared_ptr<Model> GenerateModel(
             cout << endl;
         }
         cout << endl;
-
+    */
 
     return s;
 }

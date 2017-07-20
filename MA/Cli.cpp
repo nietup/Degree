@@ -367,15 +367,14 @@ void Cli::Test() {
 //-----------------------------------------------------------------------------
 void Cli::Learn() {
     auto modelConstraints = vector<shared_ptr<Constraint>>();
-    modelConstraints.push_back(constraints[0]);
-    //modelConstraints.push_back(constraints[2]);
-    //modelConstraints.push_back(constraints[3]);
-    //modelConstraints.push_back(constraints[4]);
-    //modelConstraints.push_back(constraints[5]);
-    //modelConstraints.push_back(constraints[6]);
-    //modelConstraints.push_back(constraints[7]);
-    //modelConstraints.push_back(constraints[8]);
-    //modelConstraints.push_back(constraints[9]);
+
+    if (!constraintArray.size()) {
+        cout << "\nBledny model, constraint array puste.";
+    }
+
+    for (auto i : constraintArray) {
+        modelConstraints.push_back(constraints[i]);
+    }
 
     auto wPosSamples = vector<vector<weak_ptr<LineWrap>>>();
     auto wNegSamples = vector<vector<weak_ptr<LineWrap>>>();

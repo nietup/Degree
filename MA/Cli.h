@@ -48,6 +48,9 @@ private:
     int xsize;
     int ysize;
     std::vector<std::shared_ptr<Constraint>> constraints;
+    //array telling which constraints should be
+    //used in model
+    vector<int> constraintArray;
 };
 
 

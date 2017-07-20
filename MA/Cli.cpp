@@ -110,6 +110,8 @@ Cli::Cli() {
     auto a2 = make_shared<Vertex>(Vertex{});
     auto a3 = make_shared<Vertex>(Vertex{});
 
+    constraintArray = {0, 1, 2};
+
     model.constraints = vector<shared_ptr<Constraint>>();
     model.constraints.push_back(constraints[0]);
     model.constraints.push_back(constraints[1]);
@@ -309,6 +311,11 @@ void Cli::SaveModel() {
     string outFile = pathToModel;
     ofstream ofs(outFile, ofstream::out);
 
+    for (auto i : constraintArray) {
+        ofs << i << " ";
+    }
+    ofs << "\n";
+
     for (auto & edge : model.edges) {
         //get indices of vertices
         auto index = 0;
@@ -319,7 +326,7 @@ void Cli::SaveModel() {
             }
         }
 
-        ofs << index << ",";
+        ofs << index << " ";
 
         index = 0;
         for (; index < verticesNo; index++) {
@@ -328,10 +335,10 @@ void Cli::SaveModel() {
             }
         }
 
-        ofs << index << ";";
+        ofs << index << " ";
 
         for (auto & cons : edge->constraints) {
-            ofs << cons << ",";
+            ofs << cons << " ";
         }
         ofs << "\n";
     }
@@ -406,11 +413,34 @@ void Cli::CreateModel() {
     pathToModel = response;
 
     model = Model();
+    constraintArray.clear();
+
+    cout << "Wybierz ograniczenia:\n"
+        << "(0) podobny rozmiar\n"
+        << "(1) kat 60 stopni\n"
+        << "(2) przystawanie\n"
+        << "(3) prostopadly\n"
+        << "(4) rownowlegly\n"
+        << "(5) nie rownolegly\n"
+        << "(6) daleki\n"
+        << "(7) przystawanie do poczatku\n"
+        << "(8) przystawanie do konca\n"
+        << "(9) przystawanie wierzcholkow\n";
+
+    cin >> response;
+    for (auto c : response) {
+        constraintArray.push_back(c-'0');
+    }
 }
 
 //-----------------------------------------------------------------------------
 void Cli::LoadModel() {
-    //TODO later wczytac model z pathToModel
+    ifstream infile (pathToModel);
+
+    string line;
+    while (getline(infile, line)) {
+        ;
+    }
 }
 
 //-----------------------------------------------------------------------------

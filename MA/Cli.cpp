@@ -266,7 +266,7 @@ void Cli::SelectLearningSamples() {
     auto l33 = make_shared<LineWrap>(LineWrap{{0,0},{50,50}});
     auto n0 = vector<shared_ptr<LineWrap>>{l30, l31, l32, l33};
 
-    posSamples = vector<vector<shared_ptr<LineWrap>>>{p0, p1, p2};
+    posSamples = vector<vector<shared_ptr<LineWrap>>>{p1, p2};
     negSamples = vector<vector<shared_ptr<LineWrap>>>{n0};
 }
 

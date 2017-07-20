@@ -84,31 +84,38 @@ shared_ptr<Model> GenerateModel(
     const auto constraintCount = constraints.size();
     auto util = Utilities();
 
-    //creation of first hypothesis
-    //S must be initialized by first positive sample
-    auto sExtract = Extract(positiveSamples[0], pairCount, constraints);
+    auto s = shared_ptr<Model>{};
 
-    //make vector of vertices
-    auto atoms = vector<shared_ptr<Vertex>>();
-    for (auto i = 0; i < atomCount; i++) {
-        atoms.push_back(make_shared<Vertex>(Vertex{}));
+    if (model.constraints.size()) {
+        s = make_shared<Model>(model);
     }
+    else {
+        //creation of first hypothesis
+        //S must be initialized by first positive sample
+        auto sExtract = Extract(positiveSamples[0], pairCount, constraints);
 
-    //make vector of edges
-    auto parts = vector<shared_ptr<Edge>>();
+        //make vector of vertices
+        auto atoms = vector<shared_ptr<Vertex>>();
+        for (auto i = 0; i < atomCount; i++) {
+            atoms.push_back(make_shared<Vertex>(Vertex{}));
+        }
 
-    //connects edges with vertices
-    for (auto i = 0; i < pairCount; i++) {
-        parts.push_back(make_shared<Edge>(Edge{}));
-        parts[i]->constraints = sExtract[i];
-        auto atomsI = util.unpair(i);
-        parts[i]->vertices = {weak_ptr<Vertex>{atoms[atomsI.first]},
-                           weak_ptr<Vertex>{atoms[atomsI.second]}};
-        atoms[atomsI.first]->involved.push_back(weak_ptr<Edge>{parts[i]});
-        atoms[atomsI.second]->involved.push_back(weak_ptr<Edge>{parts[i]});
+        //make vector of edges
+        auto parts = vector<shared_ptr<Edge>>();
+
+        //connects edges with vertices
+        for (auto i = 0; i < pairCount; i++) {
+            parts.push_back(make_shared<Edge>(Edge{}));
+            parts[i]->constraints = sExtract[i];
+            auto atomsI = util.unpair(i);
+            parts[i]->vertices = {weak_ptr<Vertex>{atoms[atomsI.first]},
+                                  weak_ptr<Vertex>{atoms[atomsI.second]}};
+            atoms[atomsI.first]->involved.push_back(weak_ptr<Edge>{parts[i]});
+            atoms[atomsI.second]->involved.push_back(weak_ptr<Edge>{parts[i]});
+        }
+
+        s = make_shared<Model>(Model{parts, atoms, constraints});
     }
-
-    auto s = make_shared<Model>(Model{parts, atoms, constraints});
 
     auto matcher = Matcher();
 

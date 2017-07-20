@@ -438,7 +438,11 @@ void Cli::CreateModel() {
 void Cli::LoadModel() {
     ifstream infile (pathToModel);
 
+    model = Model();
     constraintArray.clear();
+
+    auto constraintOfEdges = vector<vector<BoolPlus>>{};
+    auto verticesNo = int{};
 
     string line;
     while (getline(infile, line)) {
@@ -450,12 +454,67 @@ void Cli::LoadModel() {
             while (iss >> i) {
                 constraintArray.push_back(i);
             }
+            continue;
         }
         if (!constraintArray.size()) {
             cout << "\nBledny plik";
         }
+        else {
+            //get constraints of all edges
+            auto v1 = int{};
+            auto v2 = int{};
 
-        //get rest from the rest TODO
+            iss >> v1 >> v2;
+            verticesNo = v2 + 1;
+
+            auto constraints = vector<BoolPlus>{};
+            auto i = int{};
+            while (iss >> i) {
+                switch (i) {
+                    case 0:
+                        constraints.push_back(NO);
+                        break;
+                    case 1:
+                        constraints.push_back(YES);
+                        break;
+                    case 2:
+                        constraints.push_back(DNC);
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            constraintOfEdges.push_back(constraints);
+        }
+    }
+
+    //create vertices
+    for (auto i = 0; i < verticesNo; i++) {
+        model.vertices.push_back(make_shared<Vertex>(Vertex{}));
+    }
+
+    //create edges and connect them to vertices and give constraints
+    Utilities u;
+
+    auto constraintOfEdgesSize = constraintOfEdges.size();
+    for (auto i = 0; i < constraintOfEdgesSize; i++) {
+        auto e = Edge{};
+        auto vi = u.unpair(i);
+        e.vertices = {weak_ptr<Vertex>(model.vertices[vi.first]),
+                      weak_ptr<Vertex>(model.vertices[vi.second])};
+        e.constraints = constraintOfEdges[i];
+        model.edges.push_back(make_shared<Edge>(e));
+
+        //connect vertices to edges
+        auto weakEdge = weak_ptr<Edge>{model.edges[i]};
+        model.vertices[vi.first]->involved.push_back(weakEdge);
+        model.vertices[vi.second]->involved.push_back(weakEdge);
+    }
+
+    //put constraints in model
+    for (auto i : constraintArray) {
+        model.constraints.push_back(constraints[i]);
     }
 }
 

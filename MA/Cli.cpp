@@ -237,12 +237,9 @@ void Cli::SelectLearningSamples() {
         << "uczacymi:\n";
     cin >> response;
     pathToNeg = response;
-    //TODO wczytac probki do wektora
-    //przyjmujemy, ze przyklady uczace to juz zsegmentowane pliki, ze wzgledu na
-    //to, ze pakiet elsd powoduje segfault przy wiecej niz jednym obrazie
 
     //placeholder
-    auto l00 = make_shared<LineWrap>(LineWrap{{0,0},{100,0}});
+    /*auto l00 = make_shared<LineWrap>(LineWrap{{0,0},{100,0}});
     auto l01 = make_shared<LineWrap>(LineWrap{{100,100},{100,0}});
     auto l02 = make_shared<LineWrap>(LineWrap{{0,0},{0,100}});
     auto l03 = make_shared<LineWrap>(LineWrap{{0,100},{100,100}});
@@ -266,8 +263,55 @@ void Cli::SelectLearningSamples() {
     auto l33 = make_shared<LineWrap>(LineWrap{{0,0},{50,50}});
     auto n0 = vector<shared_ptr<LineWrap>>{l30, l31, l32, l33};
 
-    posSamples = vector<vector<shared_ptr<LineWrap>>>{p1, p2};
-    negSamples = vector<vector<shared_ptr<LineWrap>>>{n0};
+    posSamples = vector<vector<shared_ptr<LineWrap>>>{p0, p1, p2};
+    negSamples = vector<vector<shared_ptr<LineWrap>>>{n0};*/
+
+    auto posfiles = vector<string>();
+    GetFilesInDirectory(posfiles, pathToPos);
+
+    for (auto file : posfiles) {
+        ifstream infile (file);
+
+        auto posSample = vector<shared_ptr<LineWrap>>{};
+
+        string line;
+        while (getline(infile, line)) {
+            //if not starting with '<line' then skip
+            string prefix("<line");
+            if (!line.compare(0, prefix.size(), prefix)) {
+                continue;
+            }
+
+            auto l = parseSVGLine(line);
+            posSample.push_back(l);
+        }
+
+        posSamples.push_back(posSample);
+    }
+
+    auto negfiles = vector<string>();
+    GetFilesInDirectory(negfiles, pathToNeg);
+
+    for (auto file : negfiles) {
+        ifstream infile (file);
+
+        auto negSample = vector<shared_ptr<LineWrap>>{};
+
+        string line;
+        while (getline(infile, line)) {
+            //if not starting with '<line' then skip
+            string prefix("<line");
+            if (!line.compare(0, prefix.size(), prefix)) {
+                continue;
+            }
+
+            auto l = parseSVGLine(line);
+            negSample.push_back(l);
+        }
+
+        negSamples.push_back(negSample);
+    }
+
 }
 
 //-----------------------------------------------------------------------------
@@ -546,4 +590,28 @@ void Cli::GetFilesInDirectory(std::vector<string> &out,
     }
     closedir(dir);
 
+}
+
+shared_ptr<LineWrap> Cli::parseSVGLine(string) {
+    //TODO
+
+    //skip chars until '"'
+
+    //write to x1 until '"'
+
+    //skip chars until '"'
+
+    //write to y1 until '"'
+
+    //skip chars until '"'
+
+    //write to x2 until '"'
+
+    //skip chars until '"'
+
+    //write to y2 until '"'
+
+    //skip the rest of the line
+
+    return shared_ptr<LineWrap>();
 }

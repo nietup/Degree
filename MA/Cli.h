@@ -33,6 +33,7 @@ public:
     void LoadModel();
     void GetFilesInDirectory(std::vector<string> &out,
         const string &directory);
+    shared_ptr<LineWrap> parseSVGLine(string);
 
 private:
     enum Mode {TEST, LEARN};

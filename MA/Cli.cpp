@@ -279,11 +279,9 @@ void Cli::SelectLearningSamples() {
             //if not starting with '<line' then skip
             string prefix("<line");
             if (!line.compare(0, prefix.size(), prefix)) {
-                continue;
+                auto l = parseSVGLine(line);
+                posSample.push_back(l);
             }
-
-            auto l = parseSVGLine(line);
-            posSample.push_back(l);
         }
 
         posSamples.push_back(posSample);
@@ -302,11 +300,9 @@ void Cli::SelectLearningSamples() {
             //if not starting with '<line' then skip
             string prefix("<line");
             if (!line.compare(0, prefix.size(), prefix)) {
-                continue;
+                auto l = parseSVGLine(line);
+                negSample.push_back(l);;
             }
-
-            auto l = parseSVGLine(line);
-            negSample.push_back(l);
         }
 
         negSamples.push_back(negSample);

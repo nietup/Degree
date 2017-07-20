@@ -3,6 +3,7 @@
 //
 
 #include "Cli.h"
+#include <sstream>
 
 //-----------------------------------------------------------------------------
 Cli::Cli() {
@@ -437,9 +438,24 @@ void Cli::CreateModel() {
 void Cli::LoadModel() {
     ifstream infile (pathToModel);
 
+    constraintArray.clear();
+
     string line;
     while (getline(infile, line)) {
-        ;
+        istringstream iss(line);
+
+        //get constraints from the first line
+        if (!constraintArray.size()) {
+            int i;
+            while (iss >> i) {
+                constraintArray.push_back(i);
+            }
+        }
+        if (!constraintArray.size()) {
+            cout << "\nBledny plik";
+        }
+
+        //get rest from the rest TODO
     }
 }
 

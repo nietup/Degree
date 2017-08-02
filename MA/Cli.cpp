@@ -588,26 +588,63 @@ void Cli::GetFilesInDirectory(std::vector<string> &out,
 
 }
 
-shared_ptr<LineWrap> Cli::parseSVGLine(string) {
+shared_ptr<LineWrap> Cli::parseSVGLine(string line) {
     //TODO
 
     //skip chars until '"'
+    int i = 0;
+    for (; line[i] != '"'; i++) {}
 
     //write to x1 until '"'
+    string s_x1 = "";
+    i++;
+    for (; line[i] != '"'; i ++) {
+        s_x1.push_back(line[i]);
+    }
 
     //skip chars until '"'
+    i++;
+    for (; line[i] != '"'; i++) {}
 
     //write to y1 until '"'
+    string s_y1 = "";
+    i++;
+    for (; line[i] != '"'; i ++) {
+        s_y1.push_back(line[i]);
+    }
 
     //skip chars until '"'
+    i++;
+    for (; line[i] != '"'; i++) {}
 
     //write to x2 until '"'
+    string s_x2 = "";
+    i++;
+    for (; line[i] != '"'; i ++) {
+        s_x2.push_back(line[i]);
+    }
 
     //skip chars until '"'
+    i++;
+    for (; line[i] != '"'; i++) {}
 
     //write to y2 until '"'
+    string s_y2 = "";
+    i++;
+    for (; line[i] != '"'; i ++) {
+        s_y2.push_back(line[i]);
+    }
 
     //skip the rest of the line
 
-    return shared_ptr<LineWrap>();
+    //transform strings to doubles
+    double x1, x2, y1, y2;
+    x1 = stod(s_x1);
+    x2 = stod(s_x2);
+    y1 = stod(s_y1);
+    y2 = stod(s_y2);
+
+    //construct line wrap
+    //auto lw = LineWrap{pair{x1, y1}, pair{x2, y2}};
+    return make_shared<LineWrap>(LineWrap{{x1, y1}, {x2, y2}});
 }

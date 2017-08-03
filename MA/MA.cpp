@@ -5,10 +5,15 @@ using namespace std;
 
 int main() {
     auto cli = Cli();
-    cli.parseSVGLine("<line x1=\"356.83\" y1=\"371.893\" x2=\"354.136\" y2=\"175.645\" fill=\"none\" stroke =\"green\" stroke-width=\"1\" />");
-    //cli.Run();
+    cli.Run();
 
 	return 0;
 }
 
-
+/*
+for (auto & a : posSamples) {
+cout << "\nSample:";
+for (auto & line : a) {
+cout << "\n(" << line->start.first << "; " << line->start.second << "), (" << line->end.first << "; " << line->end.second << ")";
+}
+}*/

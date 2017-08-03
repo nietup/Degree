@@ -63,7 +63,9 @@ void Generalize(Edge * furthestPart,
                 thisRowScore.diffs.push_back(j);
             }
         }
-        if (bestMatch.diffs.size() > thisRowScore.diffs.size()) {
+        if (bestMatch.diffs.size() > thisRowScore.diffs.size() &&
+            //pick line that is the most similar but is not consistent
+            thisRowScore.diffs.size() > 0) {
             bestMatch = thisRowScore;
         }
     }
@@ -71,6 +73,7 @@ void Generalize(Edge * furthestPart,
     for (auto i : bestMatch.diffs) {
         furthestPart->constraints[i] = DNC;
     }
+
 }
 
 shared_ptr<Model> GenerateModel(

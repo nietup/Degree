@@ -238,34 +238,6 @@ void Cli::SelectLearningSamples() {
     cin >> response;
     pathToNeg = response;
 
-    //placeholder
-    /*auto l00 = make_shared<LineWrap>(LineWrap{{0,0},{100,0}});
-    auto l01 = make_shared<LineWrap>(LineWrap{{100,100},{100,0}});
-    auto l02 = make_shared<LineWrap>(LineWrap{{0,0},{0,100}});
-    auto l03 = make_shared<LineWrap>(LineWrap{{0,100},{100,100}});
-    auto p0 = vector<shared_ptr<LineWrap>>{l00, l01, l02, l03};
-
-    auto l10 = make_shared<LineWrap>(LineWrap{{0,0},{500,0}});
-    auto l11 = make_shared<LineWrap>(LineWrap{{500,100},{500,0}});
-    auto l12 = make_shared<LineWrap>(LineWrap{{0,0},{0,100}});
-    auto l13 = make_shared<LineWrap>(LineWrap{{0,100},{500,100}});
-    auto p1 = vector<shared_ptr<LineWrap>>{l10, l11, l12, l13};
-
-    auto l20 = make_shared<LineWrap>(LineWrap{{0,0},{100,0}});
-    auto l21 = make_shared<LineWrap>(LineWrap{{120,97.9797},{100,0}});
-    auto l22 = make_shared<LineWrap>(LineWrap{{0,0},{20,97.9797}});
-    auto l23 = make_shared<LineWrap>(LineWrap{{20,97.9797},{120,97.9797}});
-    auto p2 = vector<shared_ptr<LineWrap>>{l20, l21, l22, l23};
-
-    auto l30 = make_shared<LineWrap>(LineWrap{{0,0},{100,0}});
-    auto l31 = make_shared<LineWrap>(LineWrap{{0,0},{0,100}});
-    auto l32 = make_shared<LineWrap>(LineWrap{{0,100},{100,0}});
-    auto l33 = make_shared<LineWrap>(LineWrap{{0,0},{50,50}});
-    auto n0 = vector<shared_ptr<LineWrap>>{l30, l31, l32, l33};
-
-    posSamples = vector<vector<shared_ptr<LineWrap>>>{p0, p1, p2};
-    negSamples = vector<vector<shared_ptr<LineWrap>>>{n0};*/
-
     auto posfiles = vector<string>();
     GetFilesInDirectory(posfiles, pathToPos);
 
@@ -307,7 +279,6 @@ void Cli::SelectLearningSamples() {
 
         negSamples.push_back(negSample);
     }
-
 }
 
 //-----------------------------------------------------------------------------
@@ -589,8 +560,6 @@ void Cli::GetFilesInDirectory(std::vector<string> &out,
 }
 
 shared_ptr<LineWrap> Cli::parseSVGLine(string line) {
-    //TODO
-
     //skip chars until '"'
     int i = 0;
     for (; line[i] != '"'; i++) {}

@@ -80,10 +80,10 @@ pair<shared_ptr<Model>, shared_ptr<Hypothesis>> GenerateModel(
     const vector<vector<weak_ptr<LineWrap>>> & positiveSamples,
     const vector<vector<weak_ptr<LineWrap>>> & negativeSamples,
     const vector<shared_ptr<Constraint>> & constraints,
-    Model model) {
+    Model model, Hypothesis gbound) {
 
     const auto atomCount = positiveSamples[0].size();
-    const auto pairCount = (uint)(0.5*atomCount*(atomCount-1));
+    const auto pairCount = (uint) (0.5 * atomCount * (atomCount - 1));
     const auto constraintCount = constraints.size();
     auto util = Utilities();
 
@@ -92,8 +92,7 @@ pair<shared_ptr<Model>, shared_ptr<Hypothesis>> GenerateModel(
 
     if (model.constraints.size()) {
         s = make_shared<Model>(model);
-    }
-    else {
+    } else {
         //creation of first hypothesis
         //S must be initialized by first positive sample
         auto sExtract = Extract(positiveSamples[0], pairCount, constraints);
@@ -124,10 +123,15 @@ pair<shared_ptr<Model>, shared_ptr<Hypothesis>> GenerateModel(
     auto matcher = Matcher();
 
     auto g = Hypothesis{};
-    for (auto i = 0; i < pairCount; i++) {
-        g.push_back(vector<BoolPlus>{});
-        for (auto j = 0; j < constraintCount; j++) {
-            g[i].push_back(DNC);
+    if (0 < gbound.size()) {
+        g = gbound;
+    }
+    else {
+        for (auto i = 0; i < pairCount; i++) {
+            g.push_back(vector<BoolPlus>{});
+            for (auto j = 0; j < constraintCount; j++) {
+                g[i].push_back(DNC);
+            }
         }
     }
 

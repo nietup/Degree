@@ -196,7 +196,7 @@ void Cli::SelectModel() {
 
 //-----------------------------------------------------------------------------
 void Cli::ShowModel() {
-    cout << "\nModel:\n";
+    cout << "\nModel:\nS:\n";
     for (auto & edge : model.edges) {
         //get indices of vertices
         auto index = 0;
@@ -207,7 +207,7 @@ void Cli::ShowModel() {
             }
         }
 
-        cout << index << ",";
+        cout << index << " ";
 
         index = 0;
         for (; index < verticesNo; index++) {
@@ -216,10 +216,18 @@ void Cli::ShowModel() {
             }
         }
 
-        cout << index << ";";
+        cout << index << "; ";
 
         for (auto & cons : edge->constraints) {
-            cout << cons << ",";
+            cout << cons << " ";
+        }
+        cout << "\n";
+    }
+
+    cout << "\nG:\n";
+    for (auto & line : g) {
+        for (auto & sign : line) {
+            cout << sign << " ";
         }
         cout << "\n";
     }
@@ -426,7 +434,7 @@ void Cli::Learn() {
     auto spmodel = shared_ptr<Model>{};
     auto spg = shared_ptr<Hypothesis>{};
     tie(spmodel, spg) =
-        ls.GenerateModel(wPosSamples, wNegSamples, modelConstraints, model);
+        ls.GenerateModel(wPosSamples, wNegSamples, modelConstraints, model, g);
     model = *spmodel;
     g = *spg;
 }
@@ -470,52 +478,75 @@ void Cli::LoadModel() {
     auto verticesNo = int{};
 
     string line;
+    bool gSection = false;
     while (getline(infile, line)) {
         if ('G' == line[0]) {
             //start of g section
-            break;
+            gSection = true;
+            continue;
         }
 
         istringstream iss(line);
 
-        //get constraints from the first line
-        if (!constraintArray.size()) {
+        if (gSection) {
+            //entered g section, just put numbers into g
+            auto hline = vector<BoolPlus>{};
             int i;
-            while (iss >> i) {
-                constraintArray.push_back(i);
-            }
-            continue;
-        }
-        if (!constraintArray.size()) {
-            cout << "\nBledny plik";
-        }
-        else {
-            //get constraints of all edges
-            auto v1 = int{};
-            auto v2 = int{};
-
-            iss >> v1 >> v2;
-            verticesNo = v2 + 1;
-
-            auto constraints = vector<BoolPlus>{};
-            auto i = int{};
             while (iss >> i) {
                 switch (i) {
                     case 0:
-                        constraints.push_back(NO);
+                        hline.push_back(NO);
                         break;
                     case 1:
-                        constraints.push_back(YES);
+                        hline.push_back(YES);
                         break;
                     case 2:
-                        constraints.push_back(DNC);
+                        hline.push_back(DNC);
                         break;
                     default:
                         break;
                 }
             }
+            g.push_back(hline);
+        }
+        else {
+            //get constraints from the first line
+            if (!constraintArray.size()) {
+                int i;
+                while (iss >> i) {
+                    constraintArray.push_back(i);
+                }
+                continue;
+            }
+            if (!constraintArray.size()) {
+                cout << "\nBledny plik";
+            } else {
+                //get constraints of all edges
+                auto v1 = int{};
+                auto v2 = int{};
 
-            constraintOfEdges.push_back(constraints);
+                iss >> v1 >> v2;
+                verticesNo = v2 + 1;
+
+                auto constraints = vector<BoolPlus>{};
+                auto i = int{};
+                while (iss >> i) {
+                    switch (i) {
+                        case 0:
+                            constraints.push_back(NO);
+                            break;
+                        case 1:
+                            constraints.push_back(YES);
+                            break;
+                        case 2:
+                            constraints.push_back(DNC);
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                constraintOfEdges.push_back(constraints);
+            }
         }
     }
 

@@ -76,7 +76,7 @@ void Generalize(Edge * furthestPart,
 
 }
 
-shared_ptr<Model> GenerateModel(
+pair<shared_ptr<Model>, shared_ptr<Hypothesis>> GenerateModel(
     const vector<vector<weak_ptr<LineWrap>>> & positiveSamples,
     const vector<vector<weak_ptr<LineWrap>>> & negativeSamples,
     const vector<shared_ptr<Constraint>> & constraints,
@@ -88,6 +88,7 @@ shared_ptr<Model> GenerateModel(
     auto util = Utilities();
 
     auto s = shared_ptr<Model>{};
+    auto gret = shared_ptr<Hypothesis>{};
 
     if (model.constraints.size()) {
         s = make_shared<Model>(model);
@@ -226,7 +227,9 @@ shared_ptr<Model> GenerateModel(
         cout << endl;
     */
 
-    return s;
+    gret = make_shared<Hypothesis>(g);
+
+    return {s, gret};
 }
 };
 #endif //DEGREE_LEARNING_H

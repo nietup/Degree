@@ -355,6 +355,8 @@ void Cli::SaveModel() {
         ofs << "\n";
     }
 
+    //todo add saving G to file
+
     ofs.close();
 
     cout << "\nModel zapisano do: " << pathToModel;
@@ -414,7 +416,11 @@ void Cli::Learn() {
     }
 
     LearningSystem ls;
-    model = *ls.GenerateModel(wPosSamples, wNegSamples, modelConstraints, model);
+    auto spmodel = shared_ptr<Model>{};
+    auto spg = shared_ptr<Hypothesis>{};
+    tie(spmodel, spg) = ls.GenerateModel(wPosSamples, wNegSamples, modelConstraints, model);
+    model = *spmodel;
+    g = *spg;
 }
 
 //-----------------------------------------------------------------------------

@@ -43,6 +43,7 @@ private:
     string pathToNeg;
     string pathToTest;
     Model model;
+    Hypothesis g;
     vector<vector<shared_ptr<LineWrap>>> testingSamples;
     vector<vector<shared_ptr<LineWrap>>> posSamples;
     vector<vector<shared_ptr<LineWrap>>> negSamples;

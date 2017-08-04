@@ -355,7 +355,14 @@ void Cli::SaveModel() {
         ofs << "\n";
     }
 
-    //todo add saving G to file
+    ofs << "G\n"; //start of g section
+    for (auto & pair : g) {
+        for (auto &field : pair) {
+            ofs << field << " ";
+        }
+        ofs << endl;
+    }
+    ofs << endl;
 
     ofs.close();
 
@@ -418,7 +425,8 @@ void Cli::Learn() {
     LearningSystem ls;
     auto spmodel = shared_ptr<Model>{};
     auto spg = shared_ptr<Hypothesis>{};
-    tie(spmodel, spg) = ls.GenerateModel(wPosSamples, wNegSamples, modelConstraints, model);
+    tie(spmodel, spg) =
+        ls.GenerateModel(wPosSamples, wNegSamples, modelConstraints, model);
     model = *spmodel;
     g = *spg;
 }
@@ -463,6 +471,11 @@ void Cli::LoadModel() {
 
     string line;
     while (getline(infile, line)) {
+        if ('G' == line[0]) {
+            //start of g section
+            break;
+        }
+
         istringstream iss(line);
 
         //get constraints from the first line

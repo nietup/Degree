@@ -170,6 +170,11 @@ shared_ptr<Model> GenerateModel(
                     bestScore = pairScore;
                 }
             }
+            //if best index is -1 then no line in extract is matching with s
+            //so just take the first line
+            if (-1 == bestIndex) {
+                bestIndex = 0;
+            }
             sortedExtract.push_back(extract[bestIndex]);
             extract.erase(extract.begin()+ bestIndex);
         }

@@ -153,6 +153,7 @@ void Cli::Run() {
         Learn();
         SaveModel();
     }
+    cout << endl;
 }
 
 //-----------------------------------------------------------------------------
@@ -394,6 +395,20 @@ void Cli::Test() {
                  << a.get()->asignment.lock().get()->end.second << ")"
                  << endl;
         }
+
+        //save detection
+        /*auto detection = vector<LineSegment>();
+        for (auto &a : model.vertices)
+            detection.push_back(a->asignment.lock()->GetLineSegment());
+
+        string detectionFile = pathToTest + ".detection.svg";
+        SvgWriterInterface::Ptr svg2(new ElsdSvgWriter);
+        svg2->setImageSize(xsize, ysize);
+        svg2->addLineSegments(detection.begin(), detection.end());
+        ofstream dfs(detectionFile, ofstream::out);
+        dfs.open(detectionFile);
+        dfs << *svg2 << "</svg>";
+        dfs.close();*/
     }
     else {
         cout << "\nNon match" << endl;

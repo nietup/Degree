@@ -42,29 +42,9 @@ Thumbs.db
 *.filters
 *.tlog
 
-Models/
-Debug/
-MA/Debug/
 .vs/
-*.jpg
 
 MA/.idea/*
-MA/Models
-*.xml
-MA/.idea/workspace.xml
-
-TODO
-
-.TODO.swp
-.Diary.txt.swp
-.gitignore.swp
-Diary.txt
-MA/Samples/
-
-MA/cmake_modules/
-opncvconfig.txt
-*.txt
-test_data/
 
 MA/cmake-build-debug/CMakeFiles/3.7.2/CMakeCCompiler.cmake
 MA/cmake-build-debug/CMakeFiles/3.7.2/CMakeCXXCompiler.cmake
@@ -92,18 +72,12 @@ MA/cmake-build-debug/CMakeFiles/feature_tests.c
 MA/cmake-build-debug/CMakeFiles/feature_tests.cxx
 MA/cmake-build-debug/CMakeFiles/progress.marks
 MA/cmake-build-debug/cmake_install.cmake
+MA/cmake-build-debug/CMakeCache.txt
+MA/cmake-build-debug/CMakeFiles/Degree.dir/
+MA/cmake-build-debug/CMakeFiles/TargetDirectories.txt
+MA/cmake-build-debug/CMakeFiles/clion-environment.txt
+MA/cmake-build-debug/CMakeFiles/clion-log.txt
 MA/cmake-build-debug/Degree
-MA/cmake-build-debug/Degree.cbp
+
 MA/cmake-build-debug/Makefile
-MA/cmake-build-debug/3.pgm.detection.svg
-MA/cmake-build-debug/3.pgm.svg
-MA/cmake-build-debug/4.pgm.svg
-MA/cmake-build-debug/5.pgm.detection.svg
-MA/cmake-build-debug/5.pgm.svg
-MA/cmake-build-debug/7.pgm.detection.svg
-MA/cmake-build-debug/7.pgm.svg
-MA/cmake-build-debug/8.pgm.detection.svg
-MA/cmake-build-debug/8.pgm.svg
-MA/cmake-build-debug/a3.PGM.detection.svg
-MA/cmake-build-debug/a3.PGM.svg
-MA/cmake-build-debug/test.*
+

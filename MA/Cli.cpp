@@ -410,7 +410,7 @@ void Cli::Test() {
         }
 
         //save detection
-        /*auto detection = vector<LineSegment>();
+        auto detection = vector<LineSegment>();
         for (auto &a : model.vertices)
             detection.push_back(a->asignment.lock()->GetLineSegment());
 
@@ -419,9 +419,9 @@ void Cli::Test() {
         svg2->setImageSize(xsize, ysize);
         svg2->addLineSegments(detection.begin(), detection.end());
         ofstream dfs(detectionFile, ofstream::out);
-        dfs.open(detectionFile);
         dfs << *svg2 << "</svg>";
-        dfs.close();*/
+        dfs.close();
+
     }
     else {
         cout << "\nNon match" << endl;

@@ -1,0 +1,9 @@
+Nazwa: Kwadrat
+
+Relacje brane pod uwagę:
+0 - podobieństwo rozmiaru
+2 - przystawanie
+3 - prostopadłość
+4 - równoległość
+7 - przystawanie do początku odcinka
+8 - przystawanie do końca odcinka 

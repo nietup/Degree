@@ -1,0 +1,5 @@
+Nazwa: Trójkąt
+
+Relacje brane pod uwagę:
+2 - przystawanie
+9 - przystawanie wierzchołków

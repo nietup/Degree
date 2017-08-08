@@ -1,0 +1,138 @@
+1. Tworzenie nowego modelu
+
+>./Degree 
+
+Prosze wybrac tryb dzialania programu:
+(1) Testowanie modelu
+(2) Trenowanie modelu
+2
+
+Prosze wprowadzic sciezke do modelu lub wpisac 'nowy':
+nowy
+
+Podaj sciezke zapisu nowego modelu:
+trojkat_rownoboczny
+
+Wybierz ograniczenia:
+(0) podobny rozmiar
+(1) kat 60 stopni
+(2) przystawanie
+(3) prostopadly
+(4) rownowlegly
+(5) nie rownolegly
+(6) daleki
+(7) przystawanie do poczatku
+(8) przystawanie do konca
+(9) przystawanie wierzcholkow
+019
+
+Model:
+S:
+
+G:
+
+Prosze wprowadzic sciezke folderu z pozytywnymi przykladami uczacymi:
+./trenowanie/probki_pozytywne
+
+Prosze wprowadzic sciezke folderu z negatywnymi przykladami uczacymi:
+./trenowanie/probki_negatywne
+
+Model zapisano do: trojkat_rownoboczny
+
+--------------------------------------------------------------------------------
+2. Dotrenowywanie modelu
+
+>./Degree 
+
+Prosze wybrac tryb dzialania programu:
+(1) Testowanie modelu
+(2) Trenowanie modelu
+2
+
+Prosze wprowadzic sciezke do modelu lub wpisac 'nowy':
+./trojkat_rownoboczny
+
+Model:
+S:
+0 1; 1 1 1 
+1 2; 1 1 1 
+0 2; 1 1 1 
+
+G:
+1 1 2 
+1 1 2 
+1 1 2 
+
+
+Prosze wprowadzic sciezke folderu z pozytywnymi przykladami uczacymi:
+./trenowanie/probki_pozytywne
+
+Prosze wprowadzic sciezke folderu z negatywnymi przykladami uczacymi:
+./trenowanie/probki_negatywne
+
+Model zapisano do: ./trojkat_rownoboczny
+
+--------------------------------------------------------------------------------
+3. Testowanie modelu - detekcja
+
+>./Degree 
+
+Prosze wybrac tryb dzialania programu:
+(1) Testowanie modelu
+(2) Trenowanie modelu
+1
+
+Prosze wprowadzic sciezke do modelu:
+./trojkat_rownoboczny
+
+Model:
+S:
+0 1; 1 1 1 
+1 2; 1 1 1 
+0 2; 1 1 1 
+
+G:
+1 1 2 
+1 1 2 
+1 1 2 
+
+
+Prosze wprowadzic sciezke przykladu testowego:
+./test/prawdziwe/7.pgm
+ -> (376.875, 354.49) (106.875, 354.49)
+ -> (244.402, 120.097) (381.016, 351.644)
+ -> (242.231, 131.573) (115.499, 346.289)
+
+--------------------------------------------------------------------------------
+4. Testowanie modelu - brak dopasowania
+
+>./Degree 
+
+Prosze wybrac tryb dzialania programu:
+(1) Testowanie modelu
+(2) Trenowanie modelu
+1
+
+Prosze wprowadzic sciezke do modelu:
+./trojkat_rownoboczny
+
+Model:
+S:
+0 1; 1 1 1 
+1 2; 1 1 1 
+0 2; 1 1 1 
+
+G:
+1 1 2 
+1 1 2 
+1 1 2 
+
+
+Prosze wprowadzic sciezke przykladu testowego:
+./test/falszywe/a1.PGM
+
+Non match
+
+
+
+

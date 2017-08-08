@@ -310,7 +310,20 @@ void Cli::SelectTestingSamples() {
         xsize = image->xsize();
         ysize = image->ysize();
 
-        const vector<LineSegment> &lines = detector->getLineSegments();
+        vector<LineSegment> lines = detector->getLineSegments();
+
+        auto ellipses = detector->getEllipticalArcs();
+        for (auto & ellipse : ellipses) {
+            auto l = LineSegment{ellipse.startPoint, ellipse.endPoint};
+            lines.push_back(l);
+        }
+
+        auto circles = detector->getCircularArcs();
+        for (auto & circle : circles) {
+            auto l = LineSegment{circle.startPoint, circle.endPoint};
+            lines.push_back(l);
+        }
+
         string outFile = pathToTest + ".svg";
         SvgWriterInterface::Ptr svg(new ElsdSvgWriter);
         svg->setImageSize(image->xsize(), image->ysize());

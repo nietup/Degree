@@ -1,6 +1,0 @@
-Nazwa: trójkąt prostokątny
-
-Relacje brane pod uwagę:
-0 - podobieństwo rozmiaru
-1 - kąt 60 stopni pomiędzy odcinkami
-9 - przystawanie wierzchołków odcinków

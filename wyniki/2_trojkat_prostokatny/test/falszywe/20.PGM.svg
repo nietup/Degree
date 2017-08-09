@@ -1,0 +1,14 @@
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="400" height="417" version="1.1"
+ xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<line x1="108.125" y1="69.4843" x2="276.875" y2="69.4936" fill="none" stroke ="green" stroke-width="1" />
+<line x1="271.875" y1="74.4938" x2="113.125" y2="74.4839" fill="none" stroke ="green" stroke-width="1" />
+<line x1="113.125" y1="315.516" x2="271.875" y2="315.506" fill="none" stroke ="green" stroke-width="1" />
+<line x1="276.875" y1="320.506" x2="108.125" y2="320.516" fill="none" stroke ="green" stroke-width="1" />
+<line x1="277.43" y1="69.9967" x2="277.435" y2="318.003" fill="none" stroke ="green" stroke-width="1" />
+<line x1="272.436" y1="74.9965" x2="272.442" y2="313.004" fill="none" stroke ="green" stroke-width="1" />
+<line x1="107.055" y1="318" x2="107.059" y2="70.0003" fill="none" stroke ="green" stroke-width="1" />
+<line x1="112.059" y1="313" x2="112.063" y2="75.0003" fill="none" stroke ="green" stroke-width="1" />
+</svg>

@@ -3,7 +3,7 @@
 <polygon id="svgEditorShapeDefs" fill="khaki" stroke="black" style="vector-effect: non-scaling-stroke; stroke-width: 1px;"/>
 </defs>
 <rect id="svgEditorBackground" x="0" y="0" width="1630" height="790" style="fill: none; stroke: none;"/>
-<line x1="68" y1="88" x2="68" y2="228" stroke="black" style="stroke-width: 1px; fill: none;"/>
+<line x1="68" y1="228" x2="68" y2="88" stroke="black" style="stroke-width: 1px; fill: none;"/>
 <line x1="67" y1="86" x2="352" y2="228" stroke="black" style="stroke-width: 1px; fill: none;"/>
 <line x1="69" y1="230" x2="354" y2="229" stroke="black" style="stroke-width: 1px; fill: none;"/>
 </svg>

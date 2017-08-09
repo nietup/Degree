@@ -1,7 +1,0 @@
-Nazwa: tójkąt prostokątny
-
-Relacje brane pod uwagę:
-2 - przystawanie
-3 - prostopadłość
-9 - przystawanie wierzchołków
-

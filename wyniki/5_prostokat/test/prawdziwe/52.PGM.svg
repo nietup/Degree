@@ -1,0 +1,22 @@
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="400" height="417" version="1.1"
+ xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<line x1="179.492" y1="91.875" x2="179.492" y2="370.625" fill="none" stroke ="green" stroke-width="1" />
+<line x1="174.492" y1="365.625" x2="174.492" y2="96.875" fill="none" stroke ="green" stroke-width="1" />
+<line x1="211.875" y1="165.507" x2="366.875" y2="165.506" fill="none" stroke ="green" stroke-width="1" />
+<line x1="210.501" y1="218.125" x2="210.501" y2="166.875" fill="none" stroke ="green" stroke-width="1" />
+<line x1="361.875" y1="170.506" x2="216.875" y2="170.507" fill="none" stroke ="green" stroke-width="1" />
+<line x1="215.499" y1="171.875" x2="215.499" y2="213.125" fill="none" stroke ="green" stroke-width="1" />
+<line x1="216.875" y1="214.493" x2="361.875" y2="214.494" fill="none" stroke ="green" stroke-width="1" />
+<line x1="366.875" y1="219.494" x2="211.875" y2="219.493" fill="none" stroke ="green" stroke-width="1" />
+<line x1="93.1245" y1="366.548" x2="173.125" y2="366.524" fill="none" stroke ="green" stroke-width="1" />
+<line x1="178.125" y1="371.525" x2="88.1246" y2="371.547" fill="none" stroke ="green" stroke-width="1" />
+<line x1="87.0188" y1="90.0967" x2="177.989" y2="89.9355" fill="none" stroke ="green" stroke-width="1" />
+<line x1="91.9994" y1="94.9594" x2="172.942" y2="95.3623" fill="none" stroke ="green" stroke-width="1" />
+<line x1="361.077" y1="170.994" x2="361.7" y2="213.035" fill="none" stroke ="green" stroke-width="1" />
+<line x1="366.107" y1="165.993" x2="366.721" y2="218.028" fill="none" stroke ="green" stroke-width="1" />
+<line x1="86.9777" y1="369.998" x2="86.9299" y2="90.9999" fill="none" stroke ="green" stroke-width="1" />
+<line x1="91.9802" y1="364.998" x2="91.931" y2="95.9999" fill="none" stroke ="green" stroke-width="1" />
+</svg>

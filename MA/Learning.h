@@ -26,10 +26,17 @@ Hypothesis Extract(const vector<weak_ptr<LineWrap>> & sample, uint pairCount,
     for(auto i = 0; i < pairCount; i++) {
         auto segsPair = util.unpair(i);
         for (auto j = 0; j < constraintCount; j++) {
-            if (threshold > constraints[j]->operator()(
-                *sample[segsPair.first].lock(),
-                *sample[segsPair.second].lock())) {
-                hypothesis[i][j] = YES;
+            //make sure that the sample is not to small
+            if (segsPair.first < sample.size() &&
+                segsPair.second < sample.size()) {
+
+                //if constraint is fulfilled, then fill YES
+                if (threshold > constraints[j]->operator()(
+                    *sample[segsPair.first].lock(),
+                    *sample[segsPair.second].lock())) {
+
+                    hypothesis[i][j] = YES;
+                }
             }
         }
     }

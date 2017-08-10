@@ -153,6 +153,7 @@ spłenienia relacji przez próbkę:
 
 -------------------------------------------------------------------------------------------------------
 Trójkąt prostokątny
+Uwagi: z uwagi na implementację etc. jest to model przedstawiający trójkąt prostokątny z przyprostokątnymi skierowanymi na zewnąrz [ref Stefańczuk]
 Relacje, na podstawie których wyuczony był model:
 prostopadły
 przystawanie do początku
@@ -328,29 +329,177 @@ przystawanie wierzchołków
 
 Próbki uczące
 Pozytywne:
-opis:
-obraz przedstawiający próbkę:
+opis: trójkąt równoboczny
+obraz przedstawiający próbkę: 22.svg
 spełnienie ograniczeń:
+4 7 8 9 
+0 1 0 0 1 1 
+1 2 0 1 0 1 
+0 2 0 1 0 1 
+
+opis: trójkąt równoramienny
+obraz przedstawiający próbkę: 23.svg
+spełnienie ograniczeń:
+4 7 8 9 
+0 1 0 1 0 1 
+1 2 0 1 0 1 
+0 2 0 0 1 1
+
+opis: trójkąt prostokątny
+obraz przedstawiający próbkę: 24.svg
+spełnienie ograniczeń:
+4 7 8 9 
+0 1 0 1 0 1 
+1 2 0 0 1 1 
+0 2 0 0 1 1 
+
+opis: trójkąt bez cech szczególnych
+obraz przedstawiający próbkę: 25.svg
+spełnienie ograniczeń:
+4 7 8 9 
+0 1 0 1 0 1 
+1 2 0 0 1 1 
+0 2 0 0 1 1 
 
 Negatywne:
-opis:
-obraz przedstawiający próbkę:
+opis: kwadrat
+obraz przedstawiający próbkę: 26.svg
 spełnienie ograniczeń:
+4 7 8 9 
+0 1 0 1 0 1 
+1 2 0 0 1 1 
+0 2 1 0 0 0 
+2 3 0 0 1 1 
+1 3 1 0 0 0 
+0 3 0 0 1 1 
+
+opis: pięciokąt foremny
+obraz przedstawiający próbkę: 27.svg
+spełnienie ograniczeń:
+4 7 8 9 
+0 1 0 0 0 0 
+1 2 0 0 1 1 
+0 2 0 0 1 1 
+2 3 0 0 0 0 
+1 3 0 0 0 0 
+0 3 0 1 0 1 
+3 4 0 1 0 1 
+2 4 0 0 0 0 
+1 4 0 1 0 1 
+0 4 0 0 0 0 
+
+opis: niepowiązane ze sobą odcinki
+obraz przedstawiający próbkę: 28.svg
+spełnienie ograniczeń:
+4 7 8 9 
+0 1 0 0 0 0 
+1 2 1 0 0 0 
+0 2 0 0 0 0 
+2 3 0 0 0 0 
+1 3 0 0 0 0 
+0 3 0 0 0 0 
+3 4 0 0 0 0 
+2 4 1 0 0 0 
+1 4 1 0 0 0 
+0 4 0 0 0 0 
 
 Wynikowa hipoteza:
+4 7 8 9 
+0 1 0 1 0 1 
+1 2 0 1 0 1 
+0 2 0 0 1 1 
+G
+2 1 2 1 
+2 1 0 1 
+0 2 1 1 
 
 Próbki testujące
 Pozytywne:
-opis:
-obraz przedstawiąjący próbkę:
+opis: trójkąt równoboczny
+obraz przedstawiąjący próbkę: 29.pgm
+obraz przedstawiający segmentację próbki:
+obraz przedstawiający wynikową detekcję:
+
+opis: trójkąt równoramienny
+obraz przedstawiąjący próbkę: 30.PGM
+obraz przedstawiający segmentację próbki:
+obraz przedstawiający wynikową detekcję:
+
+opis: trójkąt prostokątny
+obraz przedstawiąjący próbkę: 31.PGM
+obraz przedstawiający segmentację próbki:
+obraz przedstawiający wynikową detekcję:
+
+opis: trójkąt bez cech szczególnych
+obraz przedstawiąjący próbkę: 32.PGM
+obraz przedstawiający segmentację próbki:
+obraz przedstawiający wynikową detekcję:
+
+opis: trójkąt pochodzący ze zdjęcia
+obraz przedstawiąjący próbkę: rtri.pgm
+obraz przedstawiający segmentację próbki:
+obraz przedstawiający wynikową detekcję:
+
+opis: trójkąt pochodzący ze zdjęcia
+obraz przedstawiąjący próbkę: triangleB.pgm
 obraz przedstawiający segmentację próbki:
 obraz przedstawiający wynikową detekcję:
 
 Negatywne:
-opis:
-obraz przedstawiąjący próbkę:
+opis: łamana otwarta
+obraz przedstawiąjący próbkę: 33.pgm
 obraz przedstawiający segmentację próbki:
 spłenienia relacji przez próbkę:
+4 7 8 9 
+0 1 1 1 1 1 
+1 2 0 0 0 0 
+0 2 0 0 0 0 
+2 3 1 1 1 1 
+1 3 0 0 0 0 
+0 3 0 0 0 0 
+3 4 0 1 0 1 
+2 4 0 0 1 1 
+1 4 0 1 0 1 
+0 4 0 0 1 1 
+4 5 1 1 1 1 
+3 5 0 1 0 1 
+2 5 0 0 1 1 
+1 5 0 1 0 1 
+0 5 0 0 1 1 
+
+opis: kwadrat
+obraz przedstawiąjący próbkę: 34.pgm
+obraz przedstawiający segmentację próbki:
+spłenienia relacji przez próbkę:
+4 7 8 9 
+0 1 0 1 0 1 
+1 2 0 0 1 1 
+0 2 1 1 1 1 
+2 3 0 0 1 1 
+1 3 1 1 1 1 
+0 3 0 1 0 1 
+3 4 1 0 0 0 
+2 4 0 1 0 1 
+1 4 1 0 0 0 
+0 4 0 0 1 1 
+4 5 1 1 1 1 
+3 5 1 0 0 0 
+2 5 0 1 0 1 
+1 5 1 0 0 0 
+0 5 0 0 1 1 
+5 6 0 0 1 1 
+4 6 0 0 1 1 
+3 6 0 0 1 1 
+2 6 1 0 0 0 
+1 6 0 1 0 1 
+0 6 1 0 0 0 
+6 7 1 1 1 1 
+5 7 0 0 1 1 
+4 7 0 0 1 1 
+3 7 0 0 1 1 
+2 7 1 0 0 0 
+1 7 0 1 0 1 
+0 7 1 0 0 0 
 
 ----------------------------------------------------------------------------------------------------------
 Kwadrat

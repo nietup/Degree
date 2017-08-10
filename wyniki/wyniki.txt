@@ -512,29 +512,190 @@ przystawanie wierzchołków
 
 Próbki uczące
 Pozytywne:
-opis:
-obraz przedstawiający próbkę:
+opis: kwadrat o losowej rotacji i wielkości
+obraz przedstawiający próbkę: 35
 spełnienie ograniczeń:
+0 3 4 6 9 
+0 1 1 1 0 0 1 
+1 2 1 1 0 0 1 
+0 2 1 0 1 1 0 
+2 3 1 1 0 0 1 
+1 3 1 0 1 1 0 
+0 3 1 1 0 0 1 
+
+opis: kwadrat o losowej rotacji i wielkości
+obraz przedstawiający próbkę: 36
+spełnienie ograniczeń:
+0 3 4 6 9 
+0 1 1 1 0 0 1 
+1 2 1 1 0 0 1 
+0 2 1 0 1 1 0 
+2 3 1 1 0 0 1 
+1 3 1 0 1 1 0 
+0 3 1 1 0 0 1 
+
+opis: kwadrat o losowej rotacji i wielkości
+obraz przedstawiający próbkę: 37
+spełnienie ograniczeń:
+0 3 4 6 9 
+0 1 1 1 0 0 1 
+1 2 1 0 1 1 0 
+0 2 1 1 0 0 1 
+2 3 1 1 0 0 1 
+1 3 1 1 0 0 1 
+0 3 1 0 1 1 0 
+
+opis: kwadrat o losowej rotacji i wielkości
+obraz przedstawiający próbkę: 38
+spełnienie ograniczeń:
+0 3 4 6 9 
+0 1 1 1 0 0 1 
+1 2 1 0 1 1 0 
+0 2 1 1 0 0 1 
+2 3 1 1 0 0 1 
+1 3 1 1 0 0 1 
+0 3 1 0 1 1 0 
 
 Negatywne:
-opis:
-obraz przedstawiający próbkę:
+opis: prostokąt
+obraz przedstawiający próbkę: 39
 spełnienie ograniczeń:
+0 3 4 6 9 
+0 1 0 1 0 0 1 
+1 2 0 1 0 0 1 
+0 2 1 0 1 1 0 
+2 3 0 1 0 0 1 
+1 3 1 0 1 0 0 
+0 3 0 1 0 0 1 
+
+opis: romb
+obraz przedstawiający próbkę: 40
+spełnienie ograniczeń:
+0 3 4 6 9 
+0 1 1 0 0 0 1 
+1 2 1 0 0 0 1 
+0 2 1 0 1 1 0 
+2 3 1 0 0 0 1 
+1 3 1 0 1 1 0 
+0 3 1 0 0 0 1 
+
+opis: trójkąt równoramienny prostokątny
+obraz przedstawiający próbkę: 41
+spełnienie ograniczeń:
+0 3 4 6 9 
+0 1 1 0 0 0 1 
+1 2 1 0 0 0 1 
+0 2 1 0 1 1 0 
+2 3 1 0 0 0 1 
+1 3 1 0 1 1 0 
+0 3 1 0 0 0 1 
 
 Wynikowa hipoteza:
+0 3 4 6 9 
+0 1 1 1 0 0 1 
+1 2 1 0 1 1 0 
+0 2 1 1 0 0 1 
+2 3 1 1 0 0 1 
+1 3 1 1 0 0 1 
+0 3 1 0 1 1 0 
+G
+1 1 2 2 2 
+1 2 1 1 2 
+1 1 2 2 2 
+1 1 2 2 2 
+1 1 2 2 1 
+1 2 1 1 2 
 
 Próbki testujące
 Pozytywne:
-opis:
-obraz przedstawiąjący próbkę:
+opis: domek
+obraz przedstawiąjący próbkę: 001
+obraz przedstawiający segmentację próbki:
+obraz przedstawiający wynikową detekcję:
+
+opis: kwadrat z przekątnymi
+obraz przedstawiąjący próbkę: 43
+obraz przedstawiający segmentację próbki:
+obraz przedstawiający wynikową detekcję:
+
+opis: obrócony kwadrat
+obraz przedstawiąjący próbkę: 44
+obraz przedstawiający segmentację próbki:
+obraz przedstawiający wynikową detekcję:
+
+opis: zdjęcie przedstawiające kwadrat
+obraz przedstawiąjący próbkę: squareB
 obraz przedstawiający segmentację próbki:
 obraz przedstawiający wynikową detekcję:
 
 Negatywne:
-opis:
-obraz przedstawiąjący próbkę:
+opis: prostokąt
+obraz przedstawiąjący próbkę: 45
 obraz przedstawiający segmentację próbki:
 spłenienia relacji przez próbkę:
+0 3 4 6 9 
+0 1 1 0 1 0 1 
+1 2 1 0 1 1 0 
+0 2 1 0 1 1 0 
+2 3 1 0 1 0 1 
+1 3 1 0 1 1 0 
+0 3 1 0 1 1 0 
+3 4 0 1 0 0 1 
+2 4 0 1 0 0 1 
+1 4 0 1 0 0 1 
+0 4 0 1 0 0 1 
+4 5 1 0 1 0 1 
+3 5 0 1 0 0 1 
+2 5 0 1 0 0 1 
+1 5 0 1 0 0 1 
+0 5 0 1 0 0 1 
+5 6 1 0 1 1 0 
+4 6 1 0 1 1 0 
+3 6 0 1 0 0 1 
+2 6 0 1 0 0 1 
+1 6 0 1 0 0 1 
+0 6 0 1 0 0 1 
+6 7 1 0 1 0 1 
+5 7 1 0 1 1 0 
+4 7 1 0 1 1 0 
+3 7 0 1 0 0 1 
+2 7 0 1 0 0 1 
+1 7 0 1 0 0 1 
+0 7 0 1 0 0 1 
+
+opis: romb
+obraz przedstawiąjący próbkę: 46
+obraz przedstawiający segmentację próbki:
+spłenienia relacji przez próbkę:
+0 3 4 6 9 
+0 1 1 0 0 0 1 
+1 2 1 0 0 0 1 
+0 2 1 0 1 1 0 
+2 3 1 0 1 0 1 
+1 3 1 0 0 0 1 
+0 3 1 0 1 1 0 
+3 4 1 0 0 0 1 
+2 4 1 0 0 0 1 
+1 4 1 0 1 1 0 
+0 4 1 0 0 0 1 
+4 5 1 0 0 0 1 
+3 5 1 0 1 1 0 
+2 5 1 0 1 1 0 
+1 5 1 0 0 0 1 
+0 5 1 0 1 0 1 
+5 6 1 0 0 0 1 
+4 6 1 0 1 1 0 
+3 6 1 0 0 0 1 
+2 6 1 0 0 0 1 
+1 6 1 0 1 0 1 
+0 6 1 0 0 0 1 
+6 7 1 0 1 1 0 
+5 7 1 0 0 0 1 
+4 7 1 0 1 0 1 
+3 7 1 0 0 0 1 
+2 7 1 0 0 0 1 
+1 7 1 0 1 1 0 
+0 7 1 0 0 0 1 
 
 ------------------------------------------------------------------------------------------------------------
 Prostokąt

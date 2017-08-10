@@ -79,3 +79,5 @@ MA/cmake-build-debug/CMakeFiles/clion-environment.txt
 MA/cmake-build-debug/CMakeFiles/clion-log.txt
 MA/cmake-build-debug/Degree
 wyniki/*/Degree
+wyniki/#*
+wyniki/*~*

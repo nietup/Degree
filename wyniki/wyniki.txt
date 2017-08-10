@@ -159,30 +159,163 @@ przystawanie do początku
 przystawanie do końca
 
 Próbki uczące
-Pozytywne:
-opis:
-obraz przedstawiający próbkę:
+Pozytywne: 
+opis: trójkąt prostokątny
+obraz przedstawiający próbkę: 12.svg
 spełnienie ograniczeń:
+3 7 8 
+0 1 0 0 1 
+1 2 0 0 1 
+0 2 1 1 0 
+
+opis: trójkąt prostokątny
+obraz przedstawiający próbkę: 13.svg
+spełnienie ograniczeń:
+3 7 8 
+0 1 1 1 0 
+1 2 0 0 1 
+0 2 0 0 1 
+
+opis: trójkąt prostokątny równoramienny
+obraz przedstawiający próbkę: 14.svg
+spełnienie ograniczeń:
+3 7 8 
+0 1 0 1 0 
+1 2 1 1 0 
+0 2 0 0 1 
 
 Negatywne:
-opis:
-obraz przedstawiający próbkę:
+opis: trójkąt równoboczny
+obraz przedstawiający próbkę: 15.svg
 spełnienie ograniczeń:
+3 7 8 
+0 1 0 0 1 
+1 2 0 1 0 
+0 2 0 1 0 
+
+opis: kwadrat
+obraz przedstawiający próbkę: 16.svg
+spełnienie ograniczeń:
+3 7 8 
+0 1 1 1 0 
+1 2 1 0 1 
+0 2 0 0 0 
+2 3 1 0 1 
+1 3 0 0 0 
+0 3 1 0 1 
 
 Wynikowa hipoteza:
+3 7 8 
+0 1 1 1 0 
+1 2 0 0 1 
+0 2 0 0 1 
+G
+1 2 2 
+0 2 2 
+2 0 1
 
 Próbki testujące
 Pozytywne:
-opis:
-obraz przedstawiąjący próbkę:
+opis: kwadrat z przekątnymi
+obraz przedstawiąjący próbkę: 17.PGM
+obraz przedstawiający segmentację próbki:
+obraz przedstawiający wynikową detekcję:
+
+opis: prostokąt z przekątnymi
+obraz przedstawiąjący próbkę: 18.PGM
+obraz przedstawiający segmentację próbki:
+obraz przedstawiający wynikową detekcję:
+
+opis: zdjęcie przedstawiające trójkąt prostokątny
+obraz przedstawiąjący próbkę: rtri.pgm
 obraz przedstawiający segmentację próbki:
 obraz przedstawiający wynikową detekcję:
 
 Negatywne:
-opis:
-obraz przedstawiąjący próbkę:
+opis: prostokąt
+obraz przedstawiąjący próbkę: 20.PGM
 obraz przedstawiający segmentację próbki:
 spłenienia relacji przez próbkę:
+3 7 8 
+0 1 0 1 1 
+1 2 0 0 0 
+0 2 0 0 0 
+2 3 0 1 1 
+1 3 0 0 0 
+0 3 0 0 0 
+3 4 1 1 0 
+2 4 1 0 1 
+1 4 1 1 0 
+0 4 1 0 1 
+4 5 0 1 1 
+3 5 1 1 0 
+2 5 1 0 1 
+1 5 1 1 0 
+0 5 1 0 1 
+5 6 0 0 0 
+4 6 0 0 0 
+3 6 1 0 1 
+2 6 1 1 0 
+1 6 1 0 1 
+0 6 1 1 0 
+6 7 0 1 1 
+5 7 0 0 0 
+4 7 0 0 0 
+3 7 1 0 1 
+2 7 1 1 0 
+1 7 1 0 1 
+0 7 1 1 0 
+
+opis: romb z jedną przekątną
+obraz przedstawiąjący próbkę: 21.PGM
+obraz przedstawiający segmentację próbki:
+spłenienia relacji przez próbkę:
+3 7 8 
+0 1 0 1 0 
+1 2 0 1 0 
+0 2 0 0 0 
+2 3 0 1 1 
+1 3 0 1 0 
+0 3 0 0 0 
+3 4 0 0 0 
+2 4 0 0 0 
+1 4 0 0 1 
+0 4 0 1 1 
+4 5 0 1 0 
+3 5 0 0 1 
+2 5 0 1 0 
+1 5 0 0 0 
+0 5 0 0 1 
+5 6 0 1 0 
+4 6 0 1 0 
+3 6 0 0 1 
+2 6 0 1 0 
+1 6 0 0 0 
+0 6 0 0 1 
+6 7 0 0 0 
+5 7 0 0 0 
+4 7 0 0 1 
+3 7 0 1 0 
+2 7 0 0 1 
+1 7 0 1 1 
+0 7 0 1 0 
+7 8 0 1 0 
+6 8 0 1 0 
+5 8 0 0 1 
+4 8 0 0 1 
+3 8 0 0 1 
+2 8 0 1 0 
+1 8 0 0 1 
+0 8 0 1 0 
+8 9 0 1 1 
+7 9 0 1 0 
+6 9 0 1 0 
+5 9 0 0 1 
+4 9 0 0 1 
+3 9 0 0 1 
+2 9 0 1 0 
+1 9 0 0 1 
+0 9 0 1 0 
 
 --------------------------------------------------------------------------------------------------------
 Trójkąt

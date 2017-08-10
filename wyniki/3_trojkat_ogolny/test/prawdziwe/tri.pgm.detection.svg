@@ -1,0 +1,9 @@
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="486" height="528" version="1.1"
+ xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<line x1="78.0355" y1="193.19" x2="211.656" y2="377.034" fill="none" stroke ="green" stroke-width="1" />
+<line x1="113.582" y1="248.683" x2="94.0182" y2="220.876" fill="none" stroke ="green" stroke-width="1" />
+<line x1="115.849" y1="253.114" x2="206.312" y2="376.778" fill="none" stroke ="green" stroke-width="1" />
+</svg>
